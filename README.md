@@ -1,7 +1,7 @@
 # 深度词汇解析引擎 · Deep Word Explorer
 
-![GitHub stars](https://img.shields.io/github/stars/Boryac/deep-word-explorer?style=flat-square)
-![License](https://img.shields.io/github/license/Boryac/deep-word-explorer?style=flat-square)
+![GitHub stars](https://img.shields.io/github/stars/huangboryac-web/deep-word-explorer?style=flat-square)
+![License](https://img.shields.io/github/license/huangboryac-web/deep-word-explorer?style=flat-square)
 ![Skill](https://img.shields.io/badge/Skill-Agent-111111?style=flat-square)
 ![Output](https://img.shields.io/badge/Output-Single--File%20HTML-0A7CFF?style=flat-square)
 ![Themes](https://img.shields.io/badge/Themes-5-1a2e1f?style=flat-square)
@@ -103,10 +103,10 @@ Agent 会自动加载本 skill，依次走完六阶段并交付一个 `index.htm
 
 ```bash
 # WorkBuddy
-git clone https://github.com/Boryac/deep-word-explorer.git ~/.workbuddy/skills/deep-word-explorer
+git clone https://github.com/huangboryac-web/deep-word-explorer.git ~/.workbuddy/skills/deep-word-explorer
 
 # Claude Code
-git clone https://github.com/Boryac/deep-word-explorer.git ~/.claude/skills/deep-word-explorer
+git clone https://github.com/huangboryac-web/deep-word-explorer.git ~/.claude/skills/deep-word-explorer
 ```
 
 也可以直接下载 ZIP 解压到 skills 目录。验证：
@@ -121,7 +121,7 @@ ls ~/.workbuddy/skills/deep-word-explorer/
 > 帮我安装 `deep-word-explorer` 这个 skill。请按下面步骤做：
 >
 > 1. 确保 skills 目录存在（如 `~/.workbuddy/skills/`），不存在就创建
-> 2. 执行 `git clone https://github.com/Boryac/deep-word-explorer.git <skills目录>/deep-word-explorer`
+> 2. 执行 `git clone https://github.com/huangboryac-web/deep-word-explorer.git <skills目录>/deep-word-explorer`
 > 3. 验证目录里有 `SKILL.md`、`agents/`、`shared/`
 > 4. 告诉我装好了，之后我说"深度解析一下 XX"就会触发这个 skill
 

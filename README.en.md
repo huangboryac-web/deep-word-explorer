@@ -1,7 +1,7 @@
 # Deep Word Explorer · 深度词汇解析引擎
 
-![GitHub stars](https://img.shields.io/github/stars/Boryac/deep-word-explorer?style=flat-square)
-![License](https://img.shields.io/github/license/Boryac/deep-word-explorer?style=flat-square)
+![GitHub stars](https://img.shields.io/github/stars/huangboryac-web/deep-word-explorer?style=flat-square)
+![License](https://img.shields.io/github/license/huangboryac-web/deep-word-explorer?style=flat-square)
 ![Skill](https://img.shields.io/badge/Skill-Agent-111111?style=flat-square)
 ![Output](https://img.shields.io/badge/Output-Single--File%20HTML-0A7CFF?style=flat-square)
 ![Themes](https://img.shields.io/badge/Themes-5-1a2e1f?style=flat-square)
@@ -104,10 +104,10 @@ Clone the repo into your Agent's skills directory:
 
 ```bash
 # WorkBuddy
-git clone https://github.com/Boryac/deep-word-explorer.git ~/.workbuddy/skills/deep-word-explorer
+git clone https://github.com/huangboryac-web/deep-word-explorer.git ~/.workbuddy/skills/deep-word-explorer
 
 # Claude Code
-git clone https://github.com/Boryac/deep-word-explorer.git ~/.claude/skills/deep-word-explorer
+git clone https://github.com/huangboryac-web/deep-word-explorer.git ~/.claude/skills/deep-word-explorer
 ```
 
 Or download the ZIP and extract into the skills directory. Verify:
@@ -122,7 +122,7 @@ ls ~/.workbuddy/skills/deep-word-explorer/
 > Install the `deep-word-explorer` skill. Steps:
 >
 > 1. Ensure the skills dir exists (e.g. `~/.workbuddy/skills/`), create if not
-> 2. Run `git clone https://github.com/Boryac/deep-word-explorer.git <skills dir>/deep-word-explorer`
+> 2. Run `git clone https://github.com/huangboryac-web/deep-word-explorer.git <skills dir>/deep-word-explorer`
 > 3. Verify `SKILL.md`, `agents/`, `shared/` exist
 > 4. Tell me it's installed; after that "deep explainer on XX" triggers this skill
 
