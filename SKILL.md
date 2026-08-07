@@ -1,3 +1,12 @@
+---
+name: deep-word-explorer
+displayName: 深度词汇解析引擎
+description: 输入任意「词」（地点/名词/热词/书籍/国家/历史/学术概念…），多 Agent 协作产出万字以上、由浅入深、带完整引用的深度解析单页网页。
+author: Boryac
+version: 1.0.0
+license: AGPL-3.0
+---
+
 # 深度词汇解析引擎 (Deep Word Explorer)
 
 ## 技能定位

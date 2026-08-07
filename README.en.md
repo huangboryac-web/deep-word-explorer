@@ -10,6 +10,28 @@
 
 > 🌏 **中文版： [README.md](./README.md)**
 
+## Table of Contents
+
+- [Quick Start (30 seconds)](#quick-start-30-seconds)
+- [Features](#features)
+- [Common scenarios](#common-scenarios)
+- [Platform support](#platform-support)
+- [Installation](#installation)
+- [Input parameters](#input-parameters)
+- [Workflow](#workflow)
+- [Six-stage learning chain](#six-stage-learning-chain)
+- [Five-layer funnel search](#five-layer-funnel-search)
+- [Directory structure](#directory-structure)
+- [Theme palettes](#theme-palettes)
+- [Core design principles](#core-design-principles)
+- [Example requests](#example-requests)
+- [Acknowledgements](#acknowledgements)
+- [Roadmap](#roadmap)
+- [FAQ](#faq)
+- [Contributing](#contributing)
+- [Author & License](#author--license)
+- [Changelog](./CHANGELOG.md)
+
 A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs a six-stage pipeline that produces a **10,000+ word, progressively-structured, fully-cited, visually polished deep-explainer as a single-file HTML page**.
 
 Core capabilities:
