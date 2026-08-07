@@ -1,0 +1,292 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "学习链 (Learning Chain)",
+  "description": "六阶递进式学习链的完整结构化内容，是内容撰写阶段的直接输入。每阶之间有过渡问题衔接。",
+  "type": "object",
+  "required": ["meta", "stages", "transitions"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["word", "total_estimated_words", "target_reading_time_minutes"],
+      "properties": {
+        "word": { "type": "string" },
+        "depth_level": { "type": "string", "enum": ["quick", "standard", "exhaustive"] },
+        "total_estimated_words": { "type": "integer", "minimum": 10000 },
+        "target_reading_time_minutes": { "type": "integer" },
+        "generated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "stages": {
+      "type": "object",
+      "required": ["stage_1", "stage_2", "stage_3", "stage_4", "stage_5", "stage_6"],
+      "properties": {
+        "stage_1": {
+          "type": "object",
+          "description": "第一阶 · 原初印象（Hook）",
+          "required": ["title", "one_sentence_definition", "vivid_analogy", "content_outline", "min_words"],
+          "properties": {
+            "title": { "type": "string", "default": "原初印象" },
+            "subtitle": { "type": "string", "description": "如'一句话锚定认知'" },
+            "one_sentence_definition": { "type": "string", "description": "精炼的一句话定义（50字以内）" },
+            "vivid_analogy": {
+              "type": "object",
+              "properties": {
+                "text": { "type": "string" },
+                "source_domain": { "type": "string" }
+              }
+            },
+            "etymology": { "type": "string", "description": "词源解析（如有）" },
+            "content_outline": {
+              "type": "array",
+              "description": "内容要点（每个要点将展开为一段）",
+              "items": { "type": "string" }
+            },
+            "min_words": { "type": "integer", "default": 500 },
+            "key_terms_to_define": {
+              "type": "array",
+              "description": "本阶需要首次定义的关键术语",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "term": { "type": "string" },
+                  "short_definition": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "stage_2": {
+          "type": "object",
+          "description": "第二阶 · 时空坐标（Context）",
+          "required": ["title", "origin_story", "timeline", "content_outline", "min_words"],
+          "properties": {
+            "title": { "type": "string", "default": "时空坐标" },
+            "subtitle": { "type": "string" },
+            "origin_story": { "type": "string", "description": "起源故事/发现过程（200字以上）" },
+            "timeline": {
+              "type": "array",
+              "description": "完整时间线（5-20个节点）",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "date": { "type": "string" },
+                  "event": { "type": "string" },
+                  "detail": { "type": "string" },
+                  "source_ref": { "type": "integer" }
+                }
+              }
+            },
+            "geographic_context": { "type": "string", "description": "地理/文化背景说明" },
+            "key_figures_intro": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "role": { "type": "string" },
+                  "contribution_summary": { "type": "string" }
+                }
+              }
+            },
+            "content_outline": { "type": "array", "items": { "type": "string" } },
+            "min_words": { "type": "integer", "default": 2000 },
+            "has_timeline_visual": { "type": "boolean", "default": true }
+          }
+        },
+        "stage_3": {
+          "type": "object",
+          "description": "第三阶 · 核心要素拆解（Anatomy）",
+          "required": ["title", "dimensions", "content_outline", "min_words"],
+          "properties": {
+            "title": { "type": "string", "default": "核心要素拆解" },
+            "subtitle": { "type": "string" },
+            "dimensions": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 6,
+              "description": "核心维度（3-6个）",
+              "items": {
+                "type": "object",
+                "required": ["name", "what_it_is", "why_it_matters", "example"],
+                "properties": {
+                  "name": { "type": "string", "description": "维度名称" },
+                  "what_it_is": { "type": "string", "description": "该维度的解释（200字以上）" },
+                  "why_it_matters": { "type": "string", "description": "为什么这个维度重要" },
+                  "example": { "type": "string", "description": "具体例子" },
+                  "source_refs": { "type": "array", "items": { "type": "integer" } }
+                }
+              }
+            },
+            "content_outline": { "type": "array", "items": { "type": "string" } },
+            "min_words": { "type": "integer", "default": 3500 },
+            "visual_type": { "type": "string", "enum": ["cards", "comparison_table", "tree_diagram"] }
+          }
+        },
+        "stage_4": {
+          "type": "object",
+          "description": "第四阶 · 深层机制（Mechanism）",
+          "required": ["title", "causal_chain", "underlying_logic", "content_outline", "min_words"],
+          "properties": {
+            "title": { "type": "string", "default": "深层机制" },
+            "subtitle": { "type": "string" },
+            "causal_chain": {
+              "type": "array",
+              "description": "因果链条（每一步的因果关系）",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "step": { "type": "integer" },
+                  "cause": { "type": "string" },
+                  "effect": { "type": "string" },
+                  "mechanism_detail": { "type": "string" }
+                }
+              }
+            },
+            "underlying_logic": { "type": "string", "description": "底层逻辑的核心解释（300字以上）" },
+            "counterfactual_analysis": {
+              "type": "string",
+              "description": "反事实分析：如果XX不存在/不同，会发生什么"
+            },
+            "mathematical_foundation": {
+              "type": "string",
+              "description": "数学/形式化基础（仅科学/技术概念，可为空）"
+            },
+            "content_outline": { "type": "array", "items": { "type": "string" } },
+            "min_words": { "type": "integer", "default": 2500 },
+            "has_mechanism_diagram": { "type": "boolean", "default": true }
+          }
+        },
+        "stage_5": {
+          "type": "object",
+          "description": "第五阶 · 关联网络（Ecosystem）",
+          "required": ["title", "concept_map", "reading_pathway", "content_outline", "min_words"],
+          "properties": {
+            "title": { "type": "string", "default": "关联网络" },
+            "subtitle": { "type": "string" },
+            "concept_map": {
+              "type": "object",
+              "properties": {
+                "nodes": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "label": { "type": "string" },
+                      "category": { "type": "string", "enum": ["core", "prerequisite", "parallel", "downstream"] },
+                      "importance": { "type": "number", "minimum": 0, "maximum": 1 }
+                    }
+                  }
+                },
+                "edges": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "from": { "type": "string" },
+                      "to": { "type": "string" },
+                      "label": { "type": "string" },
+                      "strength": { "type": "number", "minimum": 0, "maximum": 1 }
+                    }
+                  }
+                }
+              }
+            },
+            "reading_pathway": {
+              "type": "array",
+              "description": "推荐进一步阅读路径（3-6步）",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "step": { "type": "integer" },
+                  "concept": { "type": "string" },
+                  "why": { "type": "string" },
+                  "resource": {
+                    "type": "object",
+                    "properties": {
+                      "title": { "type": "string" },
+                      "type": { "type": "string", "enum": ["book", "article", "video", "course", "paper"] },
+                      "url": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            },
+            "content_outline": { "type": "array", "items": { "type": "string" } },
+            "min_words": { "type": "integer", "default": 2000 },
+            "has_knowledge_graph": { "type": "boolean", "default": true }
+          }
+        },
+        "stage_6": {
+          "type": "object",
+          "description": "第六阶 · 批判视角（Critique）",
+          "required": ["title", "criticisms", "limitations", "open_questions", "content_outline", "min_words"],
+          "properties": {
+            "title": { "type": "string", "default": "批判视角" },
+            "subtitle": { "type": "string" },
+            "criticisms": {
+              "type": "array",
+              "minItems": 2,
+              "description": "批判观点（至少2个）",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "perspective": { "type": "string", "description": "批判者立场" },
+                  "argument": { "type": "string" },
+                  "counter_argument": { "type": "string", "description": "对该批判的回应（如存在）" },
+                  "source_ref": { "type": "integer" }
+                }
+              }
+            },
+            "limitations": {
+              "type": "array",
+              "minItems": 2,
+              "items": { "type": "string" }
+            },
+            "open_questions": {
+              "type": "array",
+              "minItems": 2,
+              "items": { "type": "string" }
+            },
+            "future_directions": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "content_outline": { "type": "array", "items": { "type": "string" } },
+            "min_words": { "type": "integer", "default": 2000 },
+            "has_comparison_table": { "type": "boolean", "default": true }
+          }
+        }
+      }
+    },
+    "transitions": {
+      "type": "object",
+      "required": ["t1_2", "t2_3", "t3_4", "t4_5", "t5_6"],
+      "properties": {
+        "t1_2": { "type": "string", "description": "第一阶到第二阶的过渡问题" },
+        "t2_3": { "type": "string", "description": "第二阶到第三阶的过渡问题" },
+        "t3_4": { "type": "string", "description": "第三阶到第四阶的过渡问题" },
+        "t4_5": { "type": "string", "description": "第四阶到第五阶的过渡问题" },
+        "t5_6": { "type": "string", "description": "第五阶到第六阶的过渡问题" }
+      }
+    },
+    "citation_index": {
+      "type": "array",
+      "description": "全局引用索引，每阶的 source_ref 指向这里",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "title", "source"],
+        "properties": {
+          "id": { "type": "integer" },
+          "type": { "type": "string", "enum": ["academic", "official", "deep_content", "news"] },
+          "title": { "type": "string" },
+          "authors": { "type": "string" },
+          "year": { "type": "string" },
+          "source": { "type": "string", "description": "出版物/平台名称" },
+          "url": { "type": "string" },
+          "access_date": { "type": "string" }
+        }
+      }
+    }
+  }
+}

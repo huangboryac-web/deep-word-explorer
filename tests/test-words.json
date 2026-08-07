@@ -1,0 +1,147 @@
+{
+  "description": "20 个测试词汇，覆盖全部 8 种本体类型，用于验证分类器的准确率",
+  "test_words": [
+    {
+      "word": "青藏高原",
+      "expected_ontology": "地理实体",
+      "expected_subtype": "自然地理",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "缓慢演变"
+    },
+    {
+      "word": "法国大革命",
+      "expected_ontology": "历史概念",
+      "expected_subtype": "历史事件",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "永恒"
+    },
+    {
+      "word": "存在主义",
+      "expected_ontology": "学术术语",
+      "expected_subtype": "哲学概念",
+      "expected_difficulty": "进阶",
+      "expected_controversy": "存在争议",
+      "expected_timeliness": "永恒"
+    },
+    {
+      "word": "百年孤独",
+      "expected_ontology": "文化符号",
+      "expected_subtype": "书籍",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "永恒"
+    },
+    {
+      "word": "Transformer",
+      "expected_ontology": "科技名词",
+      "expected_subtype": "算法/架构",
+      "expected_difficulty": "进阶",
+      "expected_timeliness": "缓慢演变"
+    },
+    {
+      "word": "内卷",
+      "expected_ontology": "热词/流行语",
+      "expected_subtype": "社会现象简称",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "快速迭代"
+    },
+    {
+      "word": "苏格拉底",
+      "expected_ontology": "人物",
+      "expected_subtype": "历史人物",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "永恒"
+    },
+    {
+      "word": "联合国",
+      "expected_ontology": "组织/机构",
+      "expected_subtype": "国际组织",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "缓慢演变"
+    },
+    {
+      "word": "黑洞",
+      "expected_ontology": "自然现象",
+      "expected_subtype": "天文现象",
+      "expected_difficulty": "进阶",
+      "expected_timeliness": "缓慢演变"
+    },
+    {
+      "word": "通货膨胀",
+      "expected_ontology": "经济概念",
+      "expected_subtype": "宏观经济",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "永恒"
+    },
+    {
+      "word": "城市化",
+      "expected_ontology": "社会现象",
+      "expected_subtype": "人口/地理",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "缓慢演变"
+    },
+    {
+      "word": "量子纠缠",
+      "expected_ontology": "学术术语",
+      "expected_subtype": "物理学概念",
+      "expected_difficulty": "专业",
+      "expected_timeliness": "永恒"
+    },
+    {
+      "word": "AGI",
+      "expected_ontology": "科技名词",
+      "expected_subtype": "人工智能概念",
+      "expected_difficulty": "进阶",
+      "expected_timeliness": "快速迭代"
+    },
+    {
+      "word": "故宫",
+      "expected_ontology": "地理实体",
+      "expected_subtype": "建筑/文化遗产",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "永恒"
+    },
+    {
+      "word": "魏晋风度",
+      "expected_ontology": "历史概念",
+      "expected_subtype": "文化时期/社会风气",
+      "expected_difficulty": "进阶",
+      "expected_timeliness": "永恒"
+    },
+    {
+      "word": "哥德尔不完备定理",
+      "expected_ontology": "学术术语",
+      "expected_subtype": "数学/逻辑学",
+      "expected_difficulty": "专业",
+      "expected_timeliness": "永恒"
+    },
+    {
+      "word": "比特币",
+      "expected_ontology": "科技名词",
+      "expected_subtype": "加密货币/金融科技",
+      "expected_difficulty": "进阶",
+      "expected_controversy": "存在争议",
+      "expected_timeliness": "快速迭代"
+    },
+    {
+      "word": "达尔文",
+      "expected_ontology": "人物",
+      "expected_subtype": "科学家",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "永恒"
+    },
+    {
+      "word": "三体",
+      "expected_ontology": "文化符号",
+      "expected_subtype": "书籍/科幻小说",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "永恒"
+    },
+    {
+      "word": "粤港澳大湾区",
+      "expected_ontology": "地理实体",
+      "expected_subtype": "经济区域",
+      "expected_difficulty": "入门",
+      "expected_timeliness": "缓慢演变"
+    }
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "文章内容 (Article Content)",
+  "description": "撰写阶段的最终产出：带完整引用标记的 Markdown 格式文章，可直接注入 HTML 模板。",
+  "type": "object",
+  "required": ["meta", "sections", "citations", "statistics"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["word", "total_words", "generated_at"],
+      "properties": {
+        "word": { "type": "string" },
+        "total_words": { "type": "integer", "minimum": 10000 },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "author_note": { "type": "string" }
+      }
+    },
+    "sections": {
+      "type": "array",
+      "minItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["stage", "title", "content", "word_count", "cached_terms"],
+        "properties": {
+          "stage": { "type": "integer", "minimum": 1, "maximum": 6 },
+          "title": { "type": "string" },
+          "subtitle": { "type": "string" },
+          "content": {
+            "type": "string",
+            "description": "Markdown 格式的正文内容，引用使用 [N] 上标标记"
+          },
+          "word_count": { "type": "integer" },
+          "cached_terms": {
+            "type": "array",
+            "description": "本阶需要 tooltip 的术语",
+            "items": {
+              "type": "object",
+              "properties": {
+                "term": { "type": "string" },
+                "definition": { "type": "string" }
+              }
+            }
+          },
+          "visual_assets": {
+            "type": "object",
+            "description": "本阶需要的可视化资源",
+            "properties": {
+              "type": { "type": "string", "enum": ["timeline", "cards", "flowchart", "comparison_table", "knowledge_graph", "none"] },
+              "data": { "type": "object", "description": "可视化所需的结构化数据" }
+            }
+          }
+        }
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "properties": {
+          "from_stage": { "type": "integer" },
+          "to_stage": { "type": "integer" },
+          "text": { "type": "string" }
+        }
+      }
+    },
+    "citations": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "title"],
+        "properties": {
+          "id": { "type": "integer" },
+          "type": { "type": "string", "enum": ["academic", "official", "deep_content", "news", "encyclopedia"] },
+          "title": { "type": "string" },
+          "authors": { "type": "string" },
+          "year": { "type": "string" },
+          "source": { "type": "string" },
+          "url": { "type": "string" },
+          "access_date": { "type": "string" },
+          "relevance_note": { "type": "string", "description": "为什么引用此来源" }
+        }
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "properties": {
+        "total_words": { "type": "integer" },
+        "words_per_stage": {
+          "type": "object",
+          "patternProperties": {
+            "^stage_[1-6]$": { "type": "integer" }
+          }
+        },
+        "total_citations": { "type": "integer" },
+        "unique_sources": { "type": "integer" },
+        "avg_sentence_length": { "type": "number" },
+        "analogy_count": { "type": "integer" },
+        "defined_terms_count": { "type": "integer" },
+        "ai_pattern_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "AI 痕迹检测得分，<0.3 为合格"
+        }
+      }
+    }
+  }
+}

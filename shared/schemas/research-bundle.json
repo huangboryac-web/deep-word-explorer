@@ -1,0 +1,373 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "研究数据包 (Research Bundle)",
+  "description": "五层漏斗搜索的完整结构化产出，是知识架构和内容撰写的唯一数据来源。",
+  "type": "object",
+  "required": ["layer_1", "layer_2", "layer_3", "meta"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["word", "generated_at", "depth_level", "total_sources_consulted"],
+      "properties": {
+        "word": { "type": "string" },
+        "generated_at": { "type": "string", "format": "date-time" },
+        "depth_level": { "type": "string", "enum": ["quick", "standard", "exhaustive"] },
+        "total_sources_consulted": { "type": "integer", "minimum": 5 },
+        "search_duration_seconds": { "type": "number" },
+        "degradations_applied": {
+          "type": "array",
+          "description": "应用的降级策略记录",
+          "items": {
+            "type": "object",
+            "properties": {
+              "layer": { "type": "string" },
+              "reason": { "type": "string" },
+              "fallback_applied": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "layer_1": {
+      "type": "object",
+      "description": "骨架层：百科/词典来源的结构化基础信息",
+      "required": ["definition", "category", "sources"],
+      "properties": {
+        "definition": {
+          "type": "string",
+          "description": "最权威的定义（从百科/词典提取，标注来源）"
+        },
+        "definition_sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "source_name": { "type": "string" },
+              "definition_text": { "type": "string" },
+              "url": { "type": "string" }
+            }
+          }
+        },
+        "aliases": {
+          "type": "array",
+          "description": "所有别名/译名/简称",
+          "items": { "type": "string" }
+        },
+        "category": {
+          "type": "object",
+          "properties": {
+            "primary": { "type": "string" },
+            "secondary": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "timeline": {
+          "type": "array",
+          "description": "关键时间节点（按时间排序）",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "string" },
+              "event": { "type": "string" },
+              "significance": { "type": "string" },
+              "source": { "type": "string" }
+            }
+          }
+        },
+        "key_figures": {
+          "type": "array",
+          "description": "关键人物列表",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "role": { "type": "string" },
+              "contribution": { "type": "string" },
+              "lifespan": { "type": "string" }
+            }
+          }
+        },
+        "geographic_scope": {
+          "type": "string",
+          "description": "地理范围描述"
+        },
+        "parent_concepts": {
+          "type": "array",
+          "description": "所属的更广泛概念",
+          "items": { "type": "string" }
+        },
+        "etymology": {
+          "type": "string",
+          "description": "词源信息"
+        },
+        "quick_stats": {
+          "type": "object",
+          "description": "快速统计数据（如有）",
+          "additionalProperties": { "type": "string" }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string" },
+              "type": { "type": "string", "enum": ["encyclopedia", "dictionary", "database"] },
+              "access_date": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "layer_2": {
+      "type": "object",
+      "description": "学术层：论文/权威出版物的深度信息",
+      "required": ["consensus_view", "sources"],
+      "properties": {
+        "consensus_view": {
+          "type": "string",
+          "description": "学术界对该概念的共识性理解（500字以上）"
+        },
+        "key_debates": {
+          "type": "array",
+          "description": "学术界的核心争议/分歧",
+          "items": {
+            "type": "object",
+            "properties": {
+              "topic": { "type": "string" },
+              "position_a": { "type": "string" },
+              "position_b": { "type": "string" },
+              "current_status": { "type": "string" },
+              "source": { "type": "string" }
+            }
+          }
+        },
+        "milestone_papers": {
+          "type": "array",
+          "description": "里程碑式论文/著作",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "authors": { "type": "string" },
+              "year": { "type": "integer" },
+              "venue": { "type": "string" },
+              "citation_count": { "type": "integer" },
+              "core_contribution": { "type": "string" },
+              "url": { "type": "string" }
+            }
+          }
+        },
+        "schools_of_thought": {
+          "type": "array",
+          "description": "主要学术流派/学派",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "core_claim": { "type": "string" },
+              "key_figures": { "type": "array", "items": { "type": "string" } },
+              "period": { "type": "string" }
+            }
+          }
+        },
+        "latest_research_directions": {
+          "type": "array",
+          "description": "最新研究方向（近5年）",
+          "items": { "type": "string" }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string" },
+              "type": { "type": "string", "enum": ["academic_journal", "academic_book", "encyclopedia", "official_report"] },
+              "access_date": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "layer_3": {
+      "type": "object",
+      "description": "专家层：深度解读和大众理解",
+      "required": ["expert_interpretations", "sources"],
+      "properties": {
+        "expert_interpretations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "author": { "type": "string" },
+              "author_credential": { "type": "string" },
+              "key_insight": { "type": "string" },
+              "source": { "type": "string" },
+              "url": { "type": "string" },
+              "trust_score": { "type": "number", "minimum": 0, "maximum": 1, "description": "来源可信度评分" }
+            }
+          }
+        },
+        "vivid_analogies": {
+          "type": "array",
+          "description": "生动的类比/比喻（用于帮助理解）",
+          "items": {
+            "type": "object",
+            "properties": {
+              "analogy": { "type": "string" },
+              "explanation": { "type": "string" },
+              "source_domain": { "type": "string", "description": "类比来源领域，如'物理''日常生活''生物学'" },
+              "accuracy_note": { "type": "string", "description": "类比的局限性说明" }
+            }
+          }
+        },
+        "common_misconceptions": {
+          "type": "array",
+          "description": "常见误解及纠正",
+          "items": {
+            "type": "object",
+            "properties": {
+              "misconception": { "type": "string" },
+              "correction": { "type": "string" },
+              "source": { "type": "string" }
+            }
+          }
+        },
+        "learning_path": {
+          "type": "array",
+          "description": "推荐的学习路径",
+          "items": {
+            "type": "object",
+            "properties": {
+              "step": { "type": "integer" },
+              "concept": { "type": "string" },
+              "why_this_order": { "type": "string" },
+              "estimated_time": { "type": "string" },
+              "recommended_resource": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "type": { "type": "string" },
+                  "url": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string" },
+              "type": { "type": "string", "enum": ["expert_article", "book", "blog", "video_lecture", "qa_platform"] },
+              "access_date": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "layer_4": {
+      "type": "object",
+      "description": "关联层：横向和纵向的知识网络（depth=exhaustive 时必填）",
+      "properties": {
+        "prerequisites": {
+          "type": "array",
+          "description": "理解该概念需要先知道的前置概念",
+          "items": {
+            "type": "object",
+            "properties": {
+              "concept": { "type": "string" },
+              "why_prerequisite": { "type": "string" },
+              "brief_explanation": { "type": "string" }
+            }
+          }
+        },
+        "parallel_concepts": {
+          "type": "array",
+          "description": "可对比的平行概念",
+          "items": {
+            "type": "object",
+            "properties": {
+              "concept": { "type": "string" },
+              "similarity": { "type": "string" },
+              "difference": { "type": "string" }
+            }
+          }
+        },
+        "downstream_concepts": {
+          "type": "array",
+          "description": "由该概念引出的下游概念",
+          "items": {
+            "type": "object",
+            "properties": {
+              "concept": { "type": "string" },
+              "relationship": { "type": "string" }
+            }
+          }
+        },
+        "concept_map_edges": {
+          "type": "array",
+          "description": "知识图谱的边（节点间关系）",
+          "items": {
+            "type": "object",
+            "properties": {
+              "from": { "type": "string" },
+              "to": { "type": "string" },
+              "relationship": { "type": "string", "enum": ["is_a", "part_of", "influences", "contrasts_with", "precedes", "evolved_from", "analogous_to"] },
+              "strength": { "type": "number", "minimum": 0, "maximum": 1 }
+            }
+          }
+        }
+      }
+    },
+    "layer_5": {
+      "type": "object",
+      "description": "时效层：最新发展和公众讨论（仅对热词/快速迭代概念启用）",
+      "properties": {
+        "recent_developments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "date": { "type": "string" },
+              "event": { "type": "string" },
+              "significance": { "type": "string" },
+              "source": { "type": "string" },
+              "url": { "type": "string" }
+            }
+          }
+        },
+        "public_sentiment": {
+          "type": "object",
+          "properties": {
+            "overall_tone": { "type": "string", "enum": ["正面", "负面", "中性", "两极分化"] },
+            "key_narratives": { "type": "array", "items": { "type": "string" } },
+            "sentiment_source": { "type": "string" }
+          }
+        },
+        "trend_analysis": {
+          "type": "string",
+          "description": "趋势分析（热度走向、原因分析）"
+        },
+        "future_projections": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "url": { "type": "string" },
+              "type": { "type": "string", "enum": ["news", "social_media", "industry_report", "expert_commentary"] },
+              "access_date": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

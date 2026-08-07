@@ -1,0 +1,35 @@
+# ===== Deep Word Explorer .gitignore =====
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+.idea/
+.vscode/
+
+# Node / Python build artifacts (if any tooling added later)
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+env/
+
+# Local runtime / cache
+.workbuddy/
+.cache/
+tmp/
+dist/
+build/
+
+# Generated outputs (keep examples/ as curated samples only)
+# Uncomment to ignore all generated explainer pages except the curated examples/
+deep-explorer/
+*.log
+
+# Secrets / tokens
+.env
+.env.*
+*.secret
+credentials.json

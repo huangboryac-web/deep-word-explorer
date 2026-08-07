@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "词汇分类画像 (Classification Profile)",
+  "description": "对输入词汇进行多维分类后产出的结构化配置，决定后续搜索策略、学习链侧重和撰写风格。",
+  "type": "object",
+  "required": ["word", "classification", "search_profile"],
+  "properties": {
+    "word": {
+      "type": "string",
+      "description": "用户输入的原始词汇"
+    },
+    "classification": {
+      "type": "object",
+      "required": ["ontology", "subtype", "difficulty", "controversy", "timeliness"],
+      "properties": {
+        "ontology": {
+          "type": "string",
+          "description": "本体类型",
+          "enum": [
+            "地理实体",
+            "历史概念",
+            "学术术语",
+            "文化符号",
+            "科技名词",
+            "热词/流行语",
+            "人物",
+            "组织/机构",
+            "自然现象",
+            "经济概念",
+            "社会现象",
+            "其他"
+          ]
+        },
+        "subtype": {
+          "type": "string",
+          "description": "子类，用于更精确的搜索策略调优。例如 ontology=学术术语, subtype=哲学概念"
+        },
+        "difficulty": {
+          "type": "string",
+          "enum": ["入门", "进阶", "专业"],
+          "description": "认知门槛：入门=大众可理解 / 进阶=需要一定基础知识 / 专业=需要专业训练"
+        },
+        "controversy": {
+          "type": "string",
+          "enum": ["共识", "存在争议", "高度争议"],
+          "description": "争议程度，决定第六阶（批判视角）的篇幅和强度"
+        },
+        "timeliness": {
+          "type": "string",
+          "enum": ["永恒", "缓慢演变", "快速迭代"],
+          "description": "时效敏感度：永恒=不受时间影响 / 缓慢演变=以年为单位变化 / 快速迭代=以月为单位变化"
+        },
+        "geographic_scope": {
+          "type": "string",
+          "description": "地理范围，如'全球''西方''中国''日本'等"
+        },
+        "era": {
+          "type": "string",
+          "description": "所属时代，如'19-20世纪''古代''当代''2020年代'等"
+        },
+        "domain": {
+          "type": "string",
+          "description": "所属知识领域，如'哲学''物理学''经济学''文学'等"
+        },
+        "language_origin": {
+          "type": "string",
+          "description": "词汇的源语言，如'中文''英文''日文''拉丁文'等"
+        },
+        "estimated_reader_familiarity": {
+          "type": "string",
+          "enum": ["几乎陌生", "有所耳闻", "大致了解", "熟悉但缺乏深层理解"],
+          "description": "预估读者对该词的熟悉程度，影响第一阶的起点定位"
+        }
+      }
+    },
+    "search_profile": {
+      "type": "object",
+      "required": [
+        "layer_1_sources",
+        "layer_2_sources",
+        "layer_3_sources",
+        "layer_4_enabled",
+        "layer_5_enabled",
+        "query_languages",
+        "depth_modifier"
+      ],
+      "properties": {
+        "layer_1_sources": {
+          "type": "array",
+          "description": "第一层（骨架层）搜索源",
+          "items": { "type": "string" }
+        },
+        "layer_2_sources": {
+          "type": "array",
+          "description": "第二层（学术层）搜索源",
+          "items": { "type": "string" }
+        },
+        "layer_3_sources": {
+          "type": "array",
+          "description": "第三层（专家层）搜索源",
+          "items": { "type": "string" }
+        },
+        "layer_4_enabled": {
+          "type": "boolean",
+          "description": "是否启用第四层（关联层）搜索，depth=exhaustive 时强制为 true"
+        },
+        "layer_5_enabled": {
+          "type": "boolean",
+          "description": "是否启用第五层（时效层）搜索，仅当 timeliness ∈ {快速迭代} 或 ontology=热词/流行语 时启用"
+        },
+        "query_languages": {
+          "type": "array",
+          "description": "搜索使用的语言列表",
+          "items": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] }
+        },
+        "depth_modifier": {
+          "type": "number",
+          "description": "深度修正系数，1.0=标准深度。>1 表示需要更深（如争议度高、专业度高的概念），<1 表示可适当浅化",
+          "minimum": 0.5,
+          "maximum": 2.0
+        },
+        "preferred_academic_databases": {
+          "type": "array",
+          "description": "推荐的学术数据库（第二层搜索优先使用）",
+          "items": { "type": "string" }
+        },
+        "forbidden_source_types": {
+          "type": "array",
+          "description": "禁止使用的来源类型（如对政治敏感概念禁用某些源）",
+          "items": { "type": "string" }
+        },
+        "timeline_importance": {
+          "type": "string",
+          "enum": ["低", "中", "高", "必须"],
+          "description": "时间线在文章中的重要性，'必须'表示该概念有清晰的历史演进需要详细呈现"
+        }
+      }
+    }
+  }
+}
