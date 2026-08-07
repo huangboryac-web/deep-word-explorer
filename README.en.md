@@ -1,4 +1,4 @@
-# Deep Word Explorer · 深度词汇解析引擎
+# Deep Word Explorer · 兴趣词汇解析
 
 ![GitHub stars](https://img.shields.io/github/stars/huangboryac-web/deep-word-explorer?style=flat-square)
 ![License](https://img.shields.io/github/license/huangboryac-web/deep-word-explorer?style=flat-square)
