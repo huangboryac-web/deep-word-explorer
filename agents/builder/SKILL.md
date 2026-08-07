@@ -151,7 +151,7 @@ document.querySelectorAll('.chain-section').forEach(el => {
 
 - `<title>` → `{word} · 深度解析 | WorkBuddy`
 - `<meta name="description">` → 第一阶的一句话定义
-- `<meta name="author">` → `WorkBuddy 深度词汇解析引擎`
+- `<meta name="author">` → `WorkBuddy 兴趣词汇解析`
 
 ### Step 12: 验证
 

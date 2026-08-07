@@ -1,6 +1,6 @@
 # guizang → 长文改造对照表 (Adaptation Guide)
 
-本文档详细说明如何将 guizang-ppt-skill 的 template.html 改造为深度词汇解析引擎的长文模板。
+本文档详细说明如何将 guizang-ppt-skill 的 template.html 改造为兴趣词汇解析的长文模板。
 
 ---
 

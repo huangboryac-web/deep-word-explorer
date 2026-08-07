@@ -1,6 +1,6 @@
 # 组件库 (Component Library)
 
-本文档定义深度词汇解析引擎 HTML 中所有交互组件的 HTML 结构、CSS 样式和 JavaScript 逻辑。
+本文档定义兴趣词汇解析 HTML 中所有交互组件的 HTML 结构、CSS 样式和 JavaScript 逻辑。
 
 ---
 

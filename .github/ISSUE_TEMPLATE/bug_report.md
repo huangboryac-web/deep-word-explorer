@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: 报告一个深度词汇解析引擎的缺陷
+about: 报告一个兴趣词汇解析的缺陷
 title: "[Bug] "
 labels: bug
 assignees: ''

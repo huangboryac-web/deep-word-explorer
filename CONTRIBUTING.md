@@ -1,6 +1,6 @@
 # 贡献指南 · Contributing
 
-感谢你考虑为 **深度词汇解析引擎 (Deep Word Explorer)** 做出贡献！本文件说明如何提交 Issue、PR，以及改动时需要同步的契约。
+感谢你考虑为 **兴趣词汇解析 (Deep Word Explorer)** 做出贡献！本文件说明如何提交 Issue、PR，以及改动时需要同步的契约。
 
 > English: see the "Contributing" section in [README.en.md](./README.en.md).
 
