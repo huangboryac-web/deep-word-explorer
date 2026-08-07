@@ -1,0 +1,12 @@
+# Normalize all text files to LF on checkout/commit for cross-platform consistency.
+* text=auto eol=lf
+
+# Explicitly treat these as text
+*.md text
+*.json text
+*.css text
+*.html text
+*.txt text
+
+# LICENSE is plain text
+LICENSE text
