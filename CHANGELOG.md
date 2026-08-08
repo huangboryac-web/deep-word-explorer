@@ -2,7 +2,7 @@
 
 本文件遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/) 约定，版本号采用语义化版本（[SemVer](https://semver.org/lang/zh-CN/)）。
 
-## [Unreleased]
+## [1.2.0] - 2026-08-08
 
 ### 结构与治理
 - **阈值单一事实源**：新增 `shared/config/quality-gates.json`，三轴档位 / 字数公式 / 引用密度 / AI 痕迹等阈值统一收口；`shared/prompts/system-prompts.md` 收敛为纯调度注入骨架，不再重复规则。
@@ -63,5 +63,6 @@
 
 ## 版本链接
 
+[1.2.0]: https://github.com/huangboryac-web/deep-word-explorer/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/huangboryac-web/deep-word-explorer/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/huangboryac-web/deep-word-explorer/releases/tag/v1.0.0
