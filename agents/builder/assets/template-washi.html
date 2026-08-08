@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{WORD}} · 深度解析 | WorkBuddy</title>
+<meta name="description" content="{{TAGLINE}}">
+<style>
+:root{--ink:#2b2118;--ink-rgb:43,33,24;--paper:#faf5ea;--paper-rgb:250,245,234;--paper-tint:#f0e4cd;--ink-tint:#b23a2a;--serif-zh:"Noto Serif SC","Songti SC",SimSun,serif;--serif-en:"Playfair Display",Georgia,serif;--content-width:680px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--serif-zh);font-size:17px;line-height:2;background:var(--paper);color:var(--ink);overflow-x:hidden;background-image:radial-gradient(rgba(178,58,42,.035) 1px,transparent 1px);background-size:14px 14px}
+body.theme-dark{background:var(--ink);color:var(--paper);background-image:radial-gradient(rgba(250,245,234,.05) 1px,transparent 1px)}
+a{color:var(--ink-tint)}
+::selection{background:var(--ink-tint);color:var(--paper)}
+#progress-bar{position:fixed;top:0;left:0;height:2px;width:0;background:var(--ink-tint);z-index:300}
+.masthead{position:sticky;top:0;z-index:100;background:var(--paper);border-bottom:3px double var(--ink-tint);padding:.7rem 1.4rem .9rem}
+body.theme-dark .masthead{background:var(--ink)}
+.masthead .topline{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.55rem}
+.masthead .brand{font-size:.85rem;letter-spacing:.25em;color:var(--ink-tint)}
+.masthead .actions{display:flex;gap:.5rem}
+.washi-btn{font-family:var(--serif-zh);font-size:.78rem;padding:.2rem .7rem;background:transparent;border:1px solid var(--ink-tint);color:var(--ink-tint);cursor:pointer;border-radius:0}
+.washi-btn:hover{background:var(--ink-tint);color:var(--paper)}
+#washi-index{display:flex;gap:.4rem;flex-wrap:wrap;font-size:.8rem}
+#washi-index a{text-decoration:none;color:var(--ink);border:1px solid transparent;padding:.05rem .35rem;letter-spacing:.08em}
+#washi-index a.active{color:var(--ink-tint);border-color:var(--ink-tint)}
+body.theme-dark #washi-index a{color:var(--paper)}
+.hero{max-width:var(--content-width);margin:0 auto;padding:4.5rem 1.5rem 2.5rem;text-align:center;align-items:center}
+.hero .kicker{font-size:.85rem;letter-spacing:.35em;color:var(--ink-tint);margin:0 0 1rem}
+.hero .kicker::before{content:"— "}
+.hero .kicker::after{content:" —"}
+.hero h1{font-size:clamp(2.3rem,6vw,4.2rem);letter-spacing:.14em;line-height:1.3;margin:0 0 1.2rem;font-weight:700}
+.hero h1::after{content:"印";display:inline-block;margin-left:.55em;font-size:.32em;line-height:1;letter-spacing:0;color:var(--paper);background:var(--ink-tint);border:2px solid var(--ink-tint);border-radius:6px;padding:.16em .22em;vertical-align:middle}
+.hero .tagline{max-width:56ch;margin:0 auto;font-size:1.02rem;line-height:2.05;color:var(--ink);opacity:.85}
+.wrap{max-width:var(--content-width);margin:0 auto;padding:0 1.5rem 4rem}
+main section{margin:3rem 0;padding-top:1.2rem}
+main section h2{font-size:1.5rem;letter-spacing:.12em;border-bottom:1px solid var(--paper-tint);padding-bottom:.55rem;margin:0 0 1.2rem}
+main section h2::after{content:"﹅";color:var(--ink-tint);margin-left:.45em;font-size:.75em}
+main section h3{font-size:1.12rem;letter-spacing:.08em;margin:1.6rem 0 .6rem}
+main section h4{font-size:1rem;margin:1.3rem 0 .5rem}
+main section p{margin:.6rem 0;text-align:justify}
+main section ul,main section ol{margin:.6rem 0;padding-left:1.5rem}
+main section li{margin:.4rem 0}
+.transition-question{text-align:center;margin:3.5rem 0;font-size:1.3rem;letter-spacing:.06em}
+.transition-question p{margin:0}
+.transition-question p::before,.transition-question p::after{content:"❖";color:var(--ink-tint);margin:0 .5em;font-size:.7em;vertical-align:middle}
+.callout{border-left:3px solid var(--ink-tint);background:rgba(178,58,42,.05);padding:.6rem 1.1rem;margin:1.2rem 0}
+.lead{font-size:1.05rem}
+.timeline-list{list-style:none;padding:0}
+.timeline-list li{padding-left:1.4rem;position:relative;margin:.5rem 0}
+.timeline-list li::before{content:"◆";position:absolute;left:0;color:var(--ink-tint);font-size:.7em;top:.55em}
+.stat-row{display:flex;flex-wrap:wrap;gap:1.6rem;margin:1.1rem 0}
+.stat-item .num{font-size:1.7rem;color:var(--ink-tint)}
+.big-num{font-size:2.1rem;color:var(--ink-tint)}
+.comparison-table{width:100%;border-collapse:collapse;margin:1.1rem 0;font-size:.92rem}
+.comparison-table th,.comparison-table td{border:1px solid var(--paper-tint);padding:.55rem .7rem;text-align:left}
+.comparison-table th{background:rgba(178,58,42,.05)}
+.references{margin-top:4.5rem;padding-top:2rem;border-top:3px double var(--ink-tint)}
+.references h2{font-size:1.3rem;letter-spacing:.15em}
+.references ol{line-height:2;padding-left:1.4rem}
+.references a{word-break:break-all}
+.abbr-term{text-decoration:underline dotted var(--ink-tint);cursor:help}
+.citation-ref{color:var(--ink-tint);font-size:.72em;vertical-align:super;cursor:pointer}
+.tooltip,.cite-popup{position:fixed;z-index:3000;max-width:300px;padding:.6rem .9rem;font-size:.85rem;line-height:1.75;background:var(--paper);color:var(--ink);border:1px solid var(--ink-tint);box-shadow:0 3px 12px rgba(43,33,24,.18);pointer-events:none}
+body.theme-dark .tooltip,body.theme-dark .cite-popup{background:var(--ink-tint);color:var(--paper)}
+#chain-indicator{position:fixed;right:max(1rem,calc((100vw - var(--content-width))/2 - 46px));top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:.55rem;z-index:90}
+#chain-indicator .stamp{width:16px;height:16px;border:1px solid var(--ink-tint);color:var(--ink-tint);font-size:.6rem;line-height:14px;text-align:center;cursor:pointer;border-radius:3px;background:var(--paper)}
+#chain-indicator .stamp.active{background:var(--ink-tint);color:var(--paper)}
+body.theme-dark #chain-indicator .stamp{background:var(--ink)}
+.article-footer{text-align:center;padding:2.5rem 1.5rem 3rem;font-size:.8rem;letter-spacing:.12em;color:var(--ink);opacity:.65;border-top:3px double var(--ink-tint)}
+@media(max-width:900px){#chain-indicator{display:none}}
+@media(max-width:768px){.hero{padding-top:3.2rem}.wrap{padding:0 1rem 3.5rem}main section h2{font-size:1.25rem}.transition-question{font-size:1.05rem}}
+@media print{.masthead,#chain-indicator,.washi-btn,#progress-bar{display:none!important}body{background:#fff!important;color:#000!important}}
+</style>
+</head>
+<body class="theme-light theme-vermilion-washi">
+<div id="progress-bar"></div>
+<header class="masthead">
+  <div class="topline"><span class="brand">兴趣词汇解析</span><span class="actions"><button class="washi-btn" id="theme-toggle" aria-label="切换明暗">明 / 暗</button><button class="washi-btn" id="export-pdf" aria-label="导出 PDF">打印</button></span></div>
+  <nav id="washi-index" aria-label="章节索引"></nav>
+</header>
+<div class="hero">
+<p class="kicker">深度解析 · DEEP DIVE</p>
+<h1>{{WORD}}</h1>
+<p class="tagline">{{TAGLINE}}</p>
+</div>
+<main class="wrap">
+{{BODY}}
+</main>
+<footer class="article-footer">{{FOOTER}}</footer>
+<nav id="chain-indicator" aria-label="学习链指示"></nav>
+<script>
+var secs=[].slice.call(document.querySelectorAll('main section[data-chain]'));
+var nums=['一','二','三','四','五','六'];
+var idx=document.getElementById('washi-index');
+secs.forEach(function(s){
+  var a=document.createElement('a');a.href='#'+s.id;
+  a.textContent=nums[parseInt(s.dataset.chain,10)-1]+' · '+s.querySelector('h2').textContent.replace(/[﹅\s]/g,'');
+  idx.appendChild(a);
+});
+var rail=document.getElementById('chain-indicator');
+secs.forEach(function(s){
+  var d=document.createElement('div');d.className='stamp';d.textContent=s.dataset.chain;d.title='第'+nums[parseInt(s.dataset.chain,10)-1]+'阶';
+  d.addEventListener('click',function(){s.scrollIntoView({behavior:'smooth',block:'start'});});
+  rail.appendChild(d);
+});
+function refresh(){
+  var t=document.documentElement.scrollTop,h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('progress-bar').style.width=(h>0?t/h*100:0)+'%';
+  var cur='';secs.forEach(function(s){if(t>=s.offsetTop-180)cur=s.id;});
+  [].forEach.call(idx.querySelectorAll('a'),function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+cur);});
+  [].forEach.call(rail.querySelectorAll('.stamp'),function(d){d.classList.toggle('active',d.textContent===cur.replace('chain-',''));});
+}
+window.addEventListener('scroll',refresh,{passive:true});refresh();
+document.querySelectorAll('.abbr-term').forEach(function(el){
+  el.addEventListener('mouseenter',function(){
+    var d=document.createElement('div');d.className='tooltip';d.textContent=el.dataset.tooltip||el.title||'';
+    document.body.appendChild(d);var r=el.getBoundingClientRect();
+    d.style.left=Math.min(r.left,window.innerWidth-320)+'px';d.style.top=r.bottom+8+'px';el._t=d;
+  });
+  el.addEventListener('mouseleave',function(){if(el._t){el._t.remove();el._t=null;}});
+});
+document.querySelectorAll('.citation-ref').forEach(function(el){
+  el.addEventListener('mouseenter',function(){
+    var d=document.createElement('div');d.className='cite-popup';d.textContent=el.dataset.citeText||'查看底部参考文献';
+    document.body.appendChild(d);var r=el.getBoundingClientRect();
+    d.style.left=Math.min(r.left,window.innerWidth-320)+'px';d.style.top=r.bottom+8+'px';el._c=d;
+  });
+  el.addEventListener('mouseleave',function(){if(el._c){el._c.remove();el._c=null;}});
+});
+var tb=document.getElementById('theme-toggle');
+tb.addEventListener('click',function(){document.body.classList.toggle('theme-dark');document.body.classList.toggle('theme-light');});
+document.getElementById('export-pdf').addEventListener('click',function(){window.print();});
+</script>
+</body>
+</html>

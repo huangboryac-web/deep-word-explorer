@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{WORD}} · 深度解析 | WorkBuddy</title>
+<meta name="description" content="{{TAGLINE}}">
+<style>
+:root{--ink:#26232a;--ink-rgb:38,35,42;--paper:#fff6ec;--paper-rgb:255,246,236;--paper-tint:#ffe0c7;--ink-tint:#d6336c;--sans-zh:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;--content-width:1080px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--sans-zh);font-size:16.5px;line-height:1.75;background:var(--paper);color:var(--ink);overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 12% 18%,rgba(214,51,108,.14) 0 18px,transparent 19px),radial-gradient(circle at 88% 12%,rgba(10,122,61,.12) 0 12px,transparent 13px),radial-gradient(circle at 78% 82%,rgba(240,120,50,.12) 0 22px,transparent 23px),radial-gradient(circle at 18% 86%,rgba(20,90,220,.09) 0 10px,transparent 11px)}
+body.theme-dark{background:var(--ink);color:var(--paper)}
+a{color:var(--ink-tint);font-weight:600}
+::selection{background:var(--ink-tint);color:var(--paper)}
+#progress-bar{position:fixed;top:0;left:0;height:6px;width:0;background:linear-gradient(90deg,var(--ink-tint),#f07832);z-index:300}
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.6rem 1.3rem;background:var(--paper);border-bottom:4px solid var(--ink)}
+body.theme-dark .topbar{background:var(--ink)}
+.topbar .logo{font-weight:900;font-size:1rem;letter-spacing:.04em;background:var(--ink-tint);color:var(--paper);padding:.2rem .55rem;transform:rotate(-1deg);box-shadow:3px 3px 0 var(--ink)}
+.topbar .actions{display:flex;gap:.55rem}
+.sticker-btn{font-family:var(--sans-zh);font-weight:800;font-size:.78rem;padding:.32rem .7rem;background:var(--paper);color:var(--ink);border:3px solid var(--ink);cursor:pointer;box-shadow:3px 3px 0 var(--ink-tint)}
+.sticker-btn:hover{transform:translate(-1px,-1px)}
+.hero{max-width:var(--content-width);margin:0 auto;padding:4.2rem 1.5rem 2.5rem}
+.hero .badge{display:inline-block;font-size:.78rem;font-weight:900;letter-spacing:.16em;background:var(--paper-tint);border:3px solid var(--ink);padding:.2rem .6rem;margin-bottom:1.1rem;transform:rotate(-1deg);box-shadow:3px 3px 0 var(--ink-tint)}
+.hero h1{display:inline-block;font-size:clamp(2.2rem,6vw,4rem);font-weight:900;line-height:1.12;background:var(--ink-tint);color:var(--paper);padding:.12em .32em;margin:0 0 1rem;transform:rotate(-1.5deg);box-shadow:7px 7px 0 var(--ink)}
+.hero .tagline{font-size:1.05rem;max-width:64ch;margin:1.2rem 0 0;line-height:1.85;opacity:.88}
+.layout{max-width:var(--content-width);margin:0 auto;padding:0 1.5rem 4rem;display:grid;grid-template-columns:minmax(0,1fr) 230px;gap:2.5rem;align-items:start}
+.article-col{min-width:0}
+main section{margin:2.6rem 0;padding:1.5rem 1.6rem;border:3px solid var(--ink);border-radius:0;background:var(--paper);box-shadow:8px 8px 0 var(--paper-tint)}
+body.theme-dark main section{background:var(--ink)}
+main section h2{display:inline-block;font-size:1.35rem;font-weight:900;letter-spacing:.02em;border-bottom:4px solid var(--ink-tint);padding-bottom:.2rem;margin:0 0 1rem}
+main section h2::after{content:"✦";color:var(--ink-tint);margin-left:.4em}
+main section h3{font-size:1.1rem;font-weight:800;margin:1.5rem 0 .6rem}
+main section h4{font-size:1rem;font-weight:800;margin:1.2rem 0 .5rem}
+main section p{margin:.6rem 0}
+main section ul,main section ol{margin:.6rem 0;padding-left:1.4rem}
+main section li{margin:.4rem 0}
+.transition-question{text-align:center;font-weight:800;background:var(--paper-tint);border:3px solid var(--ink);padding:1.15rem 1.3rem;margin:2.8rem 0;box-shadow:5px 5px 0 var(--ink-tint);transform:rotate(.5deg)}
+.transition-question p{margin:0}
+.callout{border:3px solid var(--ink-tint);border-left-width:9px;background:var(--paper-tint);padding:.6rem 1rem;margin:1.2rem 0}
+.lead{font-size:1.06rem}
+.timeline-list{list-style:none;padding:0}
+.timeline-list li{padding-left:1.35rem;position:relative;margin:.5rem 0}
+.timeline-list li::before{content:"●";position:absolute;left:0;color:var(--ink-tint)}
+.stat-row{display:flex;flex-wrap:wrap;gap:1.4rem;margin:1.1rem 0}
+.stat-item .num{font-size:1.8rem;font-weight:900;color:var(--ink-tint)}
+.big-num{font-size:2.2rem;font-weight:900;color:var(--ink-tint)}
+.comparison-table{width:100%;border-collapse:collapse;margin:1.1rem 0;font-size:.92rem}
+.comparison-table th,.comparison-table td{border:2px solid var(--paper-tint);padding:.55rem .7rem;text-align:left}
+.comparison-table th{background:var(--paper-tint);font-weight:800}
+.references{margin-top:3.5rem;padding:1.6rem;border:3px dashed var(--ink-tint);background:var(--paper)}
+.references h2{font-size:1.25rem;font-weight:900}
+.references ol{line-height:1.9;padding-left:1.4rem}
+.references a{word-break:break-all}
+.abbr-term{border-bottom:2px dotted var(--ink-tint);cursor:help;font-weight:600}
+.citation-ref{display:inline-block;color:var(--paper);background:var(--ink-tint);font-size:.66em;font-weight:800;padding:0 .28em;border-radius:3px;vertical-align:super;cursor:pointer}
+.tooltip,.cite-popup{position:fixed;z-index:3000;max-width:300px;padding:.6rem .9rem;font-size:.83rem;line-height:1.7;background:var(--paper);color:var(--ink);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink-tint);pointer-events:none}
+body.theme-dark .tooltip,body.theme-dark .cite-popup{background:var(--ink-tint);color:var(--paper)}
+.rail{position:sticky;top:6rem}
+.rail .panel{background:var(--paper);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--paper-tint);padding:1rem}
+body.theme-dark .rail .panel{background:var(--ink)}
+.rail h3{font-size:.85rem;font-weight:900;letter-spacing:.12em;margin:0 0 .8rem;color:var(--ink-tint)}
+#memphis-chips{display:flex;flex-direction:column;gap:.45rem}
+#memphis-chips a{display:block;font-size:.85rem;font-weight:800;text-decoration:none;color:var(--ink);border:2px solid var(--ink);padding:.3rem .55rem;background:var(--paper)}
+#memphis-chips a.active{background:var(--ink-tint);color:var(--paper);border-color:var(--ink-tint)}
+#chain-indicator{display:flex;gap:.4rem;margin-top:1rem}
+#chain-indicator .step{width:26px;height:26px;font-size:.72rem;font-weight:900;line-height:20px;text-align:center;border:2px solid var(--ink);cursor:pointer;background:var(--paper)}
+#chain-indicator .step.active{background:var(--ink-tint);color:var(--paper);border-color:var(--ink-tint)}
+.article-footer{max-width:var(--content-width);margin:0 auto;padding:2rem 1.5rem 3.5rem;font-weight:800;text-align:center;border-top:6px solid var(--ink)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}.rail{position:static;order:-1}.rail .panel{display:flex;flex-wrap:wrap;gap:1rem;align-items:center}.rail h3{margin:0}.rail .panel>div{flex:1;min-width:200px}}
+@media(max-width:768px){.hero{padding-top:3rem}main section{padding:1rem}.hero h1{font-size:1.9rem}}
+@media print{.topbar,.rail,.sticker-btn,#progress-bar{display:none!important}body{background:#fff!important;color:#000!important}.layout{display:block}}
+</style>
+</head>
+<body class="theme-light theme-memphis-pop">
+<div id="progress-bar"></div>
+<header class="topbar"><span class="logo">DEEP EXPLORER</span><span class="actions"><button class="sticker-btn" id="theme-toggle" aria-label="切换明暗">LIGHT/DARK</button><button class="sticker-btn" id="export-pdf" aria-label="导出 PDF">SAVE PDF</button></span></header>
+<div class="hero">
+<span class="badge">DEEP DIVE · {{WORD}}</span>
+<h1>{{WORD}}</h1>
+<p class="tagline">{{TAGLINE}}</p>
+</div>
+<div class="layout">
+<main class="article-col">
+{{BODY}}
+</main>
+<aside class="rail" aria-label="目录与学习链">
+  <div class="panel">
+    <h3>目录</h3>
+    <nav id="memphis-chips" aria-label="章节目录"></nav>
+  </div>
+  <div class="panel">
+    <h3>学习链</h3>
+    <nav id="chain-indicator" aria-label="学习链步骤"></nav>
+  </div>
+</aside>
+</div>
+<footer class="article-footer">{{FOOTER}}</footer>
+<script>
+var secs=[].slice.call(document.querySelectorAll('main section[data-chain]'));
+var chips=document.getElementById('memphis-chips');
+secs.forEach(function(s){
+  var a=document.createElement('a');a.href='#'+s.id;
+  a.textContent='STEP '+s.dataset.chain+' · '+s.querySelector('h2').textContent.replace(/[✦\s]/g,'');
+  chips.appendChild(a);
+});
+var rail=document.getElementById('chain-indicator');
+secs.forEach(function(s){
+  var d=document.createElement('div');d.className='step';d.textContent=s.dataset.chain;
+  d.addEventListener('click',function(){s.scrollIntoView({behavior:'smooth',block:'start'});});
+  rail.appendChild(d);
+});
+function refresh(){
+  var t=document.documentElement.scrollTop,h=document.documentElement.scrollHeight-window.innerHeight;
+  document.getElementById('progress-bar').style.width=(h>0?t/h*100:0)+'%';
+  var cur='';secs.forEach(function(s){if(t>=s.offsetTop-180)cur=s.id;});
+  [].forEach.call(chips.querySelectorAll('a'),function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+cur);});
+  [].forEach.call(rail.querySelectorAll('.step'),function(d){d.classList.toggle('active',d.textContent===cur.replace('chain-',''));});
+}
+window.addEventListener('scroll',refresh,{passive:true});refresh();
+document.querySelectorAll('.abbr-term').forEach(function(el){
+  el.addEventListener('mouseenter',function(){
+    var d=document.createElement('div');d.className='tooltip';d.textContent=el.dataset.tooltip||el.title||'';
+    document.body.appendChild(d);var r=el.getBoundingClientRect();
+    d.style.left=Math.min(r.left,window.innerWidth-320)+'px';d.style.top=r.bottom+8+'px';el._t=d;
+  });
+  el.addEventListener('mouseleave',function(){if(el._t){el._t.remove();el._t=null;}});
+});
+document.querySelectorAll('.citation-ref').forEach(function(el){
+  el.addEventListener('mouseenter',function(){
+    var d=document.createElement('div');d.className='cite-popup';d.textContent=el.dataset.citeText||'查看底部参考文献';
+    document.body.appendChild(d);var r=el.getBoundingClientRect();
+    d.style.left=Math.min(r.left,window.innerWidth-320)+'px';d.style.top=r.bottom+8+'px';el._c=d;
+  });
+  el.addEventListener('mouseleave',function(){if(el._c){el._c.remove();el._c=null;}});
+});
+var tb=document.getElementById('theme-toggle');
+tb.addEventListener('click',function(){var dark=document.body.classList.toggle('theme-dark');document.body.classList.toggle('theme-light');tb.textContent=dark?'DARK/LIGHT':'LIGHT/DARK';});
+document.getElementById('export-pdf').addEventListener('click',function(){window.print();});
+</script>
+</body>
+</html>

@@ -288,6 +288,14 @@ if m_ver:
 themes_css = (ROOT / "shared" / "themes" / "themes.css").read_text(encoding="utf-8")
 theme_count = len(re.findall(r"^\.theme-[\w-]+\s*\{", themes_css, re.M))
 check(theme_count == 8, "themes.css: 主题预设数量为 8")
+style_templates = {
+    "agents/builder/assets/template-terminal.html": ["{{WORD}}", "{{BODY}}", "statusbar", "chain-indicator"],
+    "agents/builder/assets/template-washi.html": ["{{WORD}}", "{{BODY}}", "washi-index", "chain-indicator"],
+    "agents/builder/assets/template-memphis.html": ["{{WORD}}", "{{BODY}}", "memphis-chips", "chain-indicator"],
+}
+for rel, needles in style_templates.items():
+    tpl_text = (ROOT / rel).read_text(encoding="utf-8")
+    check(all(n in tpl_text for n in needles), f"{rel}: 占位符与专属组件齐全")
 
 # 6. Markdown 相对链接与仓库内路径引用
 PREFIX_WHITELIST = (
@@ -375,6 +383,10 @@ THRESHOLD_ASSERTIONS = [
     ("README.en.md", "Phosphor Terminal"),
     ("README.en.md", "Vermilion Washi"),
     ("README.en.md", "Memphis Pop"),
+    ("agents/builder/SKILL.md", "template-terminal.html"),
+    ("agents/builder/SKILL.md", "template-washi.html"),
+    ("agents/builder/SKILL.md", "template-memphis.html"),
+    ("agents/builder/references/theme-injection.md", "washi-index"),
 ]
 for rel, phrase in THRESHOLD_ASSERTIONS:
     text = (ROOT / rel).read_text(encoding="utf-8")

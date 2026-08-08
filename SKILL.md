@@ -205,7 +205,7 @@ license: AGPL-3.0
 **前置分派**：按 `options.format` 分流——html 走完整流程；markdown 直接包装 article_content 为独立 `.md`；pdf 走 html 流程并追加 `@media print` 打印样式。
 
 **关键动作**：
-1. 从 guizang-ppt-skill 拷贝并改造模板（PPT → 长文）
+1. 按主题选择模板（经典 5 套用 template-article.html；终端绿 / 朱印和纸 / 孟菲斯波普 用各自独立模板）
 2. 注入主题 CSS 变量
 3. 注入六阶正文内容 + 过渡问题
 4. 注入参考文献列表（三组分类）

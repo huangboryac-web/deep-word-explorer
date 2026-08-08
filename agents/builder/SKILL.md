@@ -42,8 +42,14 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 
 ### Step 1: 准备模板
 
-1. 从 `guizang-ppt-skill/assets/template.html` 读取原始模板
-2. 创建目标 HTML 的工作副本
+1. 按 `theme` 选择模板：
+   - 经典 5 套（墨水经典 / 靛蓝瓷 / 森林墨 / 牛皮纸 / 沙丘）→ `agents/builder/assets/template-article.html`
+   - 终端绿 → `agents/builder/assets/template-terminal.html`
+   - 朱印和纸 → `agents/builder/assets/template-washi.html`
+   - 孟菲斯波普 → `agents/builder/assets/template-memphis.html`
+2. 风格模板（后三者）使用占位符 `{{WORD}}` / `{{TAGLINE}}` / `{{BODY}}` / `{{FOOTER}}`，
+   其中 `{{BODY}}` = 渲染后的六阶 sections + transitions + glossary + references
+3. 创建目标 HTML 的工作副本，替换占位符
 
 ### Step 2: 删除幻灯片系统
 

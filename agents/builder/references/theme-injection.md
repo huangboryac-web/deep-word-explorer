@@ -47,6 +47,30 @@
 
 ---
 
+## 风格模板（三套独立模板）
+
+终端绿 / 朱印和纸 / 孟菲斯波普 使用与经典模板完全不同的 HTML 骨架与专属组件，
+不共用 `template-article.html`：
+
+| 主题 | 模板 | 专属组件 |
+|------|------|---------|
+| 🟢 终端绿 | `template-terminal.html` | 底部状态栏（文件路径 + 闪烁光标）、命令行 hero 提示符、顶部链式导航 |
+| 🧧 朱印和纸 | `template-washi.html` | 顶部章节索引条 `washi-index`、标题朱印印章、右侧链式印章 |
+| 🎨 孟菲斯波普 | `template-memphis.html` | 贴纸目录 `memphis-chips`、学习链步骤条、hero 贴纸徽章 |
+
+风格模板占位符约定（与经典模板的 `{{WORD}}` / `{{ONE_SENTENCE_DEFINITION}}` 不同）：
+
+```text
+{{WORD}}    文章主题词
+{{TAGLINE}} hero 一句话定义
+{{BODY}}    渲染后的六阶 sections + transitions + glossary + references
+{{FOOTER}}  页脚生成说明
+```
+
+构建师注入顺序：替换占位符 → 按 themes.css 变量块写入 `:root` → 追加风格层（如有）。
+
+---
+
 ## 主题变量块（可直接拷贝）
 
 ### 🖋 墨水经典
