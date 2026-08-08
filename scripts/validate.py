@@ -296,6 +296,8 @@ style_templates = {
 for rel, needles in style_templates.items():
     tpl_text = (ROOT / rel).read_text(encoding="utf-8")
     check(all(n in tpl_text for n in needles), f"{rel}: 占位符与专属组件齐全")
+    for design_token in ("fonts.googleapis", "lucide", "prefers-reduced-motion", "aria-label"):
+        check(design_token in tpl_text, f"{rel}: 含 {design_token}")
 
 # 5.9 Step 0 硬性门禁防回归（未确认不得开始；无免问开关）
 skill_doc = (ROOT / "SKILL.md").read_text(encoding="utf-8")

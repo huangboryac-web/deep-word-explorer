@@ -7,6 +7,7 @@
 ### 修复
 - **审计修复**：builder / illustrator 主题计数由 5 套更正为 8 套；终端模板档位硬编码改为 `{{TIER_LABEL}}` 占位符；删除 themes.css 重复皮肤层，三套风格主题样式以独立模板为唯一源；theme-injection.md 改为引用 themes.css 正本并补充 `{{TIER_LABEL}}`；validate.py 新增防回归断言。
 - **README 重构**：新增「Step 0 参数清单（完整）」——全部参数、每项可选项、推荐值、确认门禁与触发语映射；精简效果列表；双语同步并修正徽章计数（Themes 8 / Pipeline 8）。
+- **三套风格模板全面升级**：终端绿 / 朱印和纸 / 孟菲斯波普 对齐经典模板精致度——引入 Google Fonts 字体系统与 Lucide 图标、设计令牌（spacing/radius/shadow/easing/duration）、hero 入场 + 滚动渐入 + hover/active/focus 三态 + prefers-reduced-motion 降级、各套专属动效（终端扫描线与光标、和纸印章盖印、波普贴纸弹入与漂浮形状）；validate.py 增加模板设计要素断言（字体/图标/动效/无障碍）。
 
 ## [1.4.0] - 2026-08-08
 
