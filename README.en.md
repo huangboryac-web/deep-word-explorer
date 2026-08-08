@@ -4,9 +4,9 @@
 ![License](https://img.shields.io/github/license/huangboryac-web/deep-word-explorer?style=flat-square)
 ![Skill](https://img.shields.io/badge/Skill-Agent-111111?style=flat-square)
 ![Output](https://img.shields.io/badge/Output-Single--File%20HTML-0A7CFF?style=flat-square)
-![Themes](https://img.shields.io/badge/Themes-5-1a2e1f?style=flat-square)
+![Themes](https://img.shields.io/badge/Themes-8-1a2e1f?style=flat-square)
 ![WorkBuddy](https://img.shields.io/badge/WorkBuddy-Supported-6B5B95?style=flat-square)
-![Pipeline](https://img.shields.io/badge/Pipeline-7--Agent%20Multi--Agent-222222?style=flat-square)
+![Pipeline](https://img.shields.io/badge/Pipeline-8--Agent%20Multi--Agent-222222?style=flat-square)
 ![Charts](https://img.shields.io/badge/Charts-Lieflat-3A6B8C?style=flat-square)
 
 > 🌏 **中文版： [README.md](./README.md)**
@@ -18,7 +18,7 @@
 - [Common scenarios](#common-scenarios)
 - [Platform support](#platform-support)
 - [Installation](#installation)
-- [Input parameters](#input-parameters)
+- [Step 0 parameter list (full)](#step-0-parameter-list-full)
 - [Workflow](#workflow)
 - [Six-stage learning chain](#six-stage-learning-chain)
 - [Five-layer funnel search](#five-layer-funnel-search)
@@ -77,18 +77,13 @@ Typical triggers:
 
 ## Features
 
-- 🧠 **Multi-Agent collaboration**: seven roles, each doing one job; inputs/outputs are JSON Schema, verifiable and replayable.
-- 🔍 **Five-layer funnel search**: from encyclopedia facts to papers, expert takes, related concepts, timeliness — deepening, with explicit gap labeling.
-- 🪜 **Six-stage learning chain**: enforces shallow-to-deep; each segment has a transition question; read sequentially or jump.
-- 📚 **Rigorous citations**: inline `[N]` superscripts + three-tier references (encyclopedia / academic / official); anti-AI-pattern detection keeps prose natural.
-- 🔗 **Full URL verification**: QA validates every citation URL, replacing or labeling dead links as "source unavailable".
+- 🧠 **Multi-Agent collaboration (8 roles)**: JSON hand-offs + per-stage quality gates, verifiable and replayable.
+- 📚 **Rigorous citations**: inline `[N]` superscripts + three-tier references; QA fully verifies every citation URL (P0-18).
 - 📖 **Glossary delivery**: all terms are aggregated into a collapsible glossary (in both HTML and Markdown).
-- 📊 **Data charts**: data-dense passages are charted from lieflat-chart's Lupi/Basics/Glance template families; single-file HTML chart fragments, one figure one conclusion.
-- 🖼 **Dual-track illustration**: network-sourced (license-safe, localized, attributed) + self-generated (SVG motifs / AI illustrations / charts), with one global color system per delivery.
-- 🎨 **8 themes**: Ink Classic / Indigo Porcelain / Forest Ink / Kraft Paper / Dune / Phosphor Terminal / Vermilion Washi / Memphis Pop. Colors locked, no custom hex, protecting aesthetic consistency.
-- 🧩 **7 interactive components**: reading progress bar, TOC sidebar, learning-chain indicator, term tooltip, citation popup, dark-mode toggle, PDF export.
-- 📄 **Single-file HTML**: no build, no server — open in a browser to read, screenshot, share.
-- 🌐 **Bilingual**: `language` parameter controls output language, default `zh`; template and copy are localized.
+- 📊 **Charts + dual-track illustration**: lieflat charts (one figure, one conclusion), license-safe network images, SVG/AI illustrations; one global color system per delivery.
+- 🎨 **8 themes**: 5 editorial palettes + 3 independent style templates (Phosphor Terminal / Vermilion Washi / Memphis Pop); no custom hex.
+- 📄 **Single-file HTML**: 7 interactive components, open in a browser to read, screenshot, share.
+- 🌐 **Bilingual**: `language` controls output language; template and copy are localized.
 
 ## Good fit / Not a good fit
 
@@ -172,13 +167,46 @@ After install, the Agent auto-discovers and invokes it. Trigger keywords (zh/en)
 - "我想全面了解 XX" / "I want to fully understand XX"
 - "用 deep-word-explorer 解析 XX" / "Use deep-word-explorer to explain XX"
 
-## Input parameters
+## Step 0 parameter list (full)
 
-Three tier axes plus a config panel: `speed` (fast/standard/deep), `depth` (intro/mid/pro), `scope` (point/related/panorama), plus `words` (2–8 words batch), `compare` (comparison page toggle), `format` (html/markdown/pdf), `illustrations`, `tone` (popular/academic/editorial), `citation_density`, `theme`, `language`, `custom`, and `preset`.
+Every invocation starts with Step 0 parameter confirmation — a **hard gate**: it must not start before
+confirmation and there is no bypass flag. The Agent merges message-specified values, preset files, and
+trigger-phrase recommendations into a candidate list; execution begins only after you confirm
+(reply "confirm to start" / "按以上配置开始", edit items individually, or say "your call" / "随便").
+**Nothing starts before confirmation.**
 
-Presets are loaded from `~/.deep-word-explorer.json` (global) and `./.deep-word-explorer.json` (project); Step 0 proactively asks about unset options and marks preset hits as "from preset".
+| Param | Type | Required | Options | Recommended | Notes |
+|-------|------|----------|---------|-------------|-------|
+| `word` | string | ✅* | any word | — | The word to explain; alternative to `words` |
+| `words` | array | ✅* | 2–8 words | — | Batch mode; comparison page generated by default |
+| `compare` | boolean | ❌ | `true` / `false` | `true` for multi-word | Comparison page toggle (ignored for single word) |
+| `speed` | enum | ❌ | `fast` / `standard` / `deep` | `standard` | Fast→slow: search intensity & polish rounds |
+| `depth` | enum | ❌ | `intro` / `mid` / `pro` | `mid` | Shallow→deep: cognitive level & word multiplier |
+| `scope` | enum | ❌ | `point` / `related` / `panorama` | `point` | Point→breadth: content scope |
+| `format` | enum | ❌ | `html` / `markdown` / `pdf` | `html` | Delivery format |
+| `illustrations` | boolean | ❌ | `true` / `false` | `true` | Enable illustrations |
+| `tone` | enum | ❌ | `popular` / `academic` / `editorial` | `popular` | Writing style |
+| `citation_density` | enum | ❌ | `low` / `standard` / `high` | `standard` | Citations per stage (1 / 2 / 3) |
+| `theme` | enum | ❌ | 8 themes (see "Theme palettes") | auto | Visual theme |
+| `language` | enum | ❌ | `zh` / `en` / `fr` / `de` / `ja` / `ko` / `ar` / `es` / `ru` | `zh` | Output language |
+| `custom` | array | ❌ | free text | `[]` | Custom requirements |
+| `preset` | file | ❌ | preset file path | — | Highest-priority preset |
+| `output_path` | string | ❌ | any path | `.workbuddy/deep-explorer/{word}/` | Output location |
 
-Full parameter table and defaults live in [`SKILL.md`](./SKILL.md) (Step 0). Default combo: standard × mid × point, html, illustrations on, popular tone, standard citation density, Chinese.
+**Trigger phrase → recommended mapping** (recommendation only; confirmation still required):
+
+| User expression | Recommended combo |
+|-----------------|-------------------|
+| quick look / simple intro | `speed=fast, depth=intro` |
+| general / standard depth | `speed=standard, depth=mid` |
+| deep dive / exhaustive / study material | `speed=deep, depth=pro, scope=panorama` |
+| related concepts | `scope=related` |
+| full landscape / knowledge map | `scope=panorama` |
+
+**Presets**: global `~/.deep-word-explorer.json` → project `./.deep-word-explorer.json` → explicit
+`preset` file, merged layer by layer; preset hits are marked "from preset" and still require
+confirmation. Full semantics and thresholds live in [`SKILL.md`](./SKILL.md) Step 0 and
+`shared/config/quality-gates.json`.
 
 ## Workflow
 

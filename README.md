@@ -4,9 +4,9 @@
 ![License](https://img.shields.io/github/license/huangboryac-web/deep-word-explorer?style=flat-square)
 ![Skill](https://img.shields.io/badge/Skill-Agent-111111?style=flat-square)
 ![Output](https://img.shields.io/badge/Output-Single--File%20HTML-0A7CFF?style=flat-square)
-![Themes](https://img.shields.io/badge/Themes-5-1a2e1f?style=flat-square)
+![Themes](https://img.shields.io/badge/Themes-8-1a2e1f?style=flat-square)
 ![WorkBuddy](https://img.shields.io/badge/WorkBuddy-Supported-6B5B95?style=flat-square)
-![Pipeline](https://img.shields.io/badge/Pipeline-7--Agent%20Multi--Agent-222222?style=flat-square)
+![Pipeline](https://img.shields.io/badge/Pipeline-8--Agent%20Multi--Agent-222222?style=flat-square)
 ![Charts](https://img.shields.io/badge/Charts-Lieflat-3A6B8C?style=flat-square)
 
 > 🌏 **English version: [README.en.md](./README.en.md)**
@@ -18,7 +18,7 @@
 - [常见使用场景](#常见使用场景)
 - [平台支持](#平台支持)
 - [安装](#安装)
-- [输入参数](#输入参数)
+- [Step 0 参数清单（完整）](#step-0-参数清单完整)
 - [使用流程](#使用流程)
 - [六阶学习链](#六阶学习链)
 - [五层漏斗搜索](#五层漏斗搜索)
@@ -76,18 +76,13 @@ Agent 会自动加载本 skill，依次走完六阶段并交付一个 `index.htm
 
 ## 效果
 
-- 🧠 **多 Agent 协作**：八角色各司其职，分类、研究、架构、撰写、配图、构建、质检、对比被拆成可验证的独立阶段。
-- 🔍 **五层漏斗搜索**：从百科事实到学术论文、专家解读、关联概念、时效信息，逐层深挖，显式标注信息缺口。
-- 🪜 **六阶学习链**：强制由浅入深，每段配过渡提问，读者可顺序递进也可跳跃阅读。
-- 📚 **严谨引用**：正文内联 `[N]` 上标 + 三级参考文献（百科 / 学术 / 官方），反 AI 痕迹检测保障行文自然。
-- 🔗 **引用全量核查**：QA 对全部来源 URL 全量校验，失效链接自动替换或标注「来源不可访问」。
+- 🧠 **多 Agent 协作（8 角色）**：JSON 交接 + 独立质量门禁，可验证、可回放。
+- 📚 **严谨引用**：`[N]` 上标 + 三级参考文献，QA 对全部来源 URL 全量核查（P0-18）。
 - 📖 **术语表交付**：全文术语自动汇总为可折叠术语表（HTML / Markdown 均含）。
-- 📊 **数据图表**：数据密集段落按数据形状从 lieflat-chart 的 Lupi/Basics/Glance 模板选型，单文件 HTML 图表片段嵌入，一张图一个结论。
-- 🖼 **双轨配图**：网络来源（许可安全 + 本地化 + 图源标注）与自生成（SVG 纹样 / AI 插画 / 图表）双轨并行，整份交付锁定唯一色系。
-- 🎨 **8 套主题**：墨水经典 / 靛蓝瓷 / 森林墨 / 牛皮纸 / 沙丘 / 终端绿 / 朱印和纸 / 孟菲斯波普，配色锁定，不允许自定义 hex，保护美学一致性。
-- 🧩 **7 个交互组件**：阅读进度条、目录侧栏、学习链指示器、术语 tooltip、引用弹层、暗色模式切换、PDF 导出。
-- 📄 **单文件 HTML**：不需要构建、不需要服务器，浏览器直接打开即可阅读、截图、分享。
-- 🌐 **中英双语**：`language` 参数控制输出语言，默认中文；模板与文案均支持本地化。
+- 📊 **数据图表 + 双轨配图**：lieflat 图表（一张图一个结论）、许可安全网络图、SVG/AI 插画，整份交付锁定唯一色系。
+- 🎨 **8 套主题**：5 套编辑部风 + 3 套独立风格模板（终端绿 / 朱印和纸 / 孟菲斯波普），不允许自定义 hex。
+- 📄 **单文件 HTML**：7 个交互组件，浏览器直接打开即可阅读、截图、分享。
+- 🌐 **中英双语**：`language` 控制输出语言，模板与文案均本地化。
 
 ## 适合 / 不适合
 
@@ -173,13 +168,43 @@ ls ~/.workbuddy/skills/deep-word-explorer/
 - "deep dive into XX"
 - "give me a structured explainer on XX"
 
-## 输入参数
+## Step 0 参数清单（完整）
 
-支持「三轴档位 + 配置面板」：`speed`（fast/standard/deep，快→慢）、`depth`（intro/mid/pro，浅→深）、`scope`（point/related/panorama，点→面），以及 `words`（2–8 个词批量）、`compare`（对比页开关）、`format`（html/markdown/pdf）、`illustrations`、`tone`（科普/学术/杂志）、`citation_density`、`theme`、`language`、`custom`、`preset`（预设文件）。
+调用后先进入 Step 0 参数确认（**硬性门禁**：未确认不得开始，无免问开关）。Agent 会把消息指定值、
+预设文件、触发语映射推荐值合并为候选清单展示；你确认后（回复「按以上配置开始」、逐项修改，或
+「随便 / 按推荐来」）才开始执行。**确认前不会开始**。
 
-预设支持全局（`~/.deep-word-explorer.json`）与项目级（`./.deep-word-explorer.json`）两级；调用前 Step 0 会展示完整参数清单（预设命中项标注「来自预设」）并要求确认，**确认前不会开始**。
+| 参数 | 类型 | 必填 | 可选项 | 推荐值 | 说明 |
+|------|------|------|--------|--------|------|
+| `word` | string | ✅* | 任意词 | — | 待解析词汇，与 `words` 二选一 |
+| `words` | array | ✅* | 2–8 个词 | — | 批量解析；默认生成对比页 |
+| `compare` | boolean | ❌ | `true` / `false` | 多词时 `true` | 是否生成对比页（单词忽略） |
+| `speed` | enum | ❌ | `fast` / `standard` / `deep` | `standard` | 快→慢：搜索强度与打磨轮次 |
+| `depth` | enum | ❌ | `intro` / `mid` / `pro` | `mid` | 浅→深：认知门槛与字数乘子 |
+| `scope` | enum | ❌ | `point` / `related` / `panorama` | `point` | 点→面：内容广度 |
+| `format` | enum | ❌ | `html` / `markdown` / `pdf` | `html` | 交付形态 |
+| `illustrations` | boolean | ❌ | `true` / `false` | `true` | 是否配图 |
+| `tone` | enum | ❌ | `popular` 科普 / `academic` 学术 / `editorial` 杂志 | `popular` | 行文风格 |
+| `citation_density` | enum | ❌ | `low` / `standard` / `high` | `standard` | 引用密度（每阶 1 / 2 / 3 条） |
+| `theme` | enum | ❌ | 8 套主题（见「主题色预设」） | 自动推荐 | 视觉主题 |
+| `language` | enum | ❌ | `zh` / `en` / `fr` / `de` / `ja` / `ko` / `ar` / `es` / `ru` | `zh` | 输出语言 |
+| `custom` | array | ❌ | 自由文本 | `[]` | 自定义扩展要求 |
+| `preset` | file | ❌ | 预设文件路径 | — | 最高优先级预设 |
+| `output_path` | string | ❌ | 任意路径 | `.workbuddy/deep-explorer/{word}/` | 输出位置 |
 
-完整参数表与默认值见 [`SKILL.md`](./SKILL.md)（Step 0）。默认组合：standard × mid × point、html、配图开、科普语气、标准引用密度、中文。
+**触发语 → 推荐值映射**（只作推荐，仍需确认）：
+
+| 用户表达 | 推荐组合 |
+|---------|---------|
+| 快速了解 / 简单介绍 / 简介 | `speed=fast, depth=intro` |
+| 全面了解 / 标准深度 | `speed=standard, depth=mid` |
+| 深挖 / 穷尽 / 研读 / 硬核 | `speed=deep, depth=pro, scope=panorama` |
+| 关联 / 相关概念 | `scope=related` |
+| 全景 / 知识地图 / 学科坐标 | `scope=panorama` |
+
+**预设**：全局 `~/.deep-word-explorer.json` → 项目 `./.deep-word-explorer.json` → 显式 `preset`
+逐层合并；命中项在清单中标注「来自预设」，仍需确认。完整语义与阈值见 [`SKILL.md`](./SKILL.md)
+Step 0 与 `shared/config/quality-gates.json`。
 
 ## 使用流程
 

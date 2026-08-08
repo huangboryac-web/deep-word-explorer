@@ -6,6 +6,7 @@
 
 ### 修复
 - **审计修复**：builder / illustrator 主题计数由 5 套更正为 8 套；终端模板档位硬编码改为 `{{TIER_LABEL}}` 占位符；删除 themes.css 重复皮肤层，三套风格主题样式以独立模板为唯一源；theme-injection.md 改为引用 themes.css 正本并补充 `{{TIER_LABEL}}`；validate.py 新增防回归断言。
+- **README 重构**：新增「Step 0 参数清单（完整）」——全部参数、每项可选项、推荐值、确认门禁与触发语映射；精简效果列表；双语同步并修正徽章计数（Themes 8 / Pipeline 8）。
 
 ## [1.4.0] - 2026-08-08
 

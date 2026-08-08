@@ -415,6 +415,10 @@ THRESHOLD_ASSERTIONS = [
     ("AGENTS.md", "硬性门禁"),
     ("README.md", "按以上配置开始"),
     ("commands/deep-explore.md", "确认"),
+    ("README.md", "Step 0 参数清单"),
+    ("README.en.md", "Step 0 parameter list"),
+    ("README.md", "Themes-8"),
+    ("README.en.md", "Themes-8"),
 ]
 for rel, phrase in THRESHOLD_ASSERTIONS:
     text = (ROOT / rel).read_text(encoding="utf-8")
