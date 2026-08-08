@@ -6,7 +6,7 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 ## 前置依赖
 - 撰写师 Agent 的 `article_content`
 - 配图师 Agent 的 `illustration_plan`（含 `media_assets/`、`chart_fragments/`）
-- 用户选择的 `theme`（从 5 套中选一；未指定时由主编排器按分类自动推荐）
+- 用户选择的 `theme`（从 8 套中选一；未指定时由主编排器按分类自动推荐）
 - guizang-ppt-skill 的原始 template.html（改造基础）
 - 本 Agent 的 adaptation-guide.md、component-library.md、theme-injection.md、illustration-embedding.md
 
@@ -79,10 +79,9 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 ### Step 5: 注入主题
 
 按 theme-injection.md：
-1. 根据 `theme` 参数选择对应的 CSS 变量块
-2. 替换模板 `<style>` 中 `:root` 的 6 个变量
+1. 经典 5 套模板：根据 `theme` 参数选择对应的 CSS 变量块，替换模板 `<style>` 中 `:root` 的 6 个变量
+2. 三套风格模板（终端绿 / 朱印和纸 / 孟菲斯波普）：模板已内置变量与完整样式，不执行变量替换与皮肤追加，仅确认占位符已替换
 3. 为 `<body>` 添加主题类名
-4. 若主题有风格层（themes.css 底部 `body.theme-*` 皮肤块，终端绿 / 朱印和纸 / 孟菲斯波普），追加到 `<style>` 末尾
 
 ### Step 6: 组装 HTML 结构
 

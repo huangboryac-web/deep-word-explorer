@@ -8,7 +8,7 @@ deep-word-explorer 流水线的第五个 Agent（Step 4.5，位于撰写师与�
 
 - 撰写师 Agent 的 `article_content`（正文内容）
 - 架构师 Agent 的 `learning_chain`（六阶结构与过渡问题）
-- 用户选择的 `theme`（5 套主题之一）
+- 用户选择的 `theme`（8 套主题之一）
 - 本 Agent 的 `illustration-guide.md`（配图规则正本）
 - 已安装的 **lieflat-charts** 技能（运行时依赖，安装方式：`redskill install lieflat-chart`；本仓库不重新分发其模板，许可见 README「第三方依赖」）
 

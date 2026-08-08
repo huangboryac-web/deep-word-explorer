@@ -6,7 +6,7 @@
 
 ## 注入位置
 
-在 HTML 模板的 `<style>` 块的 `:root` 区域，替换以下 6 行 CSS 变量：
+经典模板（`template-article.html`）在 `<style>` 块的 `:root` 区域使用 6 个 CSS 变量：
 
 ```css
 --ink: /* 替换 */
@@ -16,6 +16,9 @@
 --paper-tint: /* 替换 */
 --ink-tint: /* 替换 */
 ```
+
+三套风格模板（`template-terminal.html` / `template-washi.html` / `template-memphis.html`）
+已内置各自的变量与完整样式，无需替换变量，也不追加任何皮肤层。
 
 ---
 
@@ -38,12 +41,9 @@
 
 ## 注入操作
 
-1. 从 `shared/themes/themes.css` 中读取对应主题的 CSS 变量块
-2. 将 6 个变量值替换到模板的 `:root` 中
+1. **经典 5 套模板**：从 `shared/themes/themes.css` 读取对应主题的变量块，替换模板 `:root` 的 6 个变量
+2. **三套风格模板**：模板已内置变量与完整样式，不执行变量替换与皮肤追加，仅替换占位符
 3. 在 `<body>` 上添加对应主题类名（如 `class="theme-light theme-ink-classic"`）
-4. 若该主题在 themes.css 底部「主题风格层」有 `body.theme-*` 皮肤块
-   （目前为终端绿 / 朱印和纸 / 孟菲斯波普），将其追加到 `<style>` 末尾；
-   其余 5 套主题无风格层，仅做变量替换
 
 ---
 
@@ -61,94 +61,18 @@
 风格模板占位符约定（与经典模板的 `{{WORD}}` / `{{ONE_SENTENCE_DEFINITION}}` 不同）：
 
 ```text
-{{WORD}}    文章主题词
-{{TAGLINE}} hero 一句话定义
-{{BODY}}    渲染后的六阶 sections + transitions + glossary + references
-{{FOOTER}}  页脚生成说明
+{{WORD}}      文章主题词
+{{TAGLINE}}   hero 一句话定义
+{{BODY}}      渲染后的六阶 sections + transitions + glossary + references
+{{FOOTER}}    页脚生成说明
+{{TIER_LABEL}} 档位标签（如 deep×pro×panorama），由 options 组合生成
 ```
 
-构建师注入顺序：替换占位符 → 按 themes.css 变量块写入 `:root` → 追加风格层（如有）。
+构建师注入顺序：替换全部占位符 → 确认 body class 与主题一致；风格模板无需追加任何样式。
 
 ---
 
-## 主题变量块（可直接拷贝）
+## 主题变量正本
 
-### 🖋 墨水经典
-```css
---ink: #0a0a0b;
---ink-rgb: 10, 10, 11;
---paper: #f1efea;
---paper-rgb: 241, 239, 234;
---paper-tint: #e8e5de;
---ink-tint: #18181a;
-```
-
-### 🌊 靛蓝瓷
-```css
---ink: #0a1f3d;
---ink-rgb: 10, 31, 61;
---paper: #f1f3f5;
---paper-rgb: 241, 243, 245;
---paper-tint: #e4e8ec;
---ink-tint: #152a4a;
-```
-
-### 🌿 森林墨
-```css
---ink: #1a2e1f;
---ink-rgb: 26, 46, 31;
---paper: #f5f1e8;
---paper-rgb: 245, 241, 232;
---paper-tint: #ece7da;
---ink-tint: #253d2c;
-```
-
-### 🍂 牛皮纸
-```css
---ink: #2a1e13;
---ink-rgb: 42, 30, 19;
---paper: #eedfc7;
---paper-rgb: 238, 223, 199;
---paper-tint: #e0d0b6;
---ink-tint: #3a2a1d;
-```
-
-### 🌙 沙丘
-```css
---ink: #1f1a14;
---ink-rgb: 31, 26, 20;
---paper: #f0e6d2;
---paper-rgb: 240, 230, 210;
---paper-tint: #e3d7bf;
---ink-tint: #2d2620;
-```
-
-### 🟢 终端绿
-```css
---ink: #0f2418;
---ink-rgb: 15, 36, 24;
---paper: #eef7ef;
---paper-rgb: 238, 247, 239;
---paper-tint: #d8ecd9;
---ink-tint: #0a7a3d;
-```
-
-### 🧧 朱印和纸
-```css
---ink: #2b2118;
---ink-rgb: 43, 33, 24;
---paper: #faf5ea;
---paper-rgb: 250, 245, 234;
---paper-tint: #f0e4cd;
---ink-tint: #b23a2a;
-```
-
-### 🎨 孟菲斯波普
-```css
---ink: #26232a;
---ink-rgb: 38, 35, 42;
---paper: #fff6ec;
---paper-rgb: 255, 246, 236;
---paper-tint: #ffe0c7;
---ink-tint: #d6336c;
-```
+8 套主题的 6 个变量值以 `shared/themes/themes.css` 为准，本文件不再重复拷贝；
+替换经典模板时直接从该文件读取对应 `.theme-*` 变量块。

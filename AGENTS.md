@@ -31,6 +31,9 @@
    `commands/deep-explore.md`，预设结构见 `shared/schemas/preset.json`。
 10. **质量门禁**：引用来源 URL 全量核查（P0-18）与术语表一致性（glossary ↔ cached_terms）
     是 v1.3 固定门禁，改动 QA 清单时保持 P0 18 / P1 36 / P2 28 的计数同步。
+11. **样式唯一源**：三套风格主题（终端绿 / 朱印和纸 / 孟菲斯波普）的完整样式以独立模板
+    （`agents/builder/assets/template-*.html`）为唯一事实源，`themes.css` 仅维护 8 套变量块；
+    改样式只改模板，改色值先改 themes.css 变量再同步模板变量。
 
 ## 常用命令
 

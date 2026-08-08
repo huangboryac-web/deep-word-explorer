@@ -289,7 +289,7 @@ themes_css = (ROOT / "shared" / "themes" / "themes.css").read_text(encoding="utf
 theme_count = len(re.findall(r"^\.theme-[\w-]+\s*\{", themes_css, re.M))
 check(theme_count == 8, "themes.css: 主题预设数量为 8")
 style_templates = {
-    "agents/builder/assets/template-terminal.html": ["{{WORD}}", "{{BODY}}", "statusbar", "chain-indicator"],
+    "agents/builder/assets/template-terminal.html": ["{{WORD}}", "{{BODY}}", "{{TIER_LABEL}}", "statusbar", "chain-indicator"],
     "agents/builder/assets/template-washi.html": ["{{WORD}}", "{{BODY}}", "washi-index", "chain-indicator"],
     "agents/builder/assets/template-memphis.html": ["{{WORD}}", "{{BODY}}", "memphis-chips", "chain-indicator"],
 }
@@ -309,6 +309,18 @@ readme_zh = (ROOT / "README.md").read_text(encoding="utf-8")
 check("确认前不会开始" in readme_zh, "README.md: 确认门禁说明存在")
 readme_en = (ROOT / "README.en.md").read_text(encoding="utf-8")
 check("no `--no-ask` bypass" in readme_en, "README.en.md: 无免问开关说明存在")
+
+# 5.10 审计修复防回归（计数 / 档位占位符 / 样式唯一源）
+builder_doc = (ROOT / "agents/builder/SKILL.md").read_text(encoding="utf-8")
+illustrator_doc = (ROOT / "agents/illustrator/SKILL.md").read_text(encoding="utf-8")
+check("8 套" in builder_doc and "8 套" in illustrator_doc, "builder/illustrator SKILL: 主题计数为 8 套")
+terminal_tpl = (ROOT / "agents/builder/assets/template-terminal.html").read_text(encoding="utf-8")
+check("{{TIER_LABEL}}" in terminal_tpl, "template-terminal.html: 含 {{TIER_LABEL}} 占位符")
+check("--tier deep×pro×panorama" not in terminal_tpl, "template-terminal.html: 无硬编码档位")
+check("主题风格层" not in themes_css and "复古终端皮肤" not in themes_css, "themes.css: 无重复皮肤层")
+theme_injection = (ROOT / "agents/builder/references/theme-injection.md").read_text(encoding="utf-8")
+check("以 `shared/themes/themes.css` 为准" in theme_injection, "theme-injection.md: 变量以 themes.css 正本为准")
+check("追加到 `<style>` 末尾" not in theme_injection, "theme-injection.md: 无皮肤层追加步骤")
 
 # 6. Markdown 相对链接与仓库内路径引用
 PREFIX_WHITELIST = (
