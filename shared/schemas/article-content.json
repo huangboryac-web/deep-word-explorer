@@ -7,18 +7,29 @@
   "properties": {
     "meta": {
       "type": "object",
-      "required": ["word", "total_words", "generated_at"],
+      "required": ["word", "options", "total_words", "generated_at"],
       "properties": {
         "word": { "type": "string" },
-        "depth_level": {
-          "type": "string",
-          "enum": ["quick", "standard", "exhaustive"],
-          "description": "深度等级，决定 sections/transitions 数量与字数门禁（见 shared/config/quality-gates.json）"
+        "options": {
+          "type": "object",
+          "required": ["speed", "depth", "scope", "format", "illustrations", "tone", "citation_density", "language"],
+          "properties": {
+            "speed": { "type": "string", "enum": ["fast", "standard", "deep"] },
+            "depth": { "type": "string", "enum": ["intro", "mid", "pro"] },
+            "scope": { "type": "string", "enum": ["point", "related", "panorama"] },
+            "format": { "type": "string", "enum": ["html", "markdown", "pdf"] },
+            "illustrations": { "type": "boolean" },
+            "tone": { "type": "string", "enum": ["popular", "academic", "editorial"] },
+            "citation_density": { "type": "string", "enum": ["low", "standard", "high"] },
+            "language": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] },
+            "custom": { "type": "array", "items": { "type": "string" } }
+          },
+          "description": "统一配置面板（三轴档位 + 格式/配图/语气/引用密度/主题语言），见 shared/config/quality-gates.json"
         },
         "total_words": {
           "type": "integer",
-          "minimum": 4000,
-          "description": "硬性下限：quick 4,000 / standard 10,000 / exhaustive 12,000（shared/config/quality-gates.json）"
+          "minimum": 8000,
+          "description": "硬性下限 = base_words(10,000) × depth.word_multiplier + scope.extra_words（最低 intro+point=8,000；shared/config/quality-gates.json）"
         },
         "generated_at": { "type": "string", "format": "date-time" },
         "author_note": { "type": "string" }
@@ -26,7 +37,8 @@
     },
     "sections": {
       "type": "array",
-      "description": "standard/exhaustive 为 6 阶，quick 为 3 阶（由根级 if/then 按 meta.depth_level 约束）",
+      "minItems": 6,
+      "description": "任何档位均为 6 阶；scope=related/panorama 时每阶附 related_sidebar",
       "items": {
         "type": "object",
         "required": ["stage", "title", "content", "word_count", "cached_terms"],
@@ -50,6 +62,12 @@
               }
             }
           },
+          "related_sidebar": {
+            "type": "array",
+            "description": "scope=related/panorama 时的本阶关联概念侧栏（至少 1 条）",
+            "minItems": 1,
+            "items": { "type": "string" }
+          },
           "visual_assets": {
             "type": "object",
             "description": "本阶需要的可视化资源",
@@ -63,7 +81,9 @@
     },
     "transitions": {
       "type": "array",
-      "description": "standard/exhaustive 为 5 个，quick 为 2 个（由根级 if/then 按 meta.depth_level 约束）",
+      "minItems": 5,
+      "maxItems": 5,
+      "description": "任何档位均为 5 个过渡问题",
       "items": {
         "type": "object",
         "properties": {
@@ -75,7 +95,7 @@
     },
     "citations": {
       "type": "array",
-      "description": "quick 至少 6 条，standard/exhaustive 至少 8 条（由根级 if/then 按 meta.depth_level 约束）",
+      "description": "引用列表下限按 citation_density：low ≥6 / standard ≥8 / high ≥12（由根级 if/then 约束）",
       "items": {
         "type": "object",
         "required": ["id", "type", "title"],
@@ -116,29 +136,97 @@
       }
     }
   },
-  "if": {
+  "extras": {
+    "type": "object",
+    "description": "scope=panorama 时的附加章节",
     "properties": {
-      "meta": {
-        "properties": {
-          "depth_level": { "const": "quick" }
-        },
-        "required": ["depth_level"]
+      "panorama_intro": {
+        "type": "string",
+        "description": "开头「全景导览」：一句话定位 + 知识地图导语"
+      },
+      "further_reading": {
+        "type": "array",
+        "minItems": 5,
+        "description": "结尾「知识地图/延伸阅读」：至少 5 条延伸资源",
+        "items": { "type": "string" }
       }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "meta": {
+            "properties": {
+              "options": {
+                "properties": { "citation_density": { "const": "low" } },
+                "required": ["citation_density"]
+              }
+            },
+            "required": ["options"]
+          }
+        },
+        "required": ["meta"]
+      },
+      "then": { "properties": { "citations": { "minItems": 6 } } }
     },
-    "required": ["meta"]
-  },
-  "then": {
-    "properties": {
-      "sections": { "minItems": 3 },
-      "citations": { "minItems": 6 },
-      "transitions": { "minItems": 2, "maxItems": 2 }
+    {
+      "if": {
+        "properties": {
+          "meta": {
+            "properties": {
+              "options": {
+                "properties": { "citation_density": { "const": "standard" } },
+                "required": ["citation_density"]
+              }
+            },
+            "required": ["options"]
+          }
+        },
+        "required": ["meta"]
+      },
+      "then": { "properties": { "citations": { "minItems": 8 } } }
+    },
+    {
+      "if": {
+        "properties": {
+          "meta": {
+            "properties": {
+              "options": {
+                "properties": { "citation_density": { "const": "high" } },
+                "required": ["citation_density"]
+              }
+            },
+            "required": ["options"]
+          }
+        },
+        "required": ["meta"]
+      },
+      "then": { "properties": { "citations": { "minItems": 12 } } }
+    },
+    {
+      "if": {
+        "properties": {
+          "meta": {
+            "properties": {
+              "options": {
+                "properties": { "scope": { "const": "panorama" } },
+                "required": ["scope"]
+              }
+            },
+            "required": ["options"]
+          }
+        },
+        "required": ["meta"]
+      },
+      "then": {
+        "properties": {
+          "extras": {
+            "required": ["panorama_intro", "further_reading"]
+          }
+        },
+        "required": ["extras"]
+      }
     }
-  },
-  "else": {
-    "properties": {
-      "sections": { "minItems": 6 },
-      "citations": { "minItems": 8 },
-      "transitions": { "minItems": 5, "maxItems": 5 }
-    }
-  }
+  ]
 }

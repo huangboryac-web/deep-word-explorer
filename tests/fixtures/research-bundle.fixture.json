@@ -1,8 +1,17 @@
 {
   "meta": {
     "word": "存在主义",
+    "options": {
+      "speed": "standard",
+      "depth": "mid",
+      "scope": "point",
+      "format": "html",
+      "illustrations": true,
+      "tone": "popular",
+      "citation_density": "standard",
+      "language": "zh"
+    },
     "generated_at": "2026-08-08T00:00:00Z",
-    "depth_level": "standard",
     "total_sources_consulted": 12,
     "search_duration_seconds": 1800,
     "degradations_applied": []

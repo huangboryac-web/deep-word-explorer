@@ -18,6 +18,7 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 - `illustration_plan` (JSON)：来自配图师 Agent（Step 4.5）
 - `theme` (string)：主题名称（ink-classic / indigo-porcelain / forest-ink / kraft-paper / dune）
 - `output_path` (string)：输出文件的完整路径
+- `options` (object)：统一配置面板；`format` 决定交付形态
 
 ## 输出
 - `index.html`：单文件完整网页
@@ -25,6 +26,15 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 ---
 
 ## 工作流
+
+### Step 0: 按 format 分派
+
+- `format=html`（默认）：走下方完整流程，产出单文件 `index.html`
+- `format=markdown`：跳过模板 / WebGL / 交互组件 / 图表嵌入，直接包装
+  `article_content.sections` 为独立 `.md` 文件（保留 [N] 与 `<abbr>` 标注），
+  scope=panorama 时追加 `extras` 章节
+- `format=pdf`：按 html 流程构建，并追加 `@media print` 打印样式
+  （A4 分页、隐藏交互组件、图表浅底），交付时指引用户「打印 → 另存为 PDF」
 
 ### Step 1: 准备模板
 
@@ -126,6 +136,8 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 
 ### Step 8.5: 嵌入配图（数据图表 + 网络图片 + 自生成插画）
 
+`options.illustrations=false` 或 `illustration_plan.color_system="none"` 时跳过本步。
+
 按 illustration-embedding.md 执行：
 
 1. **校验资产**：每个 asset 的本地文件存在、alt_text 齐全、色系与主题协调（冲突则返回配图师重锁色系）
@@ -189,6 +201,9 @@ document.querySelectorAll('.chain-section').forEach(el => {
 - [ ] 图表片段样式已作用域化（`#fig-` 前缀），不污染文章样式
 - [ ] 网络图片全部本地化（无远程热链），figcaption 含图源与许可
 - [ ] 图表容器在暗色模式下保持浅底可读，移动端无横向溢出
+- [ ] format=markdown：输出为独立 .md，标注与章节完整，无 HTML 组件残留
+- [ ] format=pdf：打印样式生效，交互组件隐藏，页面可正常分页
+- [ ] scope=related/panorama：每阶 related_sidebar 已渲染；scope=panorama：extras 已渲染
 
 ---
 

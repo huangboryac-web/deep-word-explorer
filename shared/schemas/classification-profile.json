@@ -102,7 +102,7 @@
         },
         "layer_4_enabled": {
           "type": "boolean",
-          "description": "是否启用第四层（关联层）搜索，depth=exhaustive 时强制为 true"
+          "description": "是否启用第四层（关联层）搜索，options.scope=panorama 时强制为 true"
         },
         "layer_5_enabled": {
           "type": "boolean",
@@ -135,6 +135,22 @@
           "description": "时间线在文章中的重要性，'必须'表示该概念有清晰的历史演进需要详细呈现"
         }
       }
+    },
+    "options": {
+      "type": "object",
+      "required": ["speed", "depth", "scope", "format", "illustrations", "tone", "citation_density", "language"],
+      "properties": {
+        "speed": { "type": "string", "enum": ["fast", "standard", "deep"] },
+        "depth": { "type": "string", "enum": ["intro", "mid", "pro"] },
+        "scope": { "type": "string", "enum": ["point", "related", "panorama"] },
+        "format": { "type": "string", "enum": ["html", "markdown", "pdf"] },
+        "illustrations": { "type": "boolean" },
+        "tone": { "type": "string", "enum": ["popular", "academic", "editorial"] },
+        "citation_density": { "type": "string", "enum": ["low", "standard", "high"] },
+        "language": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] },
+        "custom": { "type": "array", "items": { "type": "string" } }
+      },
+      "description": "Step 0 确认的统一配置面板快照，见 shared/config/quality-gates.json"
     }
   }
 }

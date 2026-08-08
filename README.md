@@ -33,7 +33,7 @@
 - [作者与许可](#作者与许可)
 - [更新日志](./CHANGELOG.md)
 
-一个适配 WorkBuddy / Claude Code / Codex 等 Agent 环境的**多 Agent 协作知识生产流水线**。输入任意一个「词」——地点、名词、热词、书籍、国家、历史概念、学术术语、科技名词、人物、机构……按 Step 0–6（含 Step 4.5）流水线处理，产出一篇**由浅入深、带完整引用来源、配数据图表与视觉素材、视觉精美**的深度解析单页网页（standard / exhaustive 万字以上，quick 约 5,000 字）。
+一个适配 WorkBuddy / Claude Code / Codex 等 Agent 环境的**多 Agent 协作知识生产流水线**。输入任意一个「词」——地点、名词、热词、书籍、国家、历史概念、学术术语、科技名词、人物、机构……按 Step 0–6（含 Step 4.5）流水线处理，产出一篇**由浅入深、带完整引用来源、配数据图表与视觉素材、视觉精美**的深度解析单页网页（字数下限由 speed / depth / scope 档位组合决定）。
 
 内置核心能力：
 
@@ -56,7 +56,7 @@
 Agent 会自动加载本 skill，依次走完六阶段并交付一个 `index.html`。你也可以在请求里指定参数：
 
 ```text
-用 deep-word-explorer 解析「存在主义」，主题用牛皮纸，深度 exhaustive。
+用 deep-word-explorer 解析「存在主义」，主题用牛皮纸，speed=deep、depth=pro、scope=panorama。
 ```
 
 典型触发语：
@@ -96,8 +96,8 @@ Agent 会自动加载本 skill，依次走完六阶段并交付一个 `index.htm
 
 | 任务 | 推荐方式 |
 |------|---------|
-| 了解一个陌生地点/国家 | `深度 standard`，主题自动推荐（地理类→森林墨） |
-| 啃下一个硬核学术概念 | `深度 exhaustive`，开启 Layer 4/5 全搜索 |
+| 了解一个陌生地点/国家 | 默认组合即可，主题自动推荐（地理类→森林墨） |
+| 啃下一个硬核学术概念 | `speed=deep, depth=pro, scope=panorama`，开启全搜索 |
 | 解读一个网络热词 | 分类器自动判定为「热词」，启用时效层 Layer 5 |
 | 为一本书/一部电影做导读 | ontology 选「文化符号」，主题用「牛皮纸」 |
 | 生成可分享的研读页 | 输出 HTML 后直接用浏览器「打印 → 另存 PDF」 |
@@ -163,29 +163,15 @@ ls ~/.workbuddy/skills/deep-word-explorer/
 
 ## 输入参数
 
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `word` | string | ✅ | 待解析的词汇（地点/名词/热词/书籍/国家/历史概念/学术术语……） |
-| `depth` | enum | ❌ | `quick`（1–3 阶，约 5,000 字）/ `standard`（默认，全六阶，约 12,000–15,000 字）/ `exhaustive`（全六阶+全五层搜索，约 15,000–20,000 字）；硬性下限见 `shared/config/quality-gates.json` |
-| `theme` | enum | ❌ | 视觉主题，从 5 套中选，默认按本体类型自动推荐 |
-| `language` | string | ❌ | 输出语言，默认 `zh` |
+支持「三轴档位 + 配置面板」：`speed`（fast/standard/deep，快→慢）、`depth`（intro/mid/pro，浅→深）、`scope`（point/related/panorama，点→面），以及 `format`（html/markdown/pdf）、`illustrations`、`tone`（科普/学术/杂志）、`citation_density`、`theme`、`language`、`custom`。
+
+完整参数表与默认值见 [`SKILL.md`](./SKILL.md)（Step 0）。默认组合：standard × mid × point、html、配图开、科普语气、标准引用密度、中文。
 
 ## 使用流程
 
-Skill 本身是结构化工作流，Agent 会逐步引导：
+Skill 本身是结构化工作流，Agent 会逐步引导：参数确认 → 分类 → 研究 → 架构 → 撰写 → 配图 → 构建 → 质检 → 交付（Step 0–6，含 Step 4.5）。每个阶段以 JSON 交接、有独立质量门禁。
 
-1. **参数确认** — 一次性问清深度等级、视觉主题、输出位置（也可在首条消息里直接给）。
-2. **词汇分类** — 分类器做四维判定（本体/认知门槛/争议度/时效敏感度），产出 `classification_profile` 与搜索策略。
-3. **深度研究** — 研究员跑五层漏斗搜索，产出 `research_bundle`（结构化事实 + 引用索引）。
-4. **知识架构** — 架构师把数据分配到六阶，生成学习链大纲、过渡提问与引用分组，产出 `learning_chain`。
-5. **内容撰写** — 撰写师逐阶成文，注入 `[N]` 引用与术语 tooltip，做反 AI 痕迹自检，产出 `article_content`。
-6. **视觉配图** — 配图师执行「文字配图流程」：识别配图点，数据段落走 lieflat-chart 生成图表，实体段落走网络来源（许可安全 + 本地化），抽象段落走自生成（SVG/AI），产出 `illustration_plan`。
-7. **HTML 构建** — 构建师注入主题 CSS、六阶正文、参考文献、图表与配图、7 个交互组件，产出单文件 `index.html`。
-8. **质量审查** — QA 跑 72 项检查清单（P0 必过、P1 自动修复、P2 建议），含配图专项（编码诚实 / 单色系 / 图片来源许可 / 无障碍），必要时截图验证。
-9. **交付** — 通过预览工具打开 `index.html`，并口头说明学习链、图表与交互组件用法。
-
-详细说明见 [`SKILL.md`](./SKILL.md)。各 Agent 的细分指令在 `agents/<role>/SKILL.md`；
-字数 / 阶数 / 引用 / AI 痕迹等阈值统一来自 `shared/config/quality-gates.json`。
+详细流程见 [`SKILL.md`](./SKILL.md)；各 Agent 细分指令在 `agents/<role>/SKILL.md`；阈值统一来自 `shared/config/quality-gates.json`。
 
 ## 六阶学习链
 
@@ -200,7 +186,7 @@ Skill 本身是结构化工作流，Agent 会逐步引导：
 
 每段之间由架构师生成**过渡提问**（自然衔接，不机械），引导读者从「知道」走向「理解」。
 
-> `quick` 深度只产出前 3 阶与 2 个过渡提问；`standard` / `exhaustive` 产出完整六阶与 5 个过渡提问。
+> 任何档位均为六阶与 5 个过渡提问；`scope` 决定是否增加关联侧栏（related）与全景章节（panorama）。
 
 ## 五层漏斗搜索
 
@@ -209,48 +195,14 @@ Skill 本身是结构化工作流，Agent 会逐步引导：
 | Layer 1 | 百科骨架 | 定义、时间线、人物、坐标 | 始终启用 |
 | Layer 2 | 学术论文 | 共识、争议、里程碑研究、学派 | 始终启用 |
 | Layer 3 | 专家解读 | 通俗解释、类比、误解、学习路径 | 始终启用 |
-| Layer 4 | 关联概念 | 前置/平行/下游概念、知识图谱 | `depth=exhaustive` 启用 |
+| Layer 4 | 关联概念 | 前置/平行/下游概念、知识图谱 | `scope=panorama` 启用 |
 | Layer 5 | 时效信息 | 最新发展、舆论趋势 | 热词 / 快速迭代概念启用 |
 
 任何一层信息不足时，按 `shared/prompts/fallback-strategies.md` 降级并**显式标注**，绝不静默编造。
 
 ## 目录结构
 
-```
-deep-word-explorer/
-├── SKILL.md                              ← 主编排器：工作流、参数、异常处理
-├── AGENTS.md                             ← 贡献者与 Agent 协作约定
-├── README.md                             ← 本文件（中文）
-├── README.en.md                          ← English version
-├── LICENSE                               ← AGPL-3.0
-├── CONTRIBUTING.md                       ← 贡献指南
-├── CODE_OF_CONDUCT.md                    ← 行为准则
-├── SECURITY.md                           ← 安全披露政策
-├── .github/                              ← Issue / PR 模板 + CI 工作流
-├── agents/
-│   ├── classifier/SKILL.md               ← 分类器（四维判定 + 搜索策略）
-│   ├── researcher/SKILL.md               ← 研究员（五层漏斗搜索）
-│   │   └── references/                   ← 搜索源 + Query模板 + 提取Schema
-│   ├── architect/SKILL.md                ← 架构师（六阶学习链）
-│   │   └── references/                   ← 学习链模板 + 过渡模式库
-│   ├── writer/SKILL.md                   ← 撰写师（成文 + 引用 + 反AI）
-│   │   └── references/                   ← 风格指南 + 引用格式 + 反AI模式
-│   ├── illustrator/SKILL.md              ← 配图师（文字配图流程：网络来源 + 自生成）
-│   │   └── references/illustration-guide.md  ← 双轨配图规则 + lieflat 图表集成
-│   ├── builder/SKILL.md                  ← 构建师（HTML 装配 + 配图嵌入）
-│   │   ├── assets/template-article.html  ← 长文 HTML 模板
-│   │   └── references/                   ← 改造指南 + 组件库 + 主题注入 + 配图嵌入
-│   └── qa/SKILL.md                       ← 质量审查（72 项清单，含配图专项）
-│       └── references/                   ← 详细检查清单
-├── shared/
-│   ├── config/quality-gates.json         ← 唯一阈值事实源（字数/阶数/引用/AI 痕迹）
-│   ├── schemas/                          ← 5 个 JSON Schema（阶段间数据契约，含 illustration-plan）
-│   ├── themes/themes.css                 ← 5 套主题色
-│   └── prompts/                          ← 系统提示词 + 降级策略
-├── scripts/validate.py                   ← 一致性校验脚本（CI 运行）
-├── examples/                             ← 示例输出（如 新泽西/index.html）
-└── tests/                                ← 测试用例（test-words.json + fixtures/ + expected-outputs/）
-```
+仓库结构见 [`SKILL.md`](./SKILL.md)「相关资源」。核心目录：`agents/`（7 个角色）、`shared/`（阈值配置 + JSON Schema + 主题 + 提示词）、`scripts/validate.py`（一致性校验，CI 运行）、`examples/`（真实样例）、`tests/`（测试用例与 fixtures）。
 
 ## 主题色预设
 
@@ -268,15 +220,7 @@ deep-word-explorer/
 
 ## 核心设计原则
 
-1. **Agent 间通过 JSON 交接，不通过自然语言** — 确保数据结构完整、可验证、可回放。
-2. **每阶段有独立质量门禁** — 不把问题留给下游；P0 不过则不出 HTML。
-3. **降级优于静默失败** — 任何信息不足都明确标注，绝不编造来源。
-4. **视觉系统复用成熟方案** — 继承 guizang 的 CSS 变量与主题体系，保障美学一致性。
-5. **单文件交付** — 读者无需任何工具，浏览器打开即可阅读、截图、分享。
-6. **由浅入深是硬约束** — 学习链强制六阶递进，过渡提问负责衔接节奏。
-7. **反 AI 痕迹** — 50+ 模式检测，行文自然、有观点、有批判，不像机器生成。
-8. **配图双轨制** — 数据图表走 lieflat-chart 模板化生成（一张图一个结论）；概念图优先 SVG；网络图只采用许可安全且本地化的来源；整份交付锁定唯一色系。
-9. **阈值单一事实源** — 字数、阶数、引用、AI 痕迹等数字统一在 `shared/config/quality-gates.json`，文档与校验脚本共用，防止漂移。
+JSON 交接、阶段门禁、降级标注、单文件交付、三轴档位可组合、阈值单一事实源——完整原则见 [`SKILL.md`](./SKILL.md)「设计原则」。
 
 ## 示例请求
 
@@ -287,14 +231,14 @@ deep-word-explorer/
 ```
 
 ```text
-用 deep-word-explorer 解析「存在主义」，主题用牛皮纸，深度 exhaustive。
+用 deep-word-explorer 解析「存在主义」，主题用牛皮纸，speed=deep、depth=pro、scope=panorama。
 ```
 
 ```text
 深度解析「碳中和」，科技主题，输出英文。
 ```
 
-已附带的示例产物见 [`examples/新泽西/index.html`](./examples/新泽西/index.html)（exhaustive 深度，森林墨主题，9,089 个汉字、含标点/字母/数字约 12,124 字符，31 处引用）。
+已附带的示例产物见 [`examples/新泽西/index.html`](./examples/新泽西/index.html)（deep × pro × panorama 档位，森林墨主题，9,089 个汉字、含标点/字母/数字约 12,124 字符，31 处引用）。
 
 ## 致谢
 
@@ -307,7 +251,7 @@ deep-word-explorer/
 - 补充更多真实示例与可打开的 HTML 解析页
 - 增加更多主题包，但继续限制自定义颜色
 - 强化 QA 阶段的自动化视觉校验（暗色 / 移动端 / 溢出）
-- 探索 `exhaustive` 深度的关联知识图谱可视化
+- 探索 `scope=panorama` 的关联知识图谱可视化
 - 提供 `examples/` 下更多领域的标杆产出
 
 ## FAQ
@@ -321,8 +265,8 @@ deep-word-explorer/
 **信息不足时会怎么办？**
 任何一层信息不足都会按降级策略处理并**显式标注**（如「该概念在主流百科中暂无条目」），绝不静默编造来源。
 
-**深度等级怎么选？**
-想快速了解用 `quick`；系统学习用 `standard`（默认）；写研读材料、硬核概念、热词追踪用 `exhaustive`（开启全五层搜索）。
+**档位怎么选？**
+快速了解用 `speed=fast, depth=intro, scope=point`；系统学习用默认组合；研读硬核概念或全景梳理用 `speed=deep, depth=pro, scope=panorama`。三轴可自由组合。
 
 **支持英文输出吗？**
 支持。`language` 参数控制输出语言，默认 `zh`；模板与文案均做了本地化。

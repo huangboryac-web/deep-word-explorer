@@ -53,29 +53,56 @@ for path in json_files:
         check(False, f"{path.relative_to(ROOT)}: JSON 解析失败: {exc}")
 
 
-# 2. quality-gates.json 结构
+# 2. quality-gates.json 结构（三轴档位 + 默认面板 + 字数公式 + 引用密度）
 cfg = load_json("shared/config/quality-gates.json")
+defaults = cfg.get("defaults", {})
+tiers = cfg.get("tiers", {})
+speed_tiers = set(tiers.get("speed", {})) - {"labels"}
+depth_tiers = set(tiers.get("depth", {})) - {"labels"}
+scope_tiers = set(tiers.get("scope", {})) - {"labels"}
+check(speed_tiers == {"fast", "standard", "deep"}, "quality-gates.json: speed 档位 fast/standard/deep")
+check(depth_tiers == {"intro", "mid", "pro"}, "quality-gates.json: depth 档位 intro/mid/pro")
+check(scope_tiers == {"point", "related", "panorama"}, "quality-gates.json: scope 档位 point/related/panorama")
 check(
-    set(cfg.get("depth", {})) == {"quick", "standard", "exhaustive"},
-    "quality-gates.json: depth 包含 quick/standard/exhaustive",
-)
-depth_cfg = cfg["depth"]
-check(
-    depth_cfg["quick"]["stages"] == 3
-    and depth_cfg["standard"]["stages"] == 6
-    and depth_cfg["exhaustive"]["stages"] == 6,
-    "quality-gates.json: 阶数 quick=3, standard=exhaustive=6",
+    defaults.get("speed") in speed_tiers
+    and defaults.get("depth") in depth_tiers
+    and defaults.get("scope") in scope_tiers,
+    "quality-gates.json: 默认面板档位合法",
 )
 check(
-    depth_cfg["quick"]["min_words"] < depth_cfg["standard"]["min_words"] < depth_cfg["exhaustive"]["min_words"],
-    "quality-gates.json: 字数下限随深度递增",
+    defaults.get("format") in {"html", "markdown", "pdf"}
+    and defaults.get("tone") in {"popular", "academic", "editorial"}
+    and defaults.get("citation_density") in {"low", "standard", "high"},
+    "quality-gates.json: 默认面板 format/tone/citation_density 合法",
+)
+word_formula = cfg.get("word_formula", {})
+check(word_formula.get("base_words") == 10000, "quality-gates.json: 字数基准 base_words=10,000")
+check(
+    tiers["depth"]["intro"]["word_multiplier"] < tiers["depth"]["mid"]["word_multiplier"] < tiers["depth"]["pro"]["word_multiplier"],
+    "quality-gates.json: depth 字数乘子 0.8 < 1.0 < 1.2",
 )
 check(
-    depth_cfg["quick"]["transition_questions"] == 2
-    and depth_cfg["standard"]["transition_questions"] == 5
-    and depth_cfg["exhaustive"]["transition_questions"] == 5,
-    "quality-gates.json: 过渡问题 quick=2, standard=exhaustive=5",
+    tiers["scope"]["point"]["extra_words"] < tiers["scope"]["related"]["extra_words"] < tiers["scope"]["panorama"]["extra_words"],
+    "quality-gates.json: scope 附加字数 0 < 2,000 < 4,000",
 )
+density = cfg.get("citation_density", {})
+check(
+    all(k in density for k in ("low", "standard", "high"))
+    and density["low"]["per_stage_min"] < density["standard"]["per_stage_min"] < density["high"]["per_stage_min"],
+    "quality-gates.json: 引用密度 低/标准/高 每阶下限递增",
+)
+check(
+    cfg["structure"]["stages"] == 6 and cfg["structure"]["transition_questions"] == 5,
+    "quality-gates.json: 固定结构 6 阶 / 5 个过渡问题",
+)
+
+
+def word_floor(options):
+    """按 quality-gates 字数公式计算硬性下限。"""
+    base = cfg["word_formula"]["base_words"]
+    multiplier = cfg["tiers"]["depth"][options["depth"]]["word_multiplier"]
+    extra = cfg["tiers"]["scope"][options["scope"]]["extra_words"]
+    return int(base * multiplier) + extra
 
 # 3-4. Schema 元校验 + fixture 实例校验
 try:
@@ -106,6 +133,61 @@ if Draft7Validator is not None:
             )
 else:
     check(False, "jsonschema 缺失，无法执行 schema 校验（CI 中必须安装）")
+
+# 4.5 三轴档位语义断言（fixture 与配置一致）
+for fixture in sorted((ROOT / "tests" / "fixtures").glob("article-content.*.json")):
+    inst = json.loads(fixture.read_text(encoding="utf-8"))
+    opts = inst.get("meta", {}).get("options", {})
+    floor = word_floor(opts)
+    check(
+        inst.get("meta", {}).get("total_words", 0) >= floor,
+        f"{fixture.relative_to(ROOT)}: total_words ≥ 字数下限 {floor}",
+    )
+    check(
+        len(inst.get("citations", [])) >= density[opts["citation_density"]]["reference_list_min"],
+        f"{fixture.relative_to(ROOT)}: 引用列表 ≥ {density[opts['citation_density']]['reference_list_min']}",
+    )
+    if opts.get("scope") in {"related", "panorama"}:
+        check(
+            all(sec.get("related_sidebar") for sec in inst.get("sections", [])),
+            f"{fixture.relative_to(ROOT)}: related/panorama 每阶含 related_sidebar",
+        )
+    if opts.get("scope") == "panorama":
+        extras = inst.get("extras", {})
+        check(
+            extras.get("panorama_intro") and len(extras.get("further_reading", [])) >= 5,
+            f"{fixture.relative_to(ROOT)}: panorama 含全景导览与 ≥5 条延伸阅读",
+        )
+for fixture in sorted((ROOT / "tests" / "fixtures").glob("learning-chain.*.json")):
+    inst = json.loads(fixture.read_text(encoding="utf-8"))
+    opts = inst.get("meta", {}).get("options", {})
+    floor = word_floor(opts)
+    check(
+        inst.get("meta", {}).get("total_estimated_words", 0) >= floor,
+        f"{fixture.relative_to(ROOT)}: total_estimated_words ≥ 字数下限 {floor}",
+    )
+    check(
+        len(inst.get("citation_index", [])) >= cfg["gates"]["citation_index_min"],
+        f"{fixture.relative_to(ROOT)}: citation_index ≥ {cfg['gates']['citation_index_min']}",
+    )
+    if opts.get("scope") in {"related", "panorama"}:
+        sidebars = inst.get("related_sidebars", {})
+        check(
+            all(sidebars.get(f"stage_{n}") for n in range(1, 7)),
+            f"{fixture.relative_to(ROOT)}: related/panorama 含 stage_1-6 关联侧栏",
+        )
+    if opts.get("scope") == "panorama":
+        extras = inst.get("extras", {})
+        check(
+            extras.get("panorama_intro") and len(extras.get("further_reading", [])) >= 5,
+            f"{fixture.relative_to(ROOT)}: panorama 含全景导览与 ≥5 条延伸阅读",
+        )
+for fixture in sorted((ROOT / "tests" / "fixtures").glob("classification-profile.*.json")):
+    opts = json.loads(fixture.read_text(encoding="utf-8")).get("options", {})
+    check(opts.get("speed") in speed_tiers and opts.get("scope") in scope_tiers, f"{fixture.relative_to(ROOT)}: options 档位合法")
+for fixture in sorted((ROOT / "tests" / "fixtures").glob("research-bundle.*.json")):
+    opts = json.loads(fixture.read_text(encoding="utf-8")).get("meta", {}).get("options", {})
+    check(opts.get("depth") in depth_tiers and opts.get("format") in {"html", "markdown", "pdf"}, f"{fixture.relative_to(ROOT)}: meta.options 档位合法")
 
 # 5. test-words.json
 tw = load_json("tests/test-words.json")
@@ -175,7 +257,6 @@ for md in sorted((ROOT / ".").rglob("*.md")):
 # 7. 关键阈值一致性断言（防漂移）
 THRESHOLD_ASSERTIONS = [
     ("agents/researcher/SKILL.md", "concept_map_edges 数量 ≥ 5"),
-    ("shared/prompts/system-prompts.md", "concept_map_edges 数量 ≥ 5"),
     ("agents/researcher/SKILL.md", "timeline 节点数 ≥ 2"),
     ("shared/prompts/fallback-strategies.md", "timeline 节点 < 2"),
     ("agents/writer/SKILL.md", "ai_pattern_score < 0.3"),
@@ -185,6 +266,11 @@ THRESHOLD_ASSERTIONS = [
     ("agents/architect/SKILL.md", "shared/config/quality-gates.json"),
     ("SKILL.md", "shared/config/quality-gates.json"),
     ("shared/prompts/system-prompts.md", "shared/config/quality-gates.json"),
+    ("agents/classifier/SKILL.md", "options"),
+    ("agents/researcher/SKILL.md", "options"),
+    ("agents/writer/SKILL.md", "citation_density"),
+    ("agents/qa/SKILL.md", "illustrations"),
+    ("SKILL.md", "speed"),
 ]
 for rel, phrase in THRESHOLD_ASSERTIONS:
     text = (ROOT / rel).read_text(encoding="utf-8")

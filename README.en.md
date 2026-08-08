@@ -33,7 +33,7 @@
 - [Author & License](#author--license)
 - [Changelog](./CHANGELOG.md)
 
-A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs the pipeline as **Step 0–6 (incl. Step 4.5)**, producing a **progressively-structured, fully-cited, illustrated with data charts, visually polished deep-explainer as a single-file HTML page** (10,000+ words for standard/exhaustive, ~5,000 for quick).
+A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs the pipeline as **Step 0–6 (incl. Step 4.5)**, producing a **progressively-structured, fully-cited, illustrated with data charts, visually polished deep-explainer as a single-file HTML page**. The word-count floor is set by the `speed` / `depth` / `scope` tier combination.
 
 Core capabilities:
 
@@ -50,13 +50,13 @@ Core capabilities:
 Send this to an AI Agent with shell access (WorkBuddy shown):
 
 ```text
-Give me a deep explainer on "New Jersey", default theme, standard depth.
+Give me a deep explainer on "New Jersey", default theme, standard tiers.
 ```
 
 The Agent auto-loads this skill, runs all stages (Step 0–6, incl. Step 4.5), and delivers an `index.html`. You can also specify parameters:
 
 ```text
-Use deep-word-explorer to explain "Existentialism", theme kraft-paper, depth exhaustive.
+Use deep-word-explorer to explain "Existentialism", theme kraft-paper, speed=deep, depth=pro, scope=panorama.
 ```
 
 Typical triggers:
@@ -97,8 +97,8 @@ Typical triggers:
 
 | Task | Recommended |
 |------|-------------|
-| Understand an unfamiliar place/country | `depth standard`, theme auto (geography → Forest Ink) |
-| Tackle a hard academic concept | `depth exhaustive`, enable Layer 4/5 full search |
+| Understand an unfamiliar place/country | default combo, theme auto (geography → Forest Ink) |
+| Tackle a hard academic concept | `speed=deep, depth=pro, scope=panorama`, full search |
 | Decode a buzzword | classifier auto-tags "buzzword", enables timeliness Layer 5 |
 | Make a reader's guide for a book/film | ontology "cultural symbol", theme "Kraft Paper" |
 | Generate a shareable study page | open HTML in browser → Print → Save as PDF |
@@ -162,29 +162,15 @@ After install, the Agent auto-discovers and invokes it. Trigger keywords (zh/en)
 
 ## Input parameters
 
-| Param | Type | Required | Notes |
-|-------|------|----------|-------|
-| `word` | string | ✅ | The word to explain (place/noun/buzzword/book/country/historical concept/academic term…) |
-| `depth` | enum | ❌ | `quick` (stages 1–3, ~5,000 words) / `standard` (default, full six stages, ~12,000–15,000) / `exhaustive` (full stages + all five search layers, ~15,000–20,000); hard floors in `shared/config/quality-gates.json` |
-| `theme` | enum | ❌ | Visual theme from 5 presets; auto-recommended by ontology if omitted |
-| `language` | string | ❌ | Output language, default `zh` |
+Three tier axes plus a config panel: `speed` (fast/standard/deep), `depth` (intro/mid/pro), `scope` (point/related/panorama), plus `format` (html/markdown/pdf), `illustrations`, `tone` (popular/academic/editorial), `citation_density`, `theme`, `language`, and `custom`.
+
+Full parameter table and defaults live in [`SKILL.md`](./SKILL.md) (Step 0). Default combo: standard × mid × point, html, illustrations on, popular tone, standard citation density, Chinese.
 
 ## Workflow
 
-The Skill is a structured workflow the Agent guides step by step:
+The Skill is a structured workflow the Agent guides step by step: param alignment → classify → research → architect → write → illustrate → build → QA → deliver (Step 0–6, incl. Step 4.5). Stages hand off via JSON with independent quality gates.
 
-1. **Param alignment** — depth, theme, output path (or give all in the first message).
-2. **Classify** — classifier does 4-dimension judgment (ontology / cognitive threshold / controversy / timeliness), emits `classification_profile` + search strategy.
-3. **Research** — researcher runs the five-layer funnel, emits `research_bundle` (structured facts + citation index).
-4. **Architect** — architect distributes data into six stages, emits `learning_chain` (outline, transition questions, citation groups).
-5. **Write** — writer drafts stage by stage, injects `[N]` citations & term tooltips, runs anti-AI self-check, emits `article_content`.
-6. **Illustrate** — illustrator runs the text-illustration flow: data passages charted via lieflat-chart, visual entities via the network track (license-safe + localized), abstract concepts self-generated (SVG/AI), emits `illustration_plan`.
-7. **Build** — builder injects theme CSS, six-stage body, references, charts & figures, 7 components, emits single-file `index.html`.
-8. **QA** — QA runs the 72-item checklist (P0 must pass, P1 auto-fix, P2 suggest), including illustration checks (honest encoding / single color system / image licensing / accessibility), screenshots if needed.
-9. **Deliver** — open `index.html` via preview tool, explain learning chain, charts & components.
-
-Full detail in [`SKILL.md`](./SKILL.md). Per-Agent instructions in `agents/<role>/SKILL.md`;
-word-count / stage / citation / AI-trace thresholds live in `shared/config/quality-gates.json`.
+Full detail in [`SKILL.md`](./SKILL.md); per-Agent instructions in `agents/<role>/SKILL.md`; all thresholds live in `shared/config/quality-gates.json`.
 
 ## Six-stage learning chain
 
@@ -199,7 +185,7 @@ word-count / stage / citation / AI-trace thresholds live in `shared/config/quali
 
 Between segments the architect generates **transition questions** (natural, not mechanical), guiding the reader from "knowing" to "understanding".
 
-> `quick` depth produces only stages 1–3 with 2 transition questions; `standard` / `exhaustive` produce all six stages with 5 transition questions.
+> Every tier combo keeps six stages and 5 transition questions; `scope` adds per-stage related sidebars (related) and panorama sections (panorama).
 
 ## Five-layer funnel search
 
@@ -208,48 +194,14 @@ Between segments the architect generates **transition questions** (natural, not 
 | Layer 1 | Encyclopedia skeleton | definition, timeline, people, coordinates | always |
 | Layer 2 | Academic papers | consensus, controversy, milestones, schools | always |
 | Layer 3 | Expert interpretation | plain explanation, analogy, misconceptions, learning path | always |
-| Layer 4 | Related concepts | upstream/parallel/downstream, knowledge graph | `depth=exhaustive` |
+| Layer 4 | Related concepts | upstream/parallel/downstream, knowledge graph | `scope=panorama` |
 | Layer 5 | Timeliness | latest developments, opinion trends | buzzword / fast-iterating concept |
 
 When any layer is thin, degrade per `shared/prompts/fallback-strategies.md` and **label explicitly** — never silently fabricate.
 
 ## Directory structure
 
-```
-deep-word-explorer/
-├── SKILL.md                              ← main orchestrator: workflow, params, exceptions
-├── AGENTS.md                             ← contributor & agent collaboration conventions
-├── README.md                             ← Chinese README
-├── README.en.md                          ← this file
-├── LICENSE                               ← AGPL-3.0
-├── CONTRIBUTING.md                       ← contribution guide
-├── CODE_OF_CONDUCT.md                    ← code of conduct
-├── SECURITY.md                           ← security disclosure policy
-├── .github/                              ← Issue / PR templates + CI workflow
-├── agents/
-│   ├── classifier/SKILL.md               ← classifier (4-dim judgment + search strategy)
-│   ├── researcher/SKILL.md               ← researcher (5-layer funnel)
-│   │   └── references/                   ← sources + query templates + extraction schemas
-│   ├── architect/SKILL.md                ← architect (six-stage learning chain)
-│   │   └── references/                   ← chain templates + transition patterns
-│   ├── writer/SKILL.md                   ← writer (draft + citation + anti-AI)
-│   │   └── references/                   ← style guide + citation format + anti-AI patterns
-│   ├── illustrator/SKILL.md              ← illustrator (text-illustration flow: network + self-generated)
-│   │   └── references/illustration-guide.md  ← dual-track illustration rules + lieflat chart integration
-│   ├── builder/SKILL.md                  ← builder (HTML assembly + figure embedding)
-│   │   ├── assets/template-article.html  ← long-form HTML template
-│   │   └── references/                   ← adaptation guide + component library + theme injection + illustration embedding
-│   └── qa/SKILL.md                       ← QA (72-item checklist incl. illustration)
-│       └── references/                   ← detailed checklist
-├── shared/
-│   ├── config/quality-gates.json         ← single source of truth for thresholds
-│   ├── schemas/                          ← 5 JSON Schemas (inter-stage data contracts, incl. illustration-plan)
-│   ├── themes/themes.css                 ← 5 theme palettes
-│   └── prompts/                          ← system prompts + fallback strategies
-├── scripts/validate.py                   ← consistency validation script (runs in CI)
-├── examples/                             ← sample outputs (e.g. 新泽西/index.html)
-└── tests/                                ← test cases (test-words.json + fixtures/ + expected-outputs/)
-```
+See [`SKILL.md`](./SKILL.md) ("Related resources") for the full tree. Key directories: `agents/` (7 roles), `shared/` (thresholds + JSON Schemas + themes + prompts), `scripts/validate.py` (consistency validation, runs in CI), `examples/` (real samples), `tests/` (test cases & fixtures).
 
 ## Theme palettes
 
@@ -267,31 +219,23 @@ Theme recommendation: philosophy/humanities/general → Ink Classic; tech/AI/mat
 
 ## Core design principles
 
-1. **Agents hand off via JSON, not natural language** — complete, verifiable, replayable data.
-2. **Each stage has its own quality gate** — don't pass problems downstream; P0 must pass before HTML ships.
-3. **Degrade over silent failure** — any data gap is labeled explicitly; never fabricate sources.
-4. **Reuse a mature visual system** — inherit guizang's CSS variables & theme system for consistency.
-5. **Single-file delivery** — reader needs no tools; open in browser to read, screenshot, share.
-6. **Shallow-to-deep is a hard constraint** — learning chain enforces six-stage progression; transition questions handle pacing.
-7. **Anti-AI traces** — 50+ pattern detection keeps prose natural, opinionated, critical.
-8. **Dual-track illustration** — data charts are template-driven via lieflat-chart (one figure, one conclusion); concept art prefers SVG; network images must be license-safe and localized; one global color system per delivery.
-9. **Single source of truth for thresholds** — word counts, stages, citations, AI-trace scores all live in `shared/config/quality-gates.json`, shared by docs and the validation script to prevent drift.
+JSON hand-offs, per-stage gates, degrade-over-silent-failure, single-file delivery, combinable tier axes, and a single source of truth for thresholds — see [`SKILL.md`](./SKILL.md) ("Design principles").
 
 ## Example requests
 
 ```text
-Give me a deep explainer on "New Jersey", standard depth, default theme.
+Give me a deep explainer on "New Jersey", standard tiers, default theme.
 ```
 
 ```text
-Use deep-word-explorer to explain "Existentialism", theme kraft-paper, depth exhaustive.
+Use deep-word-explorer to explain "Existentialism", theme kraft-paper, speed=deep, depth=pro, scope=panorama.
 ```
 
 ```text
 Deep explainer on "Carbon Neutrality", tech theme, output in English.
 ```
 
-A bundled sample output: [`examples/新泽西/index.html`](./examples/新泽西/index.html) (exhaustive depth, Forest Ink, 9,089 CJK chars — ≈12,124 chars incl. punctuation/Latin/digits, 31 citations).
+A bundled sample output: [`examples/新泽西/index.html`](./examples/新泽西/index.html) (deep × pro × panorama tiers, Forest Ink, 9,089 CJK chars — ≈12,124 chars incl. punctuation/Latin/digits, 31 citations).
 
 ## Acknowledgements
 
@@ -304,7 +248,7 @@ A bundled sample output: [`examples/新泽西/index.html`](./examples/新泽西/
 - Add more real samples and openable HTML explainer pages
 - Add more theme packs, while keeping custom colors locked
 - Strengthen QA automated visual checks (dark / mobile / overflow)
-- Explore related-concept knowledge-graph visualization at `exhaustive` depth
+- Explore related-concept knowledge-graph visualization at `scope=panorama`
 - Provide more domain benchmark outputs under `examples/`
 
 ## FAQ
@@ -318,8 +262,8 @@ Stable output matters. Free color choice easily breaks the "electronic ink" aest
 **What if data is insufficient?**
 Any thin layer is handled by the fallback strategy and **explicitly labeled** (e.g. "no encyclopedia entry for this concept"), never silently fabricated.
 
-**How to choose depth?**
-`quick` for a quick look; `standard` (default) for systematic learning; `exhaustive` (all five search layers) for study material, hard concepts, buzzword tracking.
+**How to choose tiers?**
+`speed=fast, depth=intro, scope=point` for a quick look; the default combo for systematic learning; `speed=deep, depth=pro, scope=panorama` for study material, hard concepts, or a full landscape. The three axes combine freely.
 
 **Does it support English output?**
 Yes. The `language` parameter controls output language, default `zh`; template and copy are localized.

@@ -7,14 +7,29 @@
   "properties": {
     "meta": {
       "type": "object",
-      "required": ["word", "total_estimated_words", "target_reading_time_minutes"],
+      "required": ["word", "options", "total_estimated_words", "target_reading_time_minutes"],
       "properties": {
         "word": { "type": "string" },
-        "depth_level": { "type": "string", "enum": ["quick", "standard", "exhaustive"] },
+        "options": {
+          "type": "object",
+          "required": ["speed", "depth", "scope", "format", "illustrations", "tone", "citation_density", "language"],
+          "properties": {
+            "speed": { "type": "string", "enum": ["fast", "standard", "deep"] },
+            "depth": { "type": "string", "enum": ["intro", "mid", "pro"] },
+            "scope": { "type": "string", "enum": ["point", "related", "panorama"] },
+            "format": { "type": "string", "enum": ["html", "markdown", "pdf"] },
+            "illustrations": { "type": "boolean" },
+            "tone": { "type": "string", "enum": ["popular", "academic", "editorial"] },
+            "citation_density": { "type": "string", "enum": ["low", "standard", "high"] },
+            "language": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] },
+            "custom": { "type": "array", "items": { "type": "string" } }
+          },
+          "description": "统一配置面板（三轴档位 + 格式/配图/语气/引用密度/主题语言），见 shared/config/quality-gates.json"
+        },
         "total_estimated_words": {
           "type": "integer",
-          "minimum": 4000,
-          "description": "硬性下限见 shared/config/quality-gates.json（quick 4,000 / standard 10,000 / exhaustive 12,000）"
+          "minimum": 8000,
+          "description": "硬性下限 = base_words(10,000) × depth.word_multiplier + scope.extra_words（最低 intro+point=8,000；shared/config/quality-gates.json）"
         },
         "target_reading_time_minutes": { "type": "integer" },
         "generated_at": { "type": "string", "format": "date-time" }
@@ -22,7 +37,8 @@
     },
     "stages": {
       "type": "object",
-      "description": "quick 仅 stage_1-3，standard/exhaustive 为 stage_1-6（由根级 if/then 按 meta.depth_level 约束）",
+      "description": "任何档位均为 stage_1-6；scope=related/panorama 时另在根级提供 related_sidebars",
+      "required": ["stage_1", "stage_2", "stage_3", "stage_4", "stage_5", "stage_6"],
       "properties": {
         "stage_1": {
           "type": "object",
@@ -265,7 +281,8 @@
     },
     "transitions": {
       "type": "object",
-      "description": "quick 为 t1_2、t2_3；standard/exhaustive 为 t1_2..t5_6（由根级 if/then 按 meta.depth_level 约束）",
+      "description": "任何档位均为 t1_2..t5_6 五个过渡问题",
+      "required": ["t1_2", "t2_3", "t3_4", "t4_5", "t5_6"],
       "properties": {
         "t1_2": { "type": "string", "description": "第一阶到第二阶的过渡问题" },
         "t2_3": { "type": "string", "description": "第二阶到第三阶的过渡问题" },
@@ -293,35 +310,74 @@
       }
     }
   },
-  "if": {
+  "related_sidebars": {
+    "type": "object",
+    "description": "scope=related/panorama 时每阶的关联概念侧栏（至少 1 条）",
+    "patternProperties": {
+      "^stage_[1-6]$": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "type": "string" }
+      }
+    }
+  },
+  "extras": {
+    "type": "object",
+    "description": "scope=panorama 时的附加章节",
     "properties": {
-      "meta": {
+      "panorama_intro": {
+        "type": "string",
+        "description": "开头「全景导览」：一句话定位 + 知识地图导语"
+      },
+      "further_reading": {
+        "type": "array",
+        "minItems": 5,
+        "description": "结尾「知识地图/延伸阅读」：至少 5 条延伸资源",
+        "items": { "type": "string" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
         "properties": {
-          "depth_level": { "const": "quick" }
+          "meta": {
+            "properties": {
+              "options": {
+                "properties": { "scope": { "const": "related" } },
+                "required": ["scope"]
+              }
+            },
+            "required": ["options"]
+          }
         },
-        "required": ["depth_level"]
-      }
+        "required": ["meta"]
+      },
+      "then": { "required": ["related_sidebars"] }
     },
-    "required": ["meta"]
-  },
-  "then": {
-    "properties": {
-      "stages": {
-        "required": ["stage_1", "stage_2", "stage_3"]
+    {
+      "if": {
+        "properties": {
+          "meta": {
+            "properties": {
+              "options": {
+                "properties": { "scope": { "const": "panorama" } },
+                "required": ["scope"]
+              }
+            },
+            "required": ["options"]
+          }
+        },
+        "required": ["meta"]
       },
-      "transitions": {
-        "required": ["t1_2", "t2_3"]
+      "then": {
+        "required": ["related_sidebars", "extras"],
+        "properties": {
+          "extras": {
+            "required": ["panorama_intro", "further_reading"]
+          }
+        }
       }
     }
-  },
-  "else": {
-    "properties": {
-      "stages": {
-        "required": ["stage_1", "stage_2", "stage_3", "stage_4", "stage_5", "stage_6"]
-      },
-      "transitions": {
-        "required": ["t1_2", "t2_3", "t3_4", "t4_5", "t5_6"]
-      }
-    }
-  }
+  ]
 }

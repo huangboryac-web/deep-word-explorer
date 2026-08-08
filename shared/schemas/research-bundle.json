@@ -7,11 +7,26 @@
   "properties": {
     "meta": {
       "type": "object",
-      "required": ["word", "generated_at", "depth_level", "total_sources_consulted"],
+      "required": ["word", "options", "generated_at", "total_sources_consulted"],
       "properties": {
         "word": { "type": "string" },
+        "options": {
+          "type": "object",
+          "required": ["speed", "depth", "scope", "format", "illustrations", "tone", "citation_density", "language"],
+          "properties": {
+            "speed": { "type": "string", "enum": ["fast", "standard", "deep"] },
+            "depth": { "type": "string", "enum": ["intro", "mid", "pro"] },
+            "scope": { "type": "string", "enum": ["point", "related", "panorama"] },
+            "format": { "type": "string", "enum": ["html", "markdown", "pdf"] },
+            "illustrations": { "type": "boolean" },
+            "tone": { "type": "string", "enum": ["popular", "academic", "editorial"] },
+            "citation_density": { "type": "string", "enum": ["low", "standard", "high"] },
+            "language": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] },
+            "custom": { "type": "array", "items": { "type": "string" } }
+          },
+          "description": "Step 0 确认的统一配置面板快照，见 shared/config/quality-gates.json"
+        },
         "generated_at": { "type": "string", "format": "date-time" },
-        "depth_level": { "type": "string", "enum": ["quick", "standard", "exhaustive"] },
         "total_sources_consulted": { "type": "integer", "minimum": 5 },
         "search_duration_seconds": { "type": "number" },
         "degradations_applied": {
@@ -270,7 +285,7 @@
     },
     "layer_4": {
       "type": "object",
-      "description": "关联层：横向和纵向的知识网络（depth=exhaustive 时必填）",
+      "description": "关联层：横向和纵向的知识网络（options.scope=panorama 时必填）",
       "properties": {
         "prerequisites": {
           "type": "array",

@@ -5,11 +5,12 @@
 ## [Unreleased]
 
 ### 结构与治理
-- **阈值单一事实源**：新增 `shared/config/quality-gates.json`，字数 / 阶数 / 引用 / AI 痕迹等阈值统一收口；`shared/prompts/system-prompts.md` 收敛为调度注入骨架，不再另立数字。
-- **深度门禁参数化**：`quick` / `standard` / `exhaustive` 的字数下限、阶数与过渡提问数量按深度区分；QA P0 改为按 `depth_level` 校验（quick：1–3 阶、≥4,000 字；standard：六阶、≥10,000 字；exhaustive：六阶、≥12,000 字）。
-- **Schema 支持 quick**：`article-content.json` 与 `learning-chain.json` 增加基于 `meta.depth_level` 的条件约束（quick 3 阶 / 2 个过渡提问，其余 6 阶 / 5 个过渡提问）。
-- **测试与 CI**：新增 `scripts/validate.py` 与 `.github/workflows/ci.yml`（JSON / Schema / fixture / 文档链接 / 阈值防漂移校验）；新增 `tests/fixtures/`（含 standard 与 quick 两套实例）；`tests/expected-outputs/` 补 README 明确用途。
-- **AGENTS.md**：新增仓库协作约定（规则正本、阈值事实源、schema 同步、校验前置）。
+- **阈值单一事实源**：新增 `shared/config/quality-gates.json`，三轴档位 / 字数公式 / 引用密度 / AI 痕迹等阈值统一收口；`shared/prompts/system-prompts.md` 收敛为纯调度注入骨架，不再重复规则。
+- **三轴档位模型**：废弃旧 `depth`（quick/standard/exhaustive），改为 `speed`（fast/standard/deep）+ `depth`（intro/mid/pro）+ `scope`（point/related/panorama）三轴正交（3×3×3）；任何档位均为六阶 + 5 个过渡问题；字数下限 = 10,000 × depth 乘子 + scope 附加字数。
+- **统一配置面板**：新增 `format`（html/markdown/pdf）、`illustrations`、`tone`（科普/学术/杂志）、`citation_density`（低/标准/高）、`theme`、`language` 与 `custom` 自由扩展；Step 0 改为一次性确认面板，并内置「快速了解 / 全面了解 / 深挖研读」触发语映射。
+- **Schema 按档位约束**：`article-content.json` 与 `learning-chain.json` 的 `meta.options` 承载面板；citation 下限按 citation_density；scope=related/panorama 要求 related_sidebars，scope=panorama 要求 extras（全景导览 + 延伸阅读）。
+- **测试与 CI**：新增 `scripts/validate.py` 与 `.github/workflows/ci.yml`（JSON / Schema / fixture / 文档链接 / 阈值防漂移 / 档位矩阵校验）；`tests/fixtures/` 迁移为三档组合实例（fast+intro+point / standard+mid+related / deep+pro+panorama）；`tests/expected-outputs/` 补 README 明确用途。
+- **AGENTS.md**：新增仓库协作约定（规则正本、阈值事实源、档位模型、schema 同步、校验前置）。
 - **示例字数如实标注**：`examples/新泽西/README.md` 与双语 README 改为实测口径（9,089 个汉字，含标点 / 字母 / 数字约 12,124 字符）。
 - **文档收敛**：`SKILL.md` 资源树与实际结构同步（scripts / config / AGENTS.md / fixtures）；统一「Step 0–6（含 Step 4.5）」表述；修正 `agent/builder/` 路径笔误与 illustration-guide 章节引用（§4 → §5）。
 

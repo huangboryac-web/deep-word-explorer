@@ -13,7 +13,7 @@ deep-word-explorer 流水线的第三个 Agent。将研究员产出的结构化�
 ## 输入
 - `word` (string)
 - `research_bundle` (JSON)：来自研究员 Agent
-- `depth_level` (string)：quick / standard / exhaustive
+- `options` (object)：Step 0 确认的统一配置面板（三轴 + 格式/配图/语气/引用密度）
 
 ## 输出
 - `learning_chain` (JSON)：严格按照 `shared/schemas/learning-chain.json` schema 输出
@@ -87,10 +87,10 @@ deep-word-explorer 流水线的第三个 Agent。将研究员产出的结构化�
 | 某阶的必填字段为空 | 同上 |
 | 某维度信息不足 200 字 | 如果无法补充，考虑合并到其他维度 |
 
-**深度等级映射**：
-- `depth_level=quick`：跳过第四、五、六阶（learning_chain 只包含前三阶 + meta 注明）
-- `depth_level=standard`：全部六阶，但 Layer 4/5 可能不完整
-- `depth_level=exhaustive`：全部六阶，所有可选元素必须包含
+**档位映射**：
+- `options.depth`：`intro`/`mid`/`pro` → 每阶 min_words = chain-templates.md 基准 × 0.8 / 1.0 / 1.2
+- `options.scope`：`point` → 六阶只讲该词本身；`related` → 每阶生成 `related_sidebar`（≥2 条）+ 第五阶强化（≥5 关联概念）；`panorama` → 额外生成 `extras`（全景导览 + 知识地图/延伸阅读 ≥5 条）
+- 总字数下限 = 10,000 × depth 乘子 + scope 附加字数（`shared/config/quality-gates.json`），speed 不影响字数
 
 ### Step 4: 过渡问题生成
 
@@ -103,7 +103,7 @@ deep-word-explorer 流水线的第三个 Agent。将研究员产出的结构化�
 5. 润色
 6. 验证（如像机械引导则重选）
 
-生成的过渡问题写入 transitions 对象：quick 2 个（t1_2、t2_3），standard/exhaustive 5 个（t1_2..t5_6）。
+任何档位均生成 5 个过渡问题（t1_2..t5_6）写入 transitions 对象。
 
 ### Step 5: 构建引用索引
 
@@ -111,7 +111,7 @@ deep-word-explorer 流水线的第三个 Agent。将研究员产出的结构化�
 
 1. 遍历所有层的 sources 数组
 2. 去重（同一 URL 只保留一条）
-3. 分类为 academic / official / deep_content / news
+3. 分类为 academic / official / deep_content / news / encyclopedia
 4. 分配唯一 id（从 1 开始）
 5. 填入 `citation_index` 数组
 6. 在每阶的 `dimensions[].source_refs` 等字段中引用对应的 id
@@ -121,14 +121,16 @@ deep-word-explorer 流水线的第三个 Agent。将研究员产出的结构化�
 ## 质量门禁
 
 ### 结构完整性
-- [ ] 对应深度的阶全部非空（quick：stage_1-3；standard/exhaustive：stage_1-6）
+- [ ] 六阶全部非空（任何档位均为 stage_1-6）
 - [ ] 每阶的必填字段已填充
-- [ ] 过渡问题数量符合深度（quick 2 / 其余 5）且不机械
+- [ ] 5 个过渡问题全部生成且不机械
 - [ ] citation_index 至少 8 条引用（quality-gates.json: citation_index_min）
+- [ ] scope=related/panorama 时 related_sidebars 覆盖 stage_1-6
+- [ ] scope=panorama 时 extras（全景导览 + 延伸阅读）存在
 
 ### 字数保证
 - [ ] 每阶 min_words 设定 ≥ chain-templates.md 的最少字数
-- [ ] min_words 合计 ≥ shared/config/quality-gates.json 对应深度下限（quick 4,000 / standard 10,000 / exhaustive 12,000）
+- [ ] min_words 合计 ≥ 10,000 × depth 乘子 + scope 附加字数（shared/config/quality-gates.json 公式）
 
 ### 逻辑一致性
 - [ ] 过渡问题自然衔接前后阶

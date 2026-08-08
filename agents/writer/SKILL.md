@@ -1,7 +1,7 @@
 # 内容撰写师 (Writer Agent)
 
 ## 定位
-deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链转化为完整的、风格统一的、万字以上的深度解析文章。
+deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链转化为完整的、风格统一的、达到档位字数下限的深度解析文章。
 
 ## 前置依赖
 - 架构师 Agent 的 `learning_chain`
@@ -15,7 +15,7 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 - `word` (string)
 - `learning_chain` (JSON)：来自架构师 Agent
 - `research_bundle` (JSON)：来自研究员 Agent（用于细节补充）
-- `depth_level` (string)
+- `options` (object)：Step 0 确认的统一配置面板（三轴 + 格式/配图/语气/引用密度）
 
 ## 输出
 - `article_content` (JSON)：严格按照 `shared/schemas/article-content.json` schema 输出
@@ -42,7 +42,7 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 
 ### Step 2: 逐阶撰写
 
-对 learning_chain 中的 stage_1 到 stage_N（N 由 depth_level 决定：quick=3，standard/exhaustive=6），按顺序逐阶撰写。
+对 learning_chain 中的 stage_1 到 stage_6（任何档位均为六阶），按顺序逐阶撰写。
 
 #### 每阶的撰写流程
 
@@ -58,11 +58,12 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 
 **2.3 注入引用标注**
 - 本阶需要引用的论断，标注 [N]（N 为 citation_index 中的 id）
-- 每阶最少 2 条引用
+- 每阶引用数 ≥ `options.citation_density` 对应下限（low 1 / standard 2 / high 3，见 quality-gates.json）
 
 **2.4 注入术语 tooltip**
 - 本阶首次出现的专业术语，标记为 `<abbr title="一句话定义">术语</abbr>` 形式
 - 检查：这个术语在前面阶是否已经出现过？如是，检查定义是否一致
+- `options.depth=intro`：所有术语首次出现都必须解释；`pro`：仅冷门/自造术语标记
 
 **2.5 字数检查**
 - 统计本阶字数
@@ -76,12 +77,13 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 **2.7 风格检查**
 - 对照 style-guide.md 检查：禁用词、句长、段落结构、信息密度
 - 确保渐进披露：无后阶概念泄露
+- 按 `options.tone` 统一行文：`popular` 科普（类比多、禁用术语堆砌）/ `academic` 学术（严谨、可含公式、引用密度高）/ `editorial` 杂志（短句节奏、标题感、画面感）
 
 ---
 
 ### Step 3: 过渡问题润色
 
-将 learning_chain.transitions 中的过渡问题（quick 2 个，standard/exhaustive 5 个），在正文中以居中大字的方式呈现：
+将 learning_chain.transitions 中的 5 个过渡问题，在正文中以居中大字的方式呈现：
 
 ```
 <div class="transition-question">
@@ -123,16 +125,23 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 ### Step 5: 构建最终 article_content
 
 #### 5.1 sections 数组
-将全部阶的撰写结果包装为 sections 数组（quick 3 阶，standard/exhaustive 6 阶），每阶包含：
+将六阶撰写结果包装为 sections 数组，每阶包含：
 - `stage`：阶号（1-6）
 - `title`：阶标题
 - `content`：Markdown 格式正文（含引用标注和术语标记）
 - `word_count`：实际字数
 - `cached_terms`：本阶需要 tooltip 的术语列表
 - `visual_assets`：可视化需求（如有）
+- `related_sidebar`：scope=related/panorama 时，从 learning_chain.related_sidebars 映射（≥1 条）
+
+scope=panorama 时，另把 learning_chain.extras 映射为 article_content.extras
+（`panorama_intro` 全景导览 + `further_reading` 延伸阅读 ≥5 条）。
+
+`options.format=markdown`：sections[].content 直接作为独立 `.md` 交付正文（保留 [N]
+与 `<abbr>` 标注，不生成 HTML 组件）；`html`/`pdf` 走同一份 JSON 交给构建师渲染。
 
 #### 5.2 transitions 数组
-过渡问题（quick 2 个，standard/exhaustive 5 个），含 from_stage 和 to_stage。
+5 个过渡问题，含 from_stage 和 to_stage。
 
 #### 5.3 citations 数组
 从 learning_chain.citation_index 转换，添加 access_date。
@@ -176,18 +185,20 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 ## 质量门禁
 
 ### 必须通过
-- [ ] 对应深度的阶全部撰写完成，无空阶（quick：1–3；standard/exhaustive：1–6）
-- [ ] 总字数 ≥ shared/config/quality-gates.json 下限（quick 4,000 / standard 10,000 / exhaustive 12,000）
-- [ ] 过渡问题数量符合深度（quick 2 / 其余 5），无机械过渡
-- [ ] 引用标注 ≥ 每阶 2 条 × 阶数（quick ≥6；standard/exhaustive ≥12）
+- [ ] 六阶全部撰写完成，无空阶
+- [ ] 总字数 ≥ 10,000 × depth 乘子 + scope 附加字数（shared/config/quality-gates.json 公式）
+- [ ] 5 个过渡问题，无机械过渡
+- [ ] 引用标注 ≥ citation_density 每阶下限 × 6（low ≥6 / standard ≥12 / high ≥18）
 - [ ] ai_pattern_score < 0.3
 - [ ] 严格符合 shared/schemas/article-content.json schema
+- [ ] scope=related/panorama 时每阶含 related_sidebar；scope=panorama 时 extras 齐全
+- [ ] 行文风格与 options.tone 一致（科普 / 学术 / 杂志）
 
 ### 必须检查
 - [ ] 禁用词库全部避开
 - [ ] 术语定义全文一致
 - [ ] 引用编号连续且对应
-- [ ] 每阶最少 2 条引用
+- [ ] 每阶引用数 ≥ citation_density 对应下限
 
 ---
 

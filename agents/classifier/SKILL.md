@@ -8,7 +8,7 @@ deep-word-explorer 流水线的第一个 Agent。接收用户输入的任意词�
 
 ## 输入
 - `word` (string)：用户输入的待解析词汇
-- `depth_level` (string)：深度等级，quick / standard / exhaustive
+- `options` (object)：Step 0 确认的统一配置面板（speed/depth/scope/format/illustrations/tone/citation_density/language/custom）
 - `language` (string)：输出语言，默认 zh
 
 ## 输出
@@ -51,7 +51,10 @@ deep-word-explorer 流水线的第一个 Agent。接收用户输入的任意词�
 
 ### Step 2: 认知门槛评估
 
-评估普通读者理解该概念所需的先备知识。
+评估普通读者理解该概念所需的先备知识。最终写入 `classification.difficulty` 的档位由
+用户在 Step 0 选择的 `options.depth` 决定：`intro`→入门 / `mid`→进阶 / `pro`→专业。
+分类器同时评估概念本身的自然难度，若与用户档位明显不匹配（如用 `pro` 解析入门概念），
+在 `subtype` 或备注中说明，不擅自覆盖用户选择。
 
 | 级别 | 判断标准 | 示例 |
 |------|---------|------|
@@ -136,7 +139,7 @@ deep-word-explorer 流水线的第一个 Agent。接收用户输入的任意词�
 - Bilibili 知识区
 
 #### layer_4_enabled（关联层）
-- `depth_level=exhaustive` → true
+- `options.scope=panorama` → true
 - 其他 → false
 
 #### layer_5_enabled（时效层）
@@ -152,7 +155,7 @@ deep-word-explorer 流水线的第一个 Agent。接收用户输入的任意词�
 
 #### depth_modifier
 - controversy=高度争议 → 1.5
-- difficulty=专业 → 1.3
+- options.depth=pro → 1.3
 - controversy=存在争议 → 1.2
 - 默认 → 1.0
 
@@ -175,9 +178,10 @@ deep-word-explorer 流水线的第一个 Agent。接收用户输入的任意词�
 - [ ] ontology 判定有合理依据
 - [ ] subtype 与 ontology 不自相矛盾
 - [ ] search_profile 的 layer_2 至少包含 2 个来源
-- [ ] layer_4_enabled 与 depth_level 一致
+- [ ] layer_4_enabled 与 options.scope 一致（仅 panorama 启用）
 - [ ] layer_5_enabled 与 timeliness/ontology 一致
 - [ ] query_languages 非空且合理
+- [ ] classification.difficulty 与 options.depth 映射一致
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: deep-word-explorer
 displayName: 兴趣词汇解析
-description: 输入任意「词」（地点/名词/热词/书籍/国家/历史/学术概念…），多 Agent 协作产出万字以上、由浅入深、带完整引用与数据图表配图的深度解析单页网页。
+description: 输入任意「词」（地点/名词/热词/书籍/国家/历史/学术概念…），多 Agent 协作产出由浅入深、带完整引用与数据图表配图的深度解析网页，快慢/深浅/点面档位可调。
 author: Boryac
 version: 1.1.0
 license: AGPL-3.0
@@ -11,7 +11,7 @@ license: AGPL-3.0
 
 ## 技能定位
 
-一个多 Agent 协作的知识生产流水线。输入任意一个词（地点、名词、热词、书籍、国家、历史概念等），按 Step 0–6（含 Step 4.5）顺序处理，产出一篇由浅入深、有完整引用来源的、带数据图表与配图、视觉精美的深度解析网页（standard/exhaustive 万字以上，quick 约 5,000 字）。
+一个多 Agent 协作的知识生产流水线。输入任意一个词（地点、名词、热词、书籍、国家、历史概念等），按 Step 0–6（含 Step 4.5）顺序处理，产出一篇由浅入深、有完整引用来源的、带数据图表与配图、视觉精美的深度解析网页。字数下限由 `speed` / `depth` / `scope` 档位组合决定，见 `shared/config/quality-gates.json`。
 
 ## 触发条件
 
@@ -25,9 +25,16 @@ license: AGPL-3.0
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `word` | string | ✅ | 待解析的词汇 |
-| `depth` | enum | ❌ | quick（1–3 阶）/ standard（默认，全六阶）/ exhaustive（全六阶+全搜索层）；阶数与字数阈值见 `shared/config/quality-gates.json` |
+| `speed` | enum | ❌ | fast / standard / deep：搜索强度与打磨轮次（默认 standard） |
+| `depth` | enum | ❌ | intro / mid / pro：认知门槛与字数乘子（默认 mid） |
+| `scope` | enum | ❌ | point / related / panorama：内容广度（默认 point） |
+| `format` | enum | ❌ | html（默认）/ markdown / pdf |
+| `illustrations` | boolean | ❌ | 是否配图，默认 true |
+| `tone` | enum | ❌ | popular 科普 / academic 学术 / editorial 杂志（默认 popular） |
+| `citation_density` | enum | ❌ | low / standard / high（默认 standard） |
 | `theme` | enum | ❌ | 视觉主题，从 5 套中选，默认自动推荐 |
 | `language` | string | ❌ | 输出语言，默认 zh |
+| `custom` | array | ❌ | 自由扩展要求（高级用户），直接追加到 Step 0 确认 |
 
 ---
 
@@ -35,23 +42,37 @@ license: AGPL-3.0
 
 ### Step 0: 参数确认与需求对齐
 
-**交互方式**：一次性问完 3 个关键问题：
+**交互方式**：一次性确认「三轴档位 + 面板配置」，未指定项用默认值：
 
-1. **深度等级**：
-   - `quick`：轻量解析（跳第四/五/六阶，约 5,000 字）
-   - `standard`（推荐）：标准深度（全六阶，约 12,000-15,000 字）
-   - `exhaustive`：穷尽式深度（全六阶 + 全五层搜索，约 15,000-20,000 字）
+| 轴/项 | 档位/取值 | 默认 |
+|------|----------|------|
+| speed（快→慢） | fast / standard / deep | standard |
+| depth（浅→深） | intro / mid / pro | mid |
+| scope（点→面） | point / related / panorama | point |
+| format | html / markdown / pdf | html |
+| illustrations | on / off | on |
+| tone | popular 科普 / academic 学术 / editorial 杂志 | popular |
+| citation_density | low / standard / high | standard |
+| theme | 墨水经典 / 靛蓝瓷 / 森林墨 / 牛皮纸 / 沙丘 | 自动推荐 |
+| language | zh / en / ... | zh |
+| custom | 自由文本数组 | [] |
 
-2. **视觉主题**（可选，默认自动推荐）：
-   - 🖋 墨水经典（通用/人文）| 🌊 靛蓝瓷（科技）| 🌿 森林墨（自然/地理）
-   - 🍂 牛皮纸（历史/文学）| 🌙 沙丘（艺术/设计）
+**触发语 → 档位映射**（未显式指定时）：
 
-3. **输出位置**（可选，默认当前项目目录）：
-   - 如不指定，输出到当前项目的 `.workbuddy/deep-explorer/{word}/index.html`
+| 用户表达 | 映射 |
+|---------|------|
+| 快速了解 / 简单介绍 / 简介 | speed=fast, depth=intro |
+| 全面了解 / 标准深度 | speed=standard, depth=mid |
+| 深挖 / 穷尽 / 研读 / 硬核 | speed=deep, depth=pro, scope=panorama |
+| 关联 / 相关概念 | scope=related |
+| 全景 / 知识地图 / 学科坐标 | scope=panorama |
 
-**输出**：确认的参数集 `{word, depth, theme, output_path}`
+**输出位置**（可选，默认当前项目目录）：
+- 如不指定，输出到当前项目的 `.workbuddy/deep-explorer/{word}/index.html`（format=markdown 时为同名 `.md`）
 
-> 各深度硬性下限（字数 / 阶数 / 过渡问题数量）统一见 `shared/config/quality-gates.json`。
+**输出**：确认的参数集 `{word, speed, depth, scope, format, illustrations, tone, citation_density, theme, language, custom, output_path}`
+
+> 档位语义、字数公式与引用密度统一见 `shared/config/quality-gates.json`。
 
 ---
 
@@ -59,12 +80,12 @@ license: AGPL-3.0
 
 **调度**：分类器 Agent（`agents/classifier/SKILL.md`）
 
-**输入**：word + depth
+**输入**：word + options
 **输出**：`classification_profile` JSON
 
 **关键动作**：
 1. 本体类型判定（地理/历史/学术/文化/科技/热词/人物/机构/自然/经济/社会）
-2. 认知门槛评估（入门/进阶/专业）
+2. 认知门槛评估（入门/进阶/专业，跟随 options.depth 映射）
 3. 争议程度评估（共识/存在争议/高度争议）
 4. 时效敏感度评估（永恒/缓慢演变/快速迭代）
 5. 生成搜索策略配置（search_profile）
@@ -78,15 +99,15 @@ license: AGPL-3.0
 
 **调度**：研究员 Agent（`agents/researcher/SKILL.md`）
 
-**输入**：word + classification_profile + depth
+**输入**：word + classification_profile + options
 **输出**：`research_bundle` JSON
 
 **关键动作**：
 - Layer 1：百科/词典 → 基础事实（定义、时间线、人物、坐标）
 - Layer 2：学术论文 → 共识、争议、里程碑研究、学派
 - Layer 3：专家解读 → 通俗解释、类比、误解、学习路径
-- Layer 4（如启用）：关联概念 → 前置、平行、下游概念、知识图谱
-- Layer 5（如启用）：时效信息 → 最新发展、舆论趋势
+- Layer 4（options.scope=panorama 时启用）：关联概念 → 前置、平行、下游概念、知识图谱
+- Layer 5（热词 / 快速迭代概念时启用）：时效信息 → 最新发展、舆论趋势
 
 **降级策略**：如某层信息不足，按 `shared/prompts/fallback-strategies.md` 降级并标注。
 
@@ -99,15 +120,16 @@ license: AGPL-3.0
 
 **调度**：架构师 Agent（`agents/architect/SKILL.md`）
 
-**输入**：word + research_bundle + depth
+**输入**：word + research_bundle + options
 **输出**：`learning_chain` JSON
 
 **关键动作**：
 1. 数据预分类（事实/分析/关联/争议 → 分配到六阶）
 2. 每阶构建 content_outline + 必填字段
 3. 信息缺口检测
-4. 生成 5 个过渡问题（自然衔接，不机械）
-5. 构建引用索引（按三类分组）
+4. 生成 5 个过渡问题（自然衔接，不机械；任何档位均为 5 个）
+5. 构建引用索引（按 academic / official / deep_content / news / encyclopedia 分组）
+6. 按 options 处理广度：depth 乘子决定每阶 min_words；scope=related 生成 related_sidebars，scope=panorama 额外生成 extras（全景导览 + 延伸阅读）
 
 **阶段输出**：向用户展示学习链大纲：
 > 学习链已构建。六阶预估字数：500 + 2,500 + 4,000 + 3,000 + 2,000 + 2,000 = 14,000 字。包含 16 条引用。过渡问题已生成。
@@ -118,7 +140,7 @@ license: AGPL-3.0
 
 **调度**：撰写师 Agent（`agents/writer/SKILL.md`）
 
-**输入**：word + learning_chain + research_bundle + depth
+**输入**：word + learning_chain + research_bundle + options
 **输出**：`article_content` JSON
 
 **关键动作**：
@@ -127,6 +149,7 @@ license: AGPL-3.0
 3. 注入术语 tooltip（首次出现时）
 4. 润色过渡问题
 5. 全文一致性检查（术语/引用/AI 痕迹/渐进披露）
+6. 按 tone / citation_density / format 调整行文、引用密度与交付形态（markdown 直接产出 .md 正文）
 
 **阶段输出**：向用户汇报撰写结果：
 > 全文撰写完成。总字数：14,230 字。16 条引用。AI 痕迹得分：0.12（合格）。36 个专业术语已添加 tooltip。
@@ -137,8 +160,10 @@ license: AGPL-3.0
 
 **调度**：配图师 Agent（`agents/illustrator/SKILL.md`）
 
-**输入**：article_content + learning_chain + theme
+**输入**：article_content + learning_chain + theme + options
 **输出**：`illustration_plan` JSON + `media_assets/` + `chart_fragments/`
+
+**前置分派**：`options.illustrations=false` 时直接输出空 plan（color_system=none、assets=[]），跳过本流程。
 
 **关键动作**：
 1. 配图点识别（数据密集 / 强视觉实体 / 抽象概念三类信号）
@@ -157,8 +182,10 @@ license: AGPL-3.0
 
 **调度**：构建师 Agent（`agents/builder/SKILL.md`）
 
-**输入**：article_content + theme + output_path + illustration_plan（含 media_assets/、chart_fragments/）
+**输入**：article_content + theme + output_path + illustration_plan（含 media_assets/、chart_fragments/）+ options
 **输出**：`index.html`（单文件完整网页）
+
+**前置分派**：按 `options.format` 分流——html 走完整流程；markdown 直接包装 article_content 为独立 `.md`；pdf 走 html 流程并追加 `@media print` 打印样式。
 
 **关键动作**：
 1. 从 guizang-ppt-skill 拷贝并改造模板（PPT → 长文）
@@ -177,11 +204,11 @@ license: AGPL-3.0
 
 **调度**：QA Agent（`agents/qa/SKILL.md`）
 
-**输入**：html_path + article_content + learning_chain + illustration_plan + depth_level
+**输入**：html_path + article_content + learning_chain + illustration_plan + options
 **输出**：qa_report JSON + 修复后的 HTML
 
 **关键动作**：
-1. P0 级自动化检查（17 项）
+1. P0 级自动化检查（17 项；字数按 quality-gates.json 公式、结构按 options.scope、引用按 citation_density、配图按 illustrations 开关）
 2. P1 级自动化检查（33 项）+ 自动修复
 3. P2 级自动化检查（22 项）+ 建议
 4. 配图专项检查（图表编码诚实 / 单色系 / 图片来源许可 / alt / 加载降级）
@@ -202,6 +229,11 @@ license: AGPL-3.0
    - 暗色模式和 PDF 导出的操作方法
    - 参考文献的阅读建议
    - 图表与配图的阅读方式（图注、来源行、许可标注）
+
+**交付形态按 format**：
+- `html`（默认）：单文件精装网页
+- `markdown`：独立 `.md` 轻量文本（保留 [N] 与术语标注）
+- `pdf`：HTML + 打印样式，浏览器「打印 → 另存为 PDF」
 
 ---
 
@@ -250,7 +282,7 @@ deep-word-explorer/
 │   └── qa/SKILL.md                       ← 质量审查
 │       └── references/                   ← P0/P1/P2 检查清单（含配图专项）
 ├── shared/
-│   ├── config/quality-gates.json         ← 唯一阈值事实源（字数/阶数/引用/AI 痕迹）
+│   ├── config/quality-gates.json         ← 唯一阈值事实源（三轴档位/字数公式/引用/AI 痕迹）
 │   ├── schemas/                          ← 5个JSON Schema（含 illustration-plan）
 │   ├── themes/themes.css                 ← 5套主题
 │   └── prompts/                          ← 系统提示词 + 降级策略
@@ -268,6 +300,7 @@ deep-word-explorer/
 5. **单文件交付**：读者无需任何工具，浏览器打开即可阅读
 6. **配图双轨制**：数据图表走 lieflat-chart 模板化生成（一张图一个结论），概念图优先 SVG、网络图只采用许可安全且本地化的来源；整份交付锁定唯一色系
 7. **引用与署名完整**：文字引用、图片来源与许可、图表数据契约，三者缺一不可
+8. **档位可组合**：快慢/深浅/点面三轴正交（3×3×3），默认值开箱即用，高级需求经 custom 扩展
 
 ---
 

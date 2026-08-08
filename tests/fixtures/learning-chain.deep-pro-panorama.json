@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "word": "存在主义",
+    "options": {
+      "speed": "deep",
+      "depth": "pro",
+      "scope": "panorama",
+      "format": "html",
+      "illustrations": true,
+      "tone": "editorial",
+      "citation_density": "high",
+      "language": "zh"
+    },
+    "total_estimated_words": 16000,
+    "target_reading_time_minutes": 60,
+    "generated_at": "2026-08-08T00:00:00Z"
+  },
+  "stages": {
+    "stage_1": {
+      "title": "原初印象",
+      "one_sentence_definition": "存在主义：个体先存在、后定义自身的哲学立场。",
+      "vivid_analogy": { "text": "人生像一张没有说明书的白纸", "source_domain": "日常生活" },
+      "content_outline": ["一句话定义", "一个反常识的起点", "为什么今天仍需读它"],
+      "min_words": 600
+    },
+    "stage_2": {
+      "title": "时空坐标",
+      "origin_story": "19 世纪丹麦哲学家克尔凯郭尔首先系统回应个体抉择问题，战后在法国迎来高峰（示例叙事）。",
+      "timeline": [
+        { "date": "1844", "event": "《非此即彼》出版", "detail": "存在主义思想源头之一", "source_ref": 1 },
+        { "date": "1943", "event": "《存在与虚无》出版", "detail": "萨特系统化存在主义", "source_ref": 1 }
+      ],
+      "geographic_context": "欧陆，法德为中心",
+      "key_figures_intro": [
+        { "name": "萨特", "role": "哲学家", "contribution_summary": "提出存在先于本质" }
+      ],
+      "content_outline": ["思想源流", "两次世界大战后的传播"],
+      "min_words": 2400,
+      "has_timeline_visual": true
+    },
+    "stage_3": {
+      "title": "核心要素拆解",
+      "dimensions": [
+        {
+          "name": "存在先于本质",
+          "what_it_is": "人首先存在，再通过选择定义自己的本质。",
+          "why_it_matters": "它把人的自由与责任放在哲学中心。",
+          "example": "萨特以裁纸刀比喻本质先于存在的物。",
+          "source_refs": [1]
+        },
+        {
+          "name": "自由与选择",
+          "what_it_is": "人在任何处境中都拥有选择的自由。",
+          "why_it_matters": "自由同时意味着无可推卸的责任。",
+          "example": "战争中的士兵仍可选择如何行动。",
+          "source_refs": [1]
+        },
+        {
+          "name": "自欺",
+          "what_it_is": "人用借口逃避自由与责任的心理状态。",
+          "why_it_matters": "自欺解释了为什么多数人拒绝自由。",
+          "example": "「我只是听命行事」即是一种自欺。",
+          "source_refs": [1]
+        }
+      ],
+      "content_outline": ["三个核心维度"],
+      "min_words": 4200,
+      "visual_type": "cards"
+    },
+    "stage_4": {
+      "title": "深层机制",
+      "causal_chain": [
+        { "step": 1, "cause": "意识到世界无既定意义", "effect": "人被迫自行选择", "mechanism_detail": "意义的空缺把自由推向前台" }
+      ],
+      "underlying_logic": "自由与责任互为条件：选择越自由，责任越无法转嫁。",
+      "counterfactual_analysis": "如果世界天然包含意义，存在主义的核心问题便不成立。",
+      "mathematical_foundation": "此处可含形式化表述（如命题逻辑重建自由概念）",
+      "content_outline": ["自由与责任的机制", "自欺的结构"],
+      "min_words": 3000,
+      "has_mechanism_diagram": true
+    },
+    "stage_5": {
+      "title": "关联网络",
+      "concept_map": {
+        "nodes": [
+          { "id": "exist", "label": "存在主义", "category": "core", "importance": 1.0 },
+          { "id": "phen", "label": "现象学", "category": "prerequisite", "importance": 0.8 },
+          { "id": "stru", "label": "结构主义", "category": "parallel", "importance": 0.7 },
+          { "id": "post", "label": "后现代主义", "category": "downstream", "importance": 0.6 }
+        ],
+        "edges": [
+          { "from": "phen", "to": "exist", "label": "影响", "strength": 0.8 },
+          { "from": "stru", "to": "exist", "label": "批判", "strength": 0.6 },
+          { "from": "exist", "to": "post", "label": "影响", "strength": 0.6 }
+        ]
+      },
+      "reading_pathway": [
+        { "step": 1, "concept": "现象学", "why": "理解存在主义的方法论底座" },
+        { "step": 2, "concept": "结构主义", "why": "对照最有力的反对声音" },
+        { "step": 3, "concept": "后现代主义", "why": "观察存在主义的后续影响" }
+      ],
+      "content_outline": ["前置与平行概念", "阅读路径", "知识图谱"],
+      "min_words": 2400,
+      "has_knowledge_graph": true
+    },
+    "stage_6": {
+      "title": "批判视角",
+      "criticisms": [
+        { "perspective": "结构主义", "argument": "过分夸大个体自由，忽略结构约束。", "counter_argument": "存在主义并不否认处境，只强调处境中的选择。", "source_ref": 1 },
+        { "perspective": "实用主义", "argument": "缺乏可检验的操作性结论。", "counter_argument": "其价值在伦理态度而非实证命题。", "source_ref": 1 }
+      ],
+      "limitations": ["个体主义倾向明显", "概念边界模糊"],
+      "open_questions": ["自由是否有边界", "自欺能否被彻底克服"],
+      "future_directions": ["与认知科学对话", "与神经科学交叉"],
+      "content_outline": ["两类主要批判", "开放问题"],
+      "min_words": 2400,
+      "has_comparison_table": true
+    }
+  },
+  "transitions": {
+    "t1_2": "如果存在先于本质，这种思想是从哪里生长出来的？",
+    "t2_3": "历史背景已经清楚，那存在主义的核心主张到底有哪些？",
+    "t3_4": "三个维度背后，是否存在更深的共同机制？",
+    "t4_5": "这套机制在思想地图上处于什么位置？",
+    "t5_6": "既然关联如此丰富，它经得起哪些批判？"
+  },
+  "related_sidebars": {
+    "stage_1": ["虚无主义", "现象学", "主体性"],
+    "stage_2": ["启蒙哲学", "两次世界大战", "德国观念论"],
+    "stage_3": ["自欺", "自由意志", "本真性"],
+    "stage_4": ["责任伦理", "处境", "否定性"],
+    "stage_5": ["现象学", "结构主义", "后现代主义", "精神分析"],
+    "stage_6": ["结构主义", "实用主义", "认知科学"]
+  },
+  "extras": {
+    "panorama_intro": "存在主义不是孤立流派，而是欧陆哲学版图上的一个坐标：前有现象学，旁有结构主义，后有后现代主义。",
+    "further_reading": [
+      "《存在与虚无》导读",
+      "现象学入门书单",
+      "欧陆哲学知识图谱",
+      "存在主义与心理学交叉研究",
+      "二十世纪法国思想史纪录片"
+    ]
+  },
+  "citation_index": [
+    { "id": 1, "type": "encyclopedia", "title": "示例百科条目", "source": "示例百科", "url": "https://example.com/1", "access_date": "2026-08-08" },
+    { "id": 2, "type": "academic", "title": "示例论文一", "source": "示例期刊", "url": "https://example.com/2", "access_date": "2026-08-08" },
+    { "id": 3, "type": "academic", "title": "示例论文二", "source": "示例期刊", "url": "https://example.com/3", "access_date": "2026-08-08" },
+    { "id": 4, "type": "deep_content", "title": "示例解读", "source": "示例专栏", "url": "https://example.com/4", "access_date": "2026-08-08" },
+    { "id": 5, "type": "official", "title": "示例机构报告", "source": "示例机构", "url": "https://example.com/5", "access_date": "2026-08-08" },
+    { "id": 6, "type": "news", "title": "示例报道", "source": "示例媒体", "url": "https://example.com/6", "access_date": "2026-08-08" },
+    { "id": 7, "type": "deep_content", "title": "示例书评", "source": "示例书评平台", "url": "https://example.com/7", "access_date": "2026-08-08" },
+    { "id": 8, "type": "encyclopedia", "title": "示例词典", "source": "示例词典", "url": "https://example.com/8", "access_date": "2026-08-08" }
+  ]
+}

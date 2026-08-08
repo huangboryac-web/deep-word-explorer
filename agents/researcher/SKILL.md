@@ -13,7 +13,7 @@ deep-word-explorer 流水线的第二个 Agent。接收分类画像，执行五�
 ## 输入
 - `word` (string)：待解析词汇
 - `classification_profile` (JSON)：来自分类器 Agent
-- `depth_level` (string)：quick / standard / exhaustive
+- `options` (object)：Step 0 确认的统一配置面板（三轴 + 格式/配图/语气/引用密度）
 
 ## 输出
 - `research_bundle` (JSON)：严格按照 `shared/schemas/research-bundle.json` schema 输出
@@ -28,13 +28,14 @@ deep-word-explorer 流水线的第二个 Agent。接收分类画像，执行五�
 2. **同层并行**：同一层内的多个搜索 query 并行执行
 3. **退出条件**：每层完成后检查退出条件，不满足则执行降级
 4. **降级记录**：每次降级记录在 `meta.degradations_applied` 中
+5. **speed 强度**：按 `options.speed` 决定搜索层数与每层来源量（fast：L1-2 深度 + L3 最小抽取、每层 2-3 源；standard：L1-3、每层 3-5 源；deep：L1-5、每层 4-6 源），见 `shared/config/quality-gates.json`。fast 档的层数不足属预期，不视为降级，但须在 meta 注明。
 
 ### 工具使用
 
 使用 WebSearch 进行多关键词搜索，使用 WebFetch 获取具体页面内容进行深度提取。
 
 **WebSearch 使用规范**：
-- 每层发送 3-5 条搜索 query（从 query-templates.md 中选取）
+- 每层发送 2-3 / 3-5 / 4-6 条搜索 query（按 `options.speed`，从 query-templates.md 中选取）
 - 每条 query 使用不同角度，避免搜索结果高度重叠
 - 如果 query_languages 包含多语言，每种语言至少发 1 条
 
@@ -136,7 +137,8 @@ deep-word-explorer 流水线的第二个 Agent。接收分类画像，执行五�
 ### Layer 4: 关联层
 
 #### 前置条件
-仅当 search_profile.layer_4_enabled = true 时执行。否则跳过整层。
+仅当 search_profile.layer_4_enabled = true 时执行。否则跳过整层
+（layer_4_enabled 由 `options.scope` 决定：`panorama` → true，其余 → false）。
 
 #### 步骤
 1. Wikidata SPARQL 查询：
@@ -183,8 +185,8 @@ deep-word-explorer 流水线的第二个 Agent。接收分类画像，执行五�
 #### 3. 元数据填充
 ```
 meta.word = word
+meta.options = options（Step 0 面板快照）
 meta.generated_at = 当前时间
-meta.depth_level = depth_level
 meta.total_sources_consulted = 所有层访问的来源总数
 meta.search_duration_seconds = 估算或实际搜索耗时
 ```
@@ -202,6 +204,7 @@ meta.search_duration_seconds = 估算或实际搜索耗时
 - [ ] Layer 3 至少有 2 条 expert_interpretations
 - [ ] 如果 Layer 4 启用，concept_map_edges ≥ 5
 - [ ] 如果 Layer 5 启用，recent_developments ≥ 3
+- [ ] 搜索强度符合 options.speed（层数与每层来源数）
 
 ### 准确性
 - [ ] 每个事实标注来源

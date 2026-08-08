@@ -1,5 +1,15 @@
 {
   "word": "存在主义",
+  "options": {
+    "speed": "standard",
+    "depth": "mid",
+    "scope": "related",
+    "format": "html",
+    "illustrations": true,
+    "tone": "academic",
+    "citation_density": "standard",
+    "language": "zh"
+  },
   "classification": {
     "ontology": "学术术语",
     "subtype": "哲学概念",

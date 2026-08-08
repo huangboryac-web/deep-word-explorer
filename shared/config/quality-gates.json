@@ -1,28 +1,63 @@
 {
   "description": "deep-word-explorer 的唯一阈值事实源。所有 SKILL.md、系统提示词与 QA 门禁统一引用本文件；文档与校验脚本不得另立数字。",
-  "depth": {
-    "quick": {
-      "stages": 3,
-      "min_words": 4000,
-      "target_words": "约 5,000",
-      "transition_questions": 2
+  "defaults": {
+    "speed": "standard",
+    "depth": "mid",
+    "scope": "point",
+    "format": "html",
+    "illustrations": true,
+    "tone": "popular",
+    "citation_density": "standard",
+    "language": "zh"
+  },
+  "tiers": {
+    "speed": {
+      "labels": { "fast": "快速", "standard": "标准", "deep": "深度" },
+      "fast": {
+        "search_layers": "L1-2 深度 + L3 最小抽取",
+        "sources_per_layer": [2, 3],
+        "polish_rounds": 1
+      },
+      "standard": {
+        "search_layers": "L1-3 完整",
+        "sources_per_layer": [3, 5],
+        "polish_rounds": 2
+      },
+      "deep": {
+        "search_layers": "L1-5（L4/L5 按 scope 与时效启用）",
+        "sources_per_layer": [4, 6],
+        "polish_rounds": 3
+      }
     },
-    "standard": {
-      "stages": 6,
-      "min_words": 10000,
-      "target_words": "12,000–15,000",
-      "transition_questions": 5
+    "depth": {
+      "labels": { "intro": "入门", "mid": "进阶", "pro": "专业" },
+      "intro": { "word_multiplier": 0.8, "description": "零前置、术语必解释、避免数学" },
+      "mid": { "word_multiplier": 1.0, "description": "适度背景、术语首次定义" },
+      "pro": { "word_multiplier": 1.2, "description": "学术级术语、可含推导" }
     },
-    "exhaustive": {
-      "stages": 6,
-      "min_words": 12000,
-      "target_words": "15,000–20,000",
-      "transition_questions": 5
+    "scope": {
+      "labels": { "point": "单点", "related": "关联", "panorama": "全景" },
+      "point": { "extra_words": 0, "description": "六阶只讲该词本身" },
+      "related": { "extra_words": 2000, "description": "六阶 + 每阶关联侧栏 + 第五阶强化（≥5 关联概念）" },
+      "panorama": { "extra_words": 4000, "description": "六阶 + 全景导览 + 知识地图/延伸阅读，Layer 4 必开" }
     }
+  },
+  "word_formula": {
+    "base_words": 10000,
+    "note": "min_words = base_words × depth.word_multiplier + scope.extra_words；speed 不影响字数"
+  },
+  "citation_density": {
+    "low": { "per_stage_min": 1, "reference_list_min": 6 },
+    "standard": { "per_stage_min": 2, "reference_list_min": 8 },
+    "high": { "per_stage_min": 3, "reference_list_min": 12 }
+  },
+  "structure": {
+    "stages": 6,
+    "transition_questions": 5,
+    "extra_sections": { "panorama": ["全景导览", "知识地图/延伸阅读"] }
   },
   "gates": {
     "citation_index_min": 8,
-    "inline_citations_per_stage_min": 2,
     "ai_pattern_score_max": 0.3,
     "concept_map_edges_min": 5,
     "concept_map_relation_types_min": 5,

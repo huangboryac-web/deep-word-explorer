@@ -21,6 +21,7 @@ deep-word-explorer 流水线的第五个 Agent（Step 4.5，位于撰写师与�
 - `article_content` (JSON)：来自撰写师 Agent
 - `learning_chain` (JSON)：来自架构师 Agent
 - `theme` (string)：ink-classic / indigo-porcelain / forest-ink / kraft-paper / dune
+- `options` (object)：统一配置面板；`illustrations=off` 时直接跳过
 
 ## 输出
 
@@ -31,6 +32,9 @@ deep-word-explorer 流水线的第五个 Agent（Step 4.5，位于撰写师与�
 ---
 
 ## 工作流
+
+**前置分派**：如果 `options.illustrations = false`，直接输出空 plan
+（`color_system="none"`、`assets=[]`）并结束，不执行本流程；QA 同步跳过配图专项。
 
 ### Step 1: 配图点识别
 
@@ -44,7 +48,7 @@ deep-word-explorer 流水线的第五个 Agent（Step 4.5，位于撰写师与�
 
 每个配图点必须绑定三个字段：`stage_no`（所属阶）、`context_sentence`（正文锚点句）、`takeaway`（该图要传达的一个结论）。
 
-**硬规则：一张图只承担一个独立结论。** 结论重复的配图点合并或删除；配图点总量按文章长度控制在合理区间（standard 深度建议 3–5 个，exhaustive 深度建议 5–8 个），不为了凑数而配图。
+**硬规则：一张图只承担一个独立结论。** 结论重复的配图点合并或删除；配图点总量按 depth 档位控制在合理区间（intro 建议 2–3 个，mid 建议 3–5 个，pro 建议 5–8 个），不为了凑数而配图。
 
 ### Step 2: 双轨配图（文字配图流程）
 

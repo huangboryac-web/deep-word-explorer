@@ -13,8 +13,8 @@
     },
     "color_system": {
       "type": "string",
-      "enum": ["mono", "porcelain", "palm", "wire"],
-      "description": "整份交付锁定的唯一色系（lieflat-chart 的 Mono 或三套彩色预设之一）"
+      "enum": ["mono", "porcelain", "palm", "wire", "none"],
+      "description": "整份交付锁定的唯一色系（lieflat-chart 的 Mono 或三套彩色预设之一）；illustrations=off 时为 none，且 assets 必须为空数组"
     },
     "color_system_reason": {
       "type": "string",
