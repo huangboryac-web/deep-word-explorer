@@ -120,6 +120,7 @@ main section[data-chain]::before{
   content:"0" attr(data-chain);position:absolute;right:.14em;top:-.45em;z-index:0;pointer-events:none;user-select:none;
   font-family:var(--display);font-size:clamp(4.5rem,11vw,8.5rem);line-height:1;color:var(--paper-tint);
   -webkit-text-stroke:2px var(--ink);text-shadow:4px 4px 0 var(--ink-tint);opacity:.55;
+  transform:translateY(var(--n-y,0));transition:transform .12s linear;
 }
 main section > *{position:relative;z-index:1}
 body.theme-dark main section{background:var(--ink)}
@@ -291,6 +292,21 @@ function refresh(){
   [].forEach.call(rail.querySelectorAll('.step'),function(d){d.classList.toggle('active',d.textContent===cur.replace('chain-',''));});
 }
 window.addEventListener('scroll',refresh,{passive:true});refresh();
+var raf=false;
+function parallax(){
+  if(raf)return;
+  raf=true;
+  requestAnimationFrame(function(){
+    raf=false;
+    var vh=window.innerHeight||document.documentElement.clientHeight;
+    secs.forEach(function(s){
+      var r=s.getBoundingClientRect();
+      var mid=(r.top+r.height/2-vh/2);
+      s.style.setProperty('--n-y',(-mid*.11).toFixed(1)+'px');
+    });
+  });
+}
+window.addEventListener('scroll',parallax,{passive:true});parallax();
 var reveal=[].slice.call(document.querySelectorAll('main section,.transition-question,.references'));
 if('IntersectionObserver' in window){
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:.1});

@@ -48,7 +48,7 @@ body::after{
 }
 @keyframes dw-scan{0%{background-position:0 0}100%{background-position:0 6px}}
 @keyframes dw-poweron{0%{opacity:0;filter:brightness(3) contrast(.85)}35%{opacity:1;filter:brightness(1.7) contrast(1.05)}60%{opacity:1;filter:brightness(.85)}100%{opacity:1;filter:none}}
-@keyframes dw-title-glitch{0%,100%{transform:none;filter:none}18%{transform:translateX(-2px) skewX(-2deg);filter:hue-rotate(25deg)}36%{transform:translateX(2px);filter:none}54%{transform:translateY(1px) skewX(2deg)}72%{transform:translateX(-1px)}}
+@keyframes dw-title-glitch{0%,100%{opacity:1;transform:none;filter:none}18%{opacity:1;transform:translateX(-2px) skewX(-2deg);filter:hue-rotate(25deg)}36%{opacity:1;transform:translateX(2px);filter:none}54%{opacity:1;transform:translateY(1px) skewX(2deg)}72%{opacity:1;transform:translateX(-1px)}}
 a{color:var(--ink-tint)}
 ::selection{background:var(--ink-tint);color:var(--paper)}
 #progress-bar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--ink-tint),#7fd8a4);z-index:300;transition:width .08s linear}
@@ -83,7 +83,7 @@ body.theme-dark .topbar{background:var(--paper);color:var(--ink)}
   border-left:4px solid var(--ink-tint);padding-left:.75rem;margin:0 0 1.1rem;opacity:0;transform:translateY(14px);
   animation:dw-fade-up var(--dur-slow) var(--ease-out) .12s forwards;
 }
-.hero h1.typed{animation:dw-title-glitch .9s steps(1) 1}
+.hero h1.typed{animation:dw-title-glitch .9s steps(1) 1 forwards}
 .hero h1::before{
   content:attr(data-word);position:absolute;left:-.14em;top:-.26em;z-index:-1;pointer-events:none;
   font-size:1.5em;line-height:1;letter-spacing:.07em;text-transform:uppercase;color:transparent;
@@ -113,7 +113,9 @@ main section{
 main section[data-chain]::before{
   content:"0" attr(data-chain);position:absolute;right:.18em;top:-.38em;pointer-events:none;user-select:none;
   font-size:clamp(4rem,9vw,7rem);line-height:1;font-weight:700;color:var(--ink-tint);opacity:.10;
+  transform:translateY(var(--n-y,0));transition:transform .12s linear;
 }
+main section.active-scroll{border-color:var(--ink-tint);box-shadow:0 0 0 1px var(--ink-tint),var(--shadow-sm)}
 body.theme-dark main section{background:rgba(var(--ink-rgb),.45)}
 main section.visible{opacity:1;transform:none;clip-path:inset(0);transition:clip-path var(--dur-slow) var(--ease-out),opacity var(--dur-slow) var(--ease-out),transform var(--dur-slow) var(--ease-out)}
 main section h2{font-size:1.24rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 1rem}
@@ -215,8 +217,25 @@ function refresh(){
   bar.style.width=p+'%';pct.textContent=p+'%';
   var cur='';secs.forEach(function(s){if(t>=s.offsetTop-160)cur=s.id;});
   [].forEach.call(nav.querySelectorAll('a'),function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+cur);});
+  secs.forEach(function(s){s.classList.toggle('active-scroll',s.id===cur);});
 }
 window.addEventListener('scroll',refresh,{passive:true});refresh();
+/* 滚动视差：章节大数字随滚动位移 */
+var raf=false;
+function parallax(){
+  if(raf)return;
+  raf=true;
+  requestAnimationFrame(function(){
+    raf=false;
+    var vh=window.innerHeight||document.documentElement.clientHeight;
+    secs.forEach(function(s){
+      var r=s.getBoundingClientRect();
+      var mid=(r.top+r.height/2-vh/2);
+      s.style.setProperty('--n-y',(-mid*.10).toFixed(1)+'px');
+    });
+  });
+}
+window.addEventListener('scroll',parallax,{passive:true});parallax();
 var h1=document.querySelector('.hero h1');
 var lines=['$ deep-explore {{WORD}} --tier {{TIER_LABEL}}','> loading sources…','> 6 stages queued · ready'];
 var el=document.getElementById('term-lines');var li=0,ci=0,typed=false;
