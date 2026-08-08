@@ -24,7 +24,7 @@
   --dur-fast:.18s;--dur-med:.4s;--dur-slow:.75s;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body{
   margin:0;font-family:var(--sans);font-size:16.5px;line-height:1.82;background:var(--paper);color:var(--ink);overflow-x:hidden;
   transition:background var(--dur-med) var(--ease-out),color var(--dur-med) var(--ease-out);
@@ -126,8 +126,9 @@ main section > *{position:relative;z-index:1}
 body.theme-dark main section{background:var(--ink)}
 main section.visible{opacity:1;transform:rotateX(0) rotate(0) translateY(0)}
 main section:hover{box-shadow:var(--shadow-lg)}
+main section:hover::before{opacity:.75}
 main section h2{
-  display:inline-block;font-size:1.35rem;font-weight:900;letter-spacing:.01em;border-bottom:4px solid var(--ink-tint);
+  display:inline-block;font-size:clamp(1.25rem,2.4vw,1.5rem);font-weight:900;letter-spacing:.01em;border-bottom:4px solid var(--ink-tint);
   padding-bottom:.18rem;margin:0 0 1rem;
 }
 main section h2::after{content:"✦";color:var(--ink-tint);margin-left:.4em;display:inline-block;animation:dw-spin 8s linear infinite}
@@ -145,7 +146,7 @@ main section li{margin:.4rem 0}
 .transition-question.visible{opacity:1;transform:rotate(.5deg)}
 .transition-question p{margin:0}
 .callout{border:3px solid var(--ink-tint);border-left-width:9px;border-radius:var(--radius-sm);background:var(--paper-tint);padding:.6rem 1rem;margin:1.2rem 0}
-.lead{font-size:1.06rem}
+.lead{font-size:1.07rem;line-height:1.9}
 .timeline-list{list-style:none;padding:0}
 .timeline-list li{padding-left:1.35rem;position:relative;margin:.5rem 0}
 .timeline-list li::before{content:"●";position:absolute;left:0;color:var(--ink-tint)}
@@ -163,6 +164,14 @@ main section li{margin:.4rem 0}
 .references h2{font-size:1.25rem;font-weight:900}
 .references ol{line-height:1.9;padding-left:1.4rem}
 .references a{word-break:break-all}
+figure.chart-figure,figure.media-figure{margin:1.8rem 0;padding:1rem 1.1rem;border:3px solid var(--ink);border-radius:var(--radius-md);background:var(--paper);box-shadow:var(--shadow-sm)}
+figure .chart-frame{overflow-x:auto;max-width:100%}
+figure img{max-width:100%;height:auto;border-radius:var(--radius-sm)}
+figure .fig-title{font-weight:900;margin:.6rem 0 .2rem}
+figure .fig-src{font-size:.75rem;opacity:.75}
+.ref-group{margin-top:1.2rem}
+.ref-group h3{font-size:.9rem;font-weight:900;letter-spacing:.1em;color:var(--ink-tint)}
+.references a:hover{background:var(--paper-tint)}
 .abbr-term{border-bottom:2px dotted var(--ink-tint);cursor:help;font-weight:700;transition:background var(--dur-fast)}
 .abbr-term:hover{background:var(--paper-tint)}
 .citation-ref{
@@ -180,8 +189,9 @@ body.theme-dark .tooltip,body.theme-dark .cite-popup{background:var(--ink-tint);
 .tooltip.show,.cite-popup.show{opacity:1;transform:none}
 /* 右侧贴纸面板 */
 .rail{position:sticky;top:6rem;display:flex;flex-direction:column;gap:1rem}
-.panel{background:var(--paper);border:3px solid var(--ink);border-radius:var(--radius-md);box-shadow:var(--shadow-md);padding:1rem}
+.panel{background:var(--paper);border:3px solid var(--ink);border-radius:var(--radius-md);box-shadow:var(--shadow-md);padding:1rem;transition:transform var(--dur-fast) var(--ease-pop)}
 body.theme-dark .panel{background:var(--ink)}
+.panel:hover{transform:translateY(-2px)}
 .panel h3{font-size:.82rem;font-weight:900;letter-spacing:.12em;margin:0 0 .8rem;color:var(--ink-tint)}
 #memphis-chips{display:flex;flex-direction:column;gap:.45rem}
 #memphis-chips a{
@@ -269,7 +279,7 @@ body.theme-dark #chain-indicator .step{background:var(--ink)}
 <footer class="article-footer">{{FOOTER}}</footer>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
-lucide.createIcons();
+if(window.lucide){lucide.createIcons();}
 var secs=[].slice.call(document.querySelectorAll('main section[data-chain]'));
 var chips=document.getElementById('memphis-chips');
 secs.forEach(function(s){
@@ -334,12 +344,12 @@ var tb=document.getElementById('theme-toggle');
 function applyDark(dark){
   document.body.classList.toggle('theme-dark',dark);
   document.body.classList.toggle('theme-light',!dark);
-  tb.querySelector('i').setAttribute('data-lucide',dark?'sun':'moon');
-  tb.querySelector('span').textContent=dark?'DARK/LIGHT':'LIGHT/DARK';
-  lucide.createIcons();
+  if(tb.querySelector('i')){tb.querySelector('i').setAttribute('data-lucide',dark?'sun':'moon');}
+  if(tb.querySelector('span')){tb.querySelector('span').textContent=dark?'DARK/LIGHT':'LIGHT/DARK';}
+  if(window.lucide){lucide.createIcons();}
 }
 tb.addEventListener('click',function(){applyDark(!document.body.classList.contains('theme-dark'));});
-if(localStorage.getItem('dw-theme')==='dark'){applyDark(true);}
+try{if(localStorage.getItem('dw-theme')==='dark'){applyDark(true);}}catch(e){}
 document.getElementById('export-pdf').addEventListener('click',function(){window.print();});
 </script>
 </body>

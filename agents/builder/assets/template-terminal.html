@@ -23,7 +23,7 @@
   --dur-fast:.18s;--dur-med:.38s;--dur-slow:.7s;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 body{
   margin:0;font-family:var(--mono);font-size:15px;line-height:1.95;letter-spacing:.01em;
   background:var(--paper);color:var(--ink);overflow-x:hidden;
@@ -49,7 +49,7 @@ body::after{
 @keyframes dw-scan{0%{background-position:0 0}100%{background-position:0 6px}}
 @keyframes dw-poweron{0%{opacity:0;filter:brightness(3) contrast(.85)}35%{opacity:1;filter:brightness(1.7) contrast(1.05)}60%{opacity:1;filter:brightness(.85)}100%{opacity:1;filter:none}}
 @keyframes dw-title-glitch{0%,100%{opacity:1;transform:none;filter:none}18%{opacity:1;transform:translateX(-2px) skewX(-2deg);filter:hue-rotate(25deg)}36%{opacity:1;transform:translateX(2px);filter:none}54%{opacity:1;transform:translateY(1px) skewX(2deg)}72%{opacity:1;transform:translateX(-1px)}}
-a{color:var(--ink-tint)}
+a{color:var(--ink-tint);text-decoration-thickness:1px;text-underline-offset:2px}
 ::selection{background:var(--ink-tint);color:var(--paper)}
 #progress-bar{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--ink-tint),#7fd8a4);z-index:300;transition:width .08s linear}
 /* 顶栏 */
@@ -97,9 +97,9 @@ body.theme-dark .topbar{background:var(--paper);color:var(--ink)}
 .chain-row{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.5rem;opacity:0;transform:translateY(14px);animation:dw-fade-up var(--dur-slow) var(--ease-out) .28s forwards}
 .chain-row a{
   font-size:.75rem;text-decoration:none;border:1px solid var(--ink-tint);color:var(--ink-tint);
-  padding:.14rem .45rem;border-radius:var(--radius-sm);transition:background var(--dur-fast),color var(--dur-fast),box-shadow var(--dur-fast);
+  padding:.14rem .45rem;border-radius:var(--radius-sm);transition:background var(--dur-fast),color var(--dur-fast),box-shadow var(--dur-fast),transform var(--dur-fast);
 }
-.chain-row a:hover,.chain-row a.active{background:var(--ink-tint);color:var(--paper);box-shadow:var(--shadow-sm)}
+.chain-row a:hover,.chain-row a.active{background:var(--ink-tint);color:var(--paper);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
 @keyframes dw-fade-up{to{opacity:1;transform:none}}
 @keyframes dw-blink{50%{opacity:0}}
 /* 正文 */
@@ -116,9 +116,11 @@ main section[data-chain]::before{
   transform:translateY(var(--n-y,0));transition:transform .12s linear;
 }
 main section.active-scroll{border-color:var(--ink-tint);box-shadow:0 0 0 1px var(--ink-tint),var(--shadow-sm)}
+main section:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+main section:hover::before{opacity:.18}
 body.theme-dark main section{background:rgba(var(--ink-rgb),.45)}
 main section.visible{opacity:1;transform:none;clip-path:inset(0);transition:clip-path var(--dur-slow) var(--ease-out),opacity var(--dur-slow) var(--ease-out),transform var(--dur-slow) var(--ease-out)}
-main section h2{font-size:1.24rem;text-transform:uppercase;letter-spacing:.05em;margin:0 0 1rem}
+main section h2{font-size:clamp(1.18rem,2.2vw,1.42rem);line-height:1.3;text-transform:uppercase;letter-spacing:.05em;margin:0 0 1rem}
 main section h2::before{content:"// ";color:var(--ink-tint)}
 main section h3{font-size:1.02rem;text-transform:uppercase;letter-spacing:.04em;margin:1.5rem 0 .6rem}
 main section h4{font-size:.96rem;margin:1.2rem 0 .5rem}
@@ -132,7 +134,7 @@ main section li{margin:.35rem 0}
 .transition-question.visible{opacity:1;transform:none}
 .transition-question p{margin:0}
 .callout{border-left:4px solid var(--ink-tint);padding:.55rem 1rem;background:rgba(var(--ink-rgb),.04);border-radius:var(--radius-sm)}
-.lead{font-size:1.02rem}
+.lead{font-size:1.06rem;line-height:2}
 .timeline-list{list-style:none;padding:0}
 .timeline-list li{padding-left:1.3rem;position:relative;margin:.45rem 0}
 .timeline-list li::before{content:"▸";position:absolute;left:0;color:var(--ink-tint)}
@@ -149,6 +151,15 @@ main section li{margin:.35rem 0}
 .references.visible{opacity:1;transform:none}
 .references ol{line-height:1.95;padding-left:1.4rem}
 .references a{word-break:break-all}
+figure.chart-figure,figure.media-figure{margin:1.5rem 0;padding:1rem 1.1rem;border:1px solid var(--paper-tint);border-radius:var(--radius-sm);background:rgba(var(--paper-rgb),.6)}
+body.theme-dark figure.chart-figure,body.theme-dark figure.media-figure{background:rgba(var(--ink-rgb),.5)}
+figure .chart-frame{overflow-x:auto;max-width:100%}
+figure img{max-width:100%;height:auto;border:1px solid var(--paper-tint)}
+figure .fig-title{font-weight:700;margin:.6rem 0 .2rem}
+figure .fig-src{font-size:.75rem;opacity:.7}
+.ref-group{margin-top:1.2rem}
+.ref-group h3{font-size:.9rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-tint)}
+.references a:hover{color:var(--ink)}
 .abbr-term{border-bottom:1px dotted var(--ink-tint);cursor:help;transition:color var(--dur-fast)}
 .abbr-term:hover{color:var(--ink-tint)}
 .citation-ref{color:var(--ink-tint);font-size:.72em;vertical-align:super;cursor:pointer;transition:opacity var(--dur-fast)}
@@ -205,7 +216,7 @@ main{padding-bottom:3rem}
 <footer class="statusbar"><span>deep-word-explorer · {{FOOTER}}</span><span><span id="term-pct">0%</span> · █<span class="cursor"></span></span></footer>
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>
-lucide.createIcons();
+if(window.lucide){lucide.createIcons();}
 var secs=[].slice.call(document.querySelectorAll('main section[data-chain]'));
 var nav=document.getElementById('chain-indicator');
 secs.forEach(function(s){var a=document.createElement('a');a.href='#'+s.id;a.textContent=String(Number(s.dataset.chain)).padStart(2,'0');nav.appendChild(a);});
@@ -278,12 +289,12 @@ var tb=document.getElementById('theme-toggle');
 function applyDark(dark){
   document.body.classList.toggle('theme-dark',dark);
   document.body.classList.toggle('theme-light',!dark);
-  tb.querySelector('i').setAttribute('data-lucide',dark?'sun':'moon');
-  tb.querySelector('span').textContent=dark?'dark:on':'dark:off';
-  lucide.createIcons();
+  if(tb.querySelector('i')){tb.querySelector('i').setAttribute('data-lucide',dark?'sun':'moon');}
+  if(tb.querySelector('span')){tb.querySelector('span').textContent=dark?'dark:on':'dark:off';}
+  if(window.lucide){lucide.createIcons();}
 }
 tb.addEventListener('click',function(){applyDark(!document.body.classList.contains('theme-dark'));});
-if(localStorage.getItem('dw-theme')==='dark'){applyDark(true);}
+try{if(localStorage.getItem('dw-theme')==='dark'){applyDark(true);}}catch(e){}
 document.getElementById('export-pdf').addEventListener('click',function(){window.print();});
 </script>
 </body>
