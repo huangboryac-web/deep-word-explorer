@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/huangboryac-web/deep-word-explorer/main/shared/schemas/illustration-plan.json",
+  "title": "IllustrationPlan",
+  "description": "配图师 Agent 的输出契约：文字配图流程（网络来源 + 自生成）的结构化结果，供构建师嵌入、质检师复核。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["word", "color_system", "assets"],
+  "properties": {
+    "word": {
+      "type": "string",
+      "description": "被解析的词汇（与主流水线一致）"
+    },
+    "color_system": {
+      "type": "string",
+      "enum": ["mono", "porcelain", "palm", "wire"],
+      "description": "整份交付锁定的唯一色系（lieflat-chart 的 Mono 或三套彩色预设之一）"
+    },
+    "color_system_reason": {
+      "type": "string",
+      "description": "一句话说明色系选择理由（含与文章主题的映射）"
+    },
+    "assets": {
+      "type": "array",
+      "description": "配图资产列表；一张图只承担一个独立结论",
+      "items": { "$ref": "#/definitions/asset" }
+    }
+  },
+  "definitions": {
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "track", "type", "stage_no", "takeaway"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "资产 ID，构建师按此嵌入，如 chart-01 / media-02"
+        },
+        "track": {
+          "type": "string",
+          "enum": ["network", "generated"],
+          "description": "来源轨道：网络来源 / 自生成"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["chart", "image", "illustration", "svg"],
+          "description": "资产类型：数据图表 / 网络图片 / AI 插画 / SVG 纹样"
+        },
+        "stage_no": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "description": "所属学习链阶（1-6）"
+        },
+        "context_sentence": {
+          "type": "string",
+          "description": "正文锚点句；figure 插入在该句所在段落后"
+        },
+        "takeaway": {
+          "type": "string",
+          "description": "该图要传达的一个独立结论（写入 fig-title）"
+        },
+        "caption": {
+          "type": "string",
+          "description": "副标题：说明 · 图例 · 时间范围（写入 fig-sub）"
+        },
+        "alt_text": {
+          "type": "string",
+          "description": "无障碍 alt 文本，必填"
+        },
+        "network": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["attribution", "license", "source_url", "local_path"],
+          "properties": {
+            "attribution": { "type": "string", "description": "作者/机构署名" },
+            "license": { "type": "string", "description": "许可缩写全称，如 Public Domain / CC-BY-4.0" },
+            "source_url": { "type": "string", "description": "原始来源页 URL" },
+            "local_path": { "type": "string", "description": "本地副本路径 media_assets/{id}.{ext}" }
+          }
+        },
+        "generated": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "type_id": { "type": "string", "description": "lieflat 图型编号，如 F4 / L14 / G10" },
+            "gallery_source": { "type": "string", "description": "gallery 文件与卡内标题，如 templates/basics-gallery.html · Tick Donut" },
+            "data_contract": { "type": "string", "description": "数据契约：单位/口径说明" },
+            "html_fragment_path": { "type": "string", "description": "图表片段文件 chart_fragments/{id}.html" },
+            "requires_cdn": { "type": "boolean", "description": "是否依赖 Chart.js/ECharts CDN" },
+            "image_gen": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "model": { "type": "string" },
+                "prompt_summary": { "type": "string" },
+                "local_path": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,9 +1,9 @@
 ---
 name: deep-word-explorer
 displayName: 兴趣词汇解析
-description: 输入任意「词」（地点/名词/热词/书籍/国家/历史/学术概念…），多 Agent 协作产出万字以上、由浅入深、带完整引用的深度解析单页网页。
+description: 输入任意「词」（地点/名词/热词/书籍/国家/历史/学术概念…），多 Agent 协作产出万字以上、由浅入深、带完整引用与数据图表配图的深度解析单页网页。
 author: Boryac
-version: 1.0.0
+version: 1.1.0
 license: AGPL-3.0
 ---
 
@@ -11,7 +11,7 @@ license: AGPL-3.0
 
 ## 技能定位
 
-一个多 Agent 协作的知识生产流水线。输入任意一个词（地点、名词、热词、书籍、国家、历史概念等），经过六阶段处理，产出一篇万字以上的、由浅入深的、有完整引用来源的、视觉精美的深度解析网页。
+一个多 Agent 协作的知识生产流水线。输入任意一个词（地点、名词、热词、书籍、国家、历史概念等），经过七阶段处理，产出一篇万字以上的、由浅入深的、有完整引用来源的、带数据图表与配图、视觉精美的深度解析网页。
 
 ## 触发条件
 
@@ -31,7 +31,7 @@ license: AGPL-3.0
 
 ---
 
-## 工作流（6 阶段，顺序执行）
+## 工作流（7 阶段，顺序执行）
 
 ### Step 0: 参数确认与需求对齐
 
@@ -131,11 +131,31 @@ license: AGPL-3.0
 
 ---
 
+### Step 4.5: 视觉配图（文字配图流程）
+
+**调度**：配图师 Agent（`agents/illustrator/SKILL.md`）
+
+**输入**：article_content + learning_chain + theme
+**输出**：`illustration_plan` JSON + `media_assets/` + `chart_fragments/`
+
+**关键动作**：
+1. 配图点识别（数据密集 / 强视觉实体 / 抽象概念三类信号）
+2. 双轨配图（文字配图流程）：
+   - **Track A 网络来源**：检索许可安全的现成图片（公共领域/CC/官方机构），下载本地化并记录来源与许可
+   - **Track B 自生成**：B1 数据图表（调用 lieflat-charts 技能，按数据形状决策树选型，输出单文件 HTML 图表片段）；B2 概念插画（SVG 纹样或 ImageGen 按主题色系生成）
+3. 整份交付锁定唯一色系（mono / porcelain / palm / wire，与文章主题映射）
+4. 组装 `illustration_plan`（符合 `shared/schemas/illustration-plan.json`）
+
+**阶段输出**：向用户汇报配图计划：
+> 已识别 5 个配图点：3 张数据图表（F4 Tick Donut / L13 Hourglass / G10 Diverging Bar）+ 1 张网络历史照片 + 1 幅 SVG 概念纹样。全局色系：porcelain（靛蓝瓷主题）。
+
+---
+
 ### Step 5: HTML 构建
 
 **调度**：构建师 Agent（`agents/builder/SKILL.md`）
 
-**输入**：article_content + theme + output_path
+**输入**：article_content + theme + output_path + illustration_plan（含 media_assets/、chart_fragments/）
 **输出**：`index.html`（单文件完整网页）
 
 **关键动作**：
@@ -144,7 +164,8 @@ license: AGPL-3.0
 3. 注入六阶正文内容 + 过渡问题
 4. 注入参考文献列表（三组分类）
 5. 装配 7 个交互组件（进度条 / TOC / 学习链 / tooltip / 引用框 / 暗色 / PDF）
-6. 添加滚动渐入动效
+6. **嵌入配图**：按 illustration-embedding.md 将图表片段（figure.chart-figure + 作用域样式）与网络图片/插画（figure.media-figure + 来源/许可行）嵌入到对应段落后
+7. 添加滚动渐入动效
 
 **阶段输出**：`index.html` 已保存到 `output_path`
 
@@ -154,14 +175,15 @@ license: AGPL-3.0
 
 **调度**：QA Agent（`agents/qa/SKILL.md`）
 
-**输入**：html_path + article_content + learning_chain
+**输入**：html_path + article_content + learning_chain + illustration_plan
 **输出**：qa_report JSON + 修复后的 HTML
 
 **关键动作**：
-1. P0 级自动化检查（14 项）
-2. P1 级自动化检查（29 项）+ 自动修复
-3. P2 级自动化检查（19 项）+ 建议
-4. 视觉截图验证（hero / 正文 / 暗色 / 移动端）
+1. P0 级自动化检查（17 项）
+2. P1 级自动化检查（33 项）+ 自动修复
+3. P2 级自动化检查（22 项）+ 建议
+4. 配图专项检查（图表编码诚实 / 单色系 / 图片来源许可 / alt / 加载降级）
+5. 视觉截图验证（hero / 正文 / 图表区 / 暗色 / 移动端）
 
 **阶段输出**：向用户汇报 QA 结果 + 交付
 
@@ -177,6 +199,7 @@ license: AGPL-3.0
    - 侧边目录和进度条的使用方式
    - 暗色模式和 PDF 导出的操作方法
    - 参考文献的阅读建议
+   - 图表与配图的阅读方式（图注、来源行、许可标注）
 
 ---
 
@@ -216,13 +239,15 @@ deep-word-explorer/
 │   │   └── references/                   ← 学习链模板 + 过渡模式库
 │   ├── writer/SKILL.md                   ← 撰写师
 │   │   └── references/                   ← 风格指南 + 引用格式 + 反AI模式
+│   ├── illustrator/SKILL.md              ← 配图师（Step 4.5 文字配图流程）
+│   │   └── references/illustration-guide.md  ← 双轨配图规则（网络来源+自生成）+ lieflat 图表集成
 │   ├── builder/SKILL.md                  ← 构建师
 │   │   ├── assets/template-article.html  ← 长文HTML模板
-│   │   └── references/                   ← 改造指南 + 组件库 + 主题注入
+│   │   └── references/                   ← 改造指南 + 组件库 + 主题注入 + 配图嵌入
 │   └── qa/SKILL.md                       ← 质量审查
-│       └── references/                   ← 67项检查清单
+│       └── references/                   ← P0/P1/P2 检查清单（含配图专项）
 ├── shared/
-│   ├── schemas/                          ← 4个JSON Schema
+│   ├── schemas/                          ← 5个JSON Schema（含 illustration-plan）
 │   ├── themes/themes.css                 ← 5套主题
 │   └── prompts/                          ← 系统提示词 + 降级策略
 ├── examples/                             ← 示例输出（待生成）
@@ -236,6 +261,19 @@ deep-word-explorer/
 3. **降级优于静默失败**：任何不足都明确标注
 4. **视觉系统复用成熟方案**：继承 guizang 的 CSS 变量和主题体系
 5. **单文件交付**：读者无需任何工具，浏览器打开即可阅读
+6. **配图双轨制**：数据图表走 lieflat-chart 模板化生成（一张图一个结论），概念图优先 SVG、网络图只采用许可安全且本地化的来源；整份交付锁定唯一色系
+7. **引用与署名完整**：文字引用、图片来源与许可、图表数据契约，三者缺一不可
+
+---
+
+## 第三方依赖
+
+| 依赖 | 用途 | 许可 | 获取方式 |
+|------|------|------|---------|
+| [lieflat-chart](https://redskill.xiaohongshu.net)（lieflat-charts） | 数据图表生成（Lupi/Basics/Glance 模板体系） | **PolyForm Noncommercial**（作者 躺在废墟里） | `redskill install lieflat-chart`（RedSkill 商店） |
+| guizang-ppt-skill | 长文 HTML 模板改编基础 | AGPL-3.0（op7418） | 随本仓库开源 |
+
+> **许可说明**：lieflat-chart 为非商业许可，本仓库**不重新分发**其模板，仅在运行时调用其生成图表；生成的图表遵循其非商业许可（个人/学习/非营利用途可自由使用，商业用途需另行向作者授权）。若环境未安装 lieflat-chart，配图师会自动降级为纯 SVG 手绘图表或文本表格，不阻塞主流程。
 
 ---
 

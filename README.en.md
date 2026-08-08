@@ -6,7 +6,8 @@
 ![Output](https://img.shields.io/badge/Output-Single--File%20HTML-0A7CFF?style=flat-square)
 ![Themes](https://img.shields.io/badge/Themes-5-1a2e1f?style=flat-square)
 ![WorkBuddy](https://img.shields.io/badge/WorkBuddy-Supported-6B5B95?style=flat-square)
-![Pipeline](https://img.shields.io/badge/Pipeline-6--Agent%20Multi--Agent-222222?style=flat-square)
+![Pipeline](https://img.shields.io/badge/Pipeline-7--Agent%20Multi--Agent-222222?style=flat-square)
+![Charts](https://img.shields.io/badge/Charts-Lieflat-3A6B8C?style=flat-square)
 
 > 🌏 **中文版： [README.md](./README.md)**
 
@@ -32,13 +33,14 @@
 - [Author & License](#author--license)
 - [Changelog](./CHANGELOG.md)
 
-A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs a six-stage pipeline that produces a **10,000+ word, progressively-structured, fully-cited, visually polished deep-explainer as a single-file HTML page**.
+A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs a seven-stage pipeline that produces a **10,000+ word, progressively-structured, fully-cited, illustrated with data charts, visually polished deep-explainer as a single-file HTML page**.
 
 Core capabilities:
 
-- **Six-stage pipeline**: Classifier → Researcher → Architect → Writer → Builder → QA. Agents hand off via JSON Schema; each stage has its own quality gate.
+- **Seven-stage pipeline**: Classifier → Researcher → Architect → Writer → **Illustrator** → Builder → QA. Agents hand off via JSON Schema; each stage has its own quality gate.
 - **Five-layer funnel search**: encyclopedia skeleton → academic papers → expert interpretation → related concepts → timeliness, deepening layer by layer, with explicit degradation when data is thin.
 - **Six-stage learning chain**: First Impression → Spatiotemporal Context → Anatomy → Mechanism → Ecosystem → Critique, connected by transition questions that enforce "shallow-to-deep".
+- **Text-illustration flow (dual-track)**: data-dense passages get template-driven charts from [lieflat-chart](https://redskill.xiaohongshu.net) (one figure, one conclusion); strong visual entities go the network track (license-safe, localized images with source/attribution); abstract concepts go self-generated (SVG motifs / AI illustrations). One global color system per delivery, aligned with the article theme.
 - **Single-file HTML delivery**: "Editorial × Electronic Ink" aesthetic, 5 theme palettes, 7 interactive components (reading progress bar / TOC sidebar / learning-chain indicator / term tooltip / citation popup / dark mode / PDF export), open directly in a browser.
 
 > The HTML template is adapted from [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) (by [op7418](https://x.com/op7418), AGPL-3.0) and redesigned for long-form articles. Released under AGPL-3.0 in inheritance; see [Acknowledgements](#acknowledgements) and [Author & License](#author--license).
@@ -51,7 +53,7 @@ Send this to an AI Agent with shell access (WorkBuddy shown):
 Give me a deep explainer on "New Jersey", default theme, standard depth.
 ```
 
-The Agent auto-loads this skill, runs all six stages, and delivers an `index.html`. You can also specify parameters:
+The Agent auto-loads this skill, runs all seven stages, and delivers an `index.html`. You can also specify parameters:
 
 ```text
 Use deep-word-explorer to explain "Existentialism", theme kraft-paper, depth exhaustive.
@@ -66,10 +68,12 @@ Typical triggers:
 
 ## Features
 
-- 🧠 **Multi-Agent collaboration**: six roles, each doing one job; inputs/outputs are JSON Schema, verifiable and replayable.
+- 🧠 **Multi-Agent collaboration**: seven roles, each doing one job; inputs/outputs are JSON Schema, verifiable and replayable.
 - 🔍 **Five-layer funnel search**: from encyclopedia facts to papers, expert takes, related concepts, timeliness — deepening, with explicit gap labeling.
 - 🪜 **Six-stage learning chain**: enforces shallow-to-deep; each segment has a transition question; read sequentially or jump.
 - 📚 **Rigorous citations**: inline `[N]` superscripts + three-tier references (encyclopedia / academic / official); anti-AI-pattern detection keeps prose natural.
+- 📊 **Data charts**: data-dense passages are charted from lieflat-chart's Lupi/Basics/Glance template families; single-file HTML chart fragments, one figure one conclusion.
+- 🖼 **Dual-track illustration**: network-sourced (license-safe, localized, attributed) + self-generated (SVG motifs / AI illustrations / charts), with one global color system per delivery.
 - 🎨 **5 themes**: Ink Classic / Indigo Porcelain / Forest Ink / Kraft Paper / Dune. Colors locked, no custom hex, protecting aesthetic consistency.
 - 🧩 **7 interactive components**: reading progress bar, TOC sidebar, learning-chain indicator, term tooltip, citation popup, dark-mode toggle, PDF export.
 - 📄 **Single-file HTML**: no build, no server — open in a browser to read, screenshot, share.
@@ -106,7 +110,7 @@ Typical triggers:
 - **More stable than one-shot**: a single long generation tends to be rich early and watered-down late; six stages + per-stage gates lock in "depth".
 - **Higher expressiveness than Markdown**: HTML/CSS enables precise typography, spatial layout, progressive disclosure, dark mode, interactive components.
 - **Lighter delivery**: single-file HTML opens, presents, sends, screenshots directly; reading tools ship with the file.
-- **Easier quality control**: QA runs a 67-item checklist (P0/P1/P2) catching structure, citations, AI traces, dark mode, mobile issues.
+- **Easier quality control**: QA runs a 72-item checklist (P0/P1/P2) catching structure, citations, AI traces, charts & figures, dark mode, mobile issues.
 
 ## Platform support
 
@@ -174,9 +178,10 @@ The Skill is a structured workflow the Agent guides step by step:
 3. **Research** — researcher runs the five-layer funnel, emits `research_bundle` (structured facts + citation index).
 4. **Architect** — architect distributes data into six stages, emits `learning_chain` (outline, transition questions, citation groups).
 5. **Write** — writer drafts stage by stage, injects `[N]` citations & term tooltips, runs anti-AI self-check, emits `article_content`.
-6. **Build** — builder injects theme CSS, six-stage body, references, 7 components, emits single-file `index.html`.
-7. **QA** — QA runs the 67-item checklist (P0 must pass, P1 auto-fix, P2 suggest), screenshots if needed.
-8. **Deliver** — open `index.html` via preview tool, explain learning chain & components.
+6. **Illustrate** — illustrator runs the text-illustration flow: data passages charted via lieflat-chart, visual entities via the network track (license-safe + localized), abstract concepts self-generated (SVG/AI), emits `illustration_plan`.
+7. **Build** — builder injects theme CSS, six-stage body, references, charts & figures, 7 components, emits single-file `index.html`.
+8. **QA** — QA runs the 72-item checklist (P0 must pass, P1 auto-fix, P2 suggest), including illustration checks (honest encoding / single color system / image licensing / accessibility), screenshots if needed.
+9. **Deliver** — open `index.html` via preview tool, explain learning chain, charts & components.
 
 Full detail in [`SKILL.md`](./SKILL.md). Per-Agent instructions in `agents/<role>/SKILL.md`.
 
@@ -225,13 +230,15 @@ deep-word-explorer/
 │   │   └── references/                   ← chain templates + transition patterns
 │   ├── writer/SKILL.md                   ← writer (draft + citation + anti-AI)
 │   │   └── references/                   ← style guide + citation format + anti-AI patterns
-│   ├── builder/SKILL.md                  ← builder (HTML assembly)
+│   ├── illustrator/SKILL.md              ← illustrator (text-illustration flow: network + self-generated)
+│   │   └── references/illustration-guide.md  ← dual-track illustration rules + lieflat chart integration
+│   ├── builder/SKILL.md                  ← builder (HTML assembly + figure embedding)
 │   │   ├── assets/template-article.html  ← long-form HTML template
-│   │   └── references/                   ← adaptation guide + component library + theme injection
-│   └── qa/SKILL.md                       ← QA (67-item checklist)
+│   │   └── references/                   ← adaptation guide + component library + theme injection + illustration embedding
+│   └── qa/SKILL.md                       ← QA (70-item checklist incl. illustration)
 │       └── references/                   ← detailed checklist
 ├── shared/
-│   ├── schemas/                          ← 4 JSON Schemas (inter-stage data contracts)
+│   ├── schemas/                          ← 5 JSON Schemas (inter-stage data contracts, incl. illustration-plan)
 │   ├── themes/themes.css                 ← 5 theme palettes
 │   └── prompts/                          ← system prompts + fallback strategies
 ├── examples/                             ← sample outputs (e.g. 新泽西/index.html)
@@ -261,6 +268,7 @@ Theme recommendation: philosophy/humanities/general → Ink Classic; tech/AI/mat
 5. **Single-file delivery** — reader needs no tools; open in browser to read, screenshot, share.
 6. **Shallow-to-deep is a hard constraint** — learning chain enforces six-stage progression; transition questions handle pacing.
 7. **Anti-AI traces** — 50+ pattern detection keeps prose natural, opinionated, critical.
+8. **Dual-track illustration** — data charts are template-driven via lieflat-chart (one figure, one conclusion); concept art prefers SVG; network images must be license-safe and localized; one global color system per delivery.
 
 ## Example requests
 
@@ -281,6 +289,7 @@ A bundled sample output: [`examples/新泽西/index.html`](./examples/新泽西/
 ## Acknowledgements
 
 - The HTML template is adapted from [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) (by [op7418](https://x.com/op7418)), released under AGPL-3.0 and open-sourced here in inheritance. This skill reuses its "Editorial × Electronic Ink" aesthetic, CSS variable system, and theme palettes, and redesigns the layout & interactive components for long-form articles.
+- Data charts are generated from [lieflat-chart](https://redskill.xiaohongshu.net) (lieflat-charts, by 躺在废墟里). lieflat-chart is **PolyForm Noncommercial**: this repo only calls it at runtime and does not redistribute its templates; generated charts follow its non-commercial license (free for personal / learning / non-commercial use; commercial use requires separate authorization from the author).
 - Visual references: *Monocle* magazine layout, Swiss International Typographic System.
 
 ## Roadmap
@@ -310,6 +319,9 @@ Yes. The `language` parameter controls output language, default `zh`; template a
 
 **How to update?**
 Re-run the install command, or `git pull` in the local skill directory.
+
+**Anything extra needed for charts & figures?**
+Data charts depend on [lieflat-chart](https://redskill.xiaohongshu.net) (RedSkill store). Install with: `redskill install lieflat-chart`. If it's missing, the illustrator degrades to hand-written SVG charts or text tables — the main flow is not blocked. Network images and SVG/AI illustrations need no extra install.
 
 ## Contributing
 

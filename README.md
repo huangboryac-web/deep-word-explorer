@@ -6,7 +6,8 @@
 ![Output](https://img.shields.io/badge/Output-Single--File%20HTML-0A7CFF?style=flat-square)
 ![Themes](https://img.shields.io/badge/Themes-5-1a2e1f?style=flat-square)
 ![WorkBuddy](https://img.shields.io/badge/WorkBuddy-Supported-6B5B95?style=flat-square)
-![Pipeline](https://img.shields.io/badge/Pipeline-6--Agent%20Multi--Agent-222222?style=flat-square)
+![Pipeline](https://img.shields.io/badge/Pipeline-7--Agent%20Multi--Agent-222222?style=flat-square)
+![Charts](https://img.shields.io/badge/Charts-Lieflat-3A6B8C?style=flat-square)
 
 > 🌏 **English version: [README.en.md](./README.en.md)**
 
@@ -32,13 +33,14 @@
 - [作者与许可](#作者与许可)
 - [更新日志](./CHANGELOG.md)
 
-一个适配 WorkBuddy / Claude Code / Codex 等 Agent 环境的**多 Agent 协作知识生产流水线**。输入任意一个「词」——地点、名词、热词、书籍、国家、历史概念、学术术语、科技名词、人物、机构……经过六阶段处理，产出一篇**万字以上、由浅入深、带完整引用来源、视觉精美**的深度解析单页网页。
+一个适配 WorkBuddy / Claude Code / Codex 等 Agent 环境的**多 Agent 协作知识生产流水线**。输入任意一个「词」——地点、名词、热词、书籍、国家、历史概念、学术术语、科技名词、人物、机构……经过七阶段处理，产出一篇**万字以上、由浅入深、带完整引用来源、配数据图表与视觉素材、视觉精美**的深度解析单页网页。
 
 内置核心能力：
 
-- **六阶段流水线**：分类器 → 研究员 → 架构师 → 撰写师 → 构建师 → 质量审查，Agent 之间通过 JSON Schema 结构化交接，每段都有独立质量门禁。
+- **七阶段流水线**：分类器 → 研究员 → 架构师 → 撰写师 → **配图师** → 构建师 → 质量审查，Agent 之间通过 JSON Schema 结构化交接，每段都有独立质量门禁。
 - **五层漏斗搜索**：百科骨架 → 学术论文 → 专家解读 → 关联概念 → 时效信息，逐层加深，不足即降级标注。
 - **六阶学习链**：原初印象 → 时空坐标 → 核心要素拆解 → 深层机制 → 关联网络 → 批判视角，段间用过渡提问自然衔接，强制「由浅入深」。
+- **文字配图流程（双轨制）**：数据密集段落用 [lieflat-chart](https://redskill.xiaohongshu.net) 模板化生成数据图表（一张图一个结论）；强视觉实体走网络来源（仅采用许可安全且本地化的图片，标注图源与许可）；抽象概念用 SVG 纹样 / AI 插画自生成。整份交付锁定唯一色系，与文章主题协调。
 - **单文件 HTML 交付**：电子杂志 × 电子墨水美学，5 套主题色，7 个交互组件（阅读进度条 / 目录侧栏 / 学习链指示器 / 术语浮窗 / 引用弹层 / 暗色模式 / PDF 导出），浏览器直接打开即读。
 
 > 本技能的 HTML 模板由 [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill)（作者 [op7418](https://x.com/op7418)，AGPL-3.0）改造而来，已按「长文网页」重新设计。依 AGPL-3.0 协议继承并开源，详见文末[致谢](#致谢)与[作者与许可](#作者与许可)。
@@ -65,10 +67,12 @@ Agent 会自动加载本 skill，依次走完六阶段并交付一个 `index.htm
 
 ## 效果
 
-- 🧠 **多 Agent 协作**：六角色各司其职，分类、研究、架构、撰写、构建、质检被拆成可验证的独立阶段。
+- 🧠 **多 Agent 协作**：七角色各司其职，分类、研究、架构、撰写、配图、构建、质检被拆成可验证的独立阶段。
 - 🔍 **五层漏斗搜索**：从百科事实到学术论文、专家解读、关联概念、时效信息，逐层深挖，显式标注信息缺口。
 - 🪜 **六阶学习链**：强制由浅入深，每段配过渡提问，读者可顺序递进也可跳跃阅读。
 - 📚 **严谨引用**：正文内联 `[N]` 上标 + 三级参考文献（百科 / 学术 / 官方），反 AI 痕迹检测保障行文自然。
+- 📊 **数据图表**：数据密集段落按数据形状从 lieflat-chart 的 Lupi/Basics/Glance 模板选型，单文件 HTML 图表片段嵌入，一张图一个结论。
+- 🖼 **双轨配图**：网络来源（许可安全 + 本地化 + 图源标注）与自生成（SVG 纹样 / AI 插画 / 图表）双轨并行，整份交付锁定唯一色系。
 - 🎨 **5 套主题**：墨水经典 / 靛蓝瓷 / 森林墨 / 牛皮纸 / 沙丘，配色锁定，不允许自定义 hex，保护美学一致性。
 - 🧩 **7 个交互组件**：阅读进度条、目录侧栏、学习链指示器、术语 tooltip、引用弹层、暗色模式切换、PDF 导出。
 - 📄 **单文件 HTML**：不需要构建、不需要服务器，浏览器直接打开即可阅读、截图、分享。
@@ -105,7 +109,7 @@ Agent 会自动加载本 skill，依次走完六阶段并交付一个 `index.htm
 - **比一镜到底更稳**：单 Agent 长文容易前半段翔实、后半段注水；六阶段 + 每段质量门禁把「深度」锁死。
 - **比 Markdown 表现力更高**：HTML/CSS 可做精细排版、空间定位、渐进披露、暗色模式与交互组件。
 - **交付更轻**：单文件 HTML 可直接打开、演示、发送、截图，阅读工具随文件一起交付。
-- **更容易做质量控制**：QA 阶段用 67 项检查清单（P0/P1/P2）拦截结构、引用、AI 痕迹、暗色与移动端问题。
+- **更容易做质量控制**：QA 阶段用 72 项检查清单（P0/P1/P2）拦截结构、引用、AI 痕迹、配图图表、暗色与移动端问题。
 
 ## 平台支持
 
@@ -175,9 +179,10 @@ Skill 本身是结构化工作流，Agent 会逐步引导：
 3. **深度研究** — 研究员跑五层漏斗搜索，产出 `research_bundle`（结构化事实 + 引用索引）。
 4. **知识架构** — 架构师把数据分配到六阶，生成学习链大纲、过渡提问与引用分组，产出 `learning_chain`。
 5. **内容撰写** — 撰写师逐阶成文，注入 `[N]` 引用与术语 tooltip，做反 AI 痕迹自检，产出 `article_content`。
-6. **HTML 构建** — 构建师注入主题 CSS、六阶正文、参考文献与 7 个交互组件，产出单文件 `index.html`。
-7. **质量审查** — QA 跑 67 项检查清单（P0 必过、P1 自动修复、P2 建议），必要时截图验证。
-8. **交付** — 通过预览工具打开 `index.html`，并口头说明学习链与交互组件用法。
+6. **视觉配图** — 配图师执行「文字配图流程」：识别配图点，数据段落走 lieflat-chart 生成图表，实体段落走网络来源（许可安全 + 本地化），抽象段落走自生成（SVG/AI），产出 `illustration_plan`。
+7. **HTML 构建** — 构建师注入主题 CSS、六阶正文、参考文献、图表与配图、7 个交互组件，产出单文件 `index.html`。
+8. **质量审查** — QA 跑 72 项检查清单（P0 必过、P1 自动修复、P2 建议），含配图专项（编码诚实 / 单色系 / 图片来源许可 / 无障碍），必要时截图验证。
+9. **交付** — 通过预览工具打开 `index.html`，并口头说明学习链、图表与交互组件用法。
 
 详细说明见 [`SKILL.md`](./SKILL.md)。各 Agent 的细分指令在 `agents/<role>/SKILL.md`。
 
@@ -226,13 +231,15 @@ deep-word-explorer/
 │   │   └── references/                   ← 学习链模板 + 过渡模式库
 │   ├── writer/SKILL.md                   ← 撰写师（成文 + 引用 + 反AI）
 │   │   └── references/                   ← 风格指南 + 引用格式 + 反AI模式
-│   ├── builder/SKILL.md                  ← 构建师（HTML 装配）
+│   ├── illustrator/SKILL.md              ← 配图师（文字配图流程：网络来源 + 自生成）
+│   │   └── references/illustration-guide.md  ← 双轨配图规则 + lieflat 图表集成
+│   ├── builder/SKILL.md                  ← 构建师（HTML 装配 + 配图嵌入）
 │   │   ├── assets/template-article.html  ← 长文 HTML 模板
-│   │   └── references/                   ← 改造指南 + 组件库 + 主题注入
-│   └── qa/SKILL.md                       ← 质量审查（67 项清单）
+│   │   └── references/                   ← 改造指南 + 组件库 + 主题注入 + 配图嵌入
+│   └── qa/SKILL.md                       ← 质量审查（70 项清单，含配图专项）
 │       └── references/                   ← 详细检查清单
 ├── shared/
-│   ├── schemas/                          ← 4 个 JSON Schema（阶段间数据契约）
+│   ├── schemas/                          ← 5 个 JSON Schema（阶段间数据契约，含 illustration-plan）
 │   ├── themes/themes.css                 ← 5 套主题色
 │   └── prompts/                          ← 系统提示词 + 降级策略
 ├── examples/                             ← 示例输出（如 新泽西/index.html）
@@ -262,6 +269,7 @@ deep-word-explorer/
 5. **单文件交付** — 读者无需任何工具，浏览器打开即可阅读、截图、分享。
 6. **由浅入深是硬约束** — 学习链强制六阶递进，过渡提问负责衔接节奏。
 7. **反 AI 痕迹** — 50+ 模式检测，行文自然、有观点、有批判，不像机器生成。
+8. **配图双轨制** — 数据图表走 lieflat-chart 模板化生成（一张图一个结论）；概念图优先 SVG；网络图只采用许可安全且本地化的来源；整份交付锁定唯一色系。
 
 ## 示例请求
 
@@ -284,6 +292,7 @@ deep-word-explorer/
 ## 致谢
 
 - HTML 模板改编自 [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill)（作者 [op7418](https://x.com/op7418)），依其 AGPL-3.0 协议继承与开源。本技能沿用了其「电子杂志 × 电子墨水」美学、CSS 变量体系与主题色板，并按「长文网页」需求移除了翻页系统、改造了布局与交互组件。
+- 数据图表由 [lieflat-chart](https://redskill.xiaohongshu.net)（lieflat-charts，作者 躺在废墟里）模板化生成。lieflat-chart 采用 **PolyForm Noncommercial** 许可：本仓库仅在运行时调用它、不重新分发其模板；生成的图表遵循其非商业许可（个人 / 学习 / 非营利用途可自由使用，商业用途需另行向作者授权）。
 - 视觉参考：*Monocle* 杂志版式、瑞士国际主义网格系统。
 
 ## Roadmap
@@ -313,6 +322,9 @@ deep-word-explorer/
 
 **怎么更新到最新版？**
 重新运行安装命令，或在本地 skill 目录执行 `git pull`。
+
+**图表与配图需要额外安装什么吗？**
+数据图表依赖 [lieflat-chart](https://redskill.xiaohongshu.net)（RedSkill 商店）。安装方式：`redskill install lieflat-chart`。未安装时配图师会自动降级为纯 SVG 手绘图表或文本表格，不阻塞主流程；网络图片与 SVG/AI 插画不依赖额外安装。
 
 ## 贡献
 

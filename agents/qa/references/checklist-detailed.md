@@ -1,6 +1,6 @@
 # 质量审查清单 (QA Checklist)
 
-本文档定义兴趣词汇解析的完整质量审查清单，共 67 项，分三级（P0 / P1 / P2）。
+本文档定义兴趣词汇解析的完整质量审查清单，共 72 项，分三级（P0 17 项 / P1 33 项 / P2 22 项）。其中 P0-15~17 / P1-30~33 / P2-20~22 为 v1.1.0 新增的「配图与图表」专项检查（共 10 项）。
 
 ---
 
@@ -29,6 +29,11 @@
 ### 渐进披露
 - [ ] P0-13：无前阶引入后阶才详细解释的概念（抽查 3 个术语的首次出现位置）
 - [ ] P0-14：六阶的递进逻辑通顺（通读全文判断）
+
+### 配图与图表完整性（v1.1.0 新增）
+- [ ] P0-15：所有 figure 的 `data-asset-id` 在 illustration_plan 中有对应资产（无孤儿 / 无重复嵌入）
+- [ ] P0-16：网络图片全部本地化（无远程热链），且 figcaption 含图源（attribution）与许可（license）
+- [ ] P0-17：整份交付仅使用一种色系（mono / porcelain / palm / wire 四选一），无跨预设混用
 
 ---
 
@@ -77,6 +82,12 @@
 - [ ] P1-28：参考文献三类分组（学术/官方/深度内容）准确
 - [ ] P1-29：来源 URL 有效（抽查 5 个）
 
+### 配图与图表（v1.1.0 新增）
+- [ ] P1-30：每个 figure 的 `alt_text` 已填写（缺失从 illustration_plan 补全）
+- [ ] P1-31：图表 fig-title 是结论而非图型名（如「Where we gained」而非「柱状图」）；fig-src 含来源/许可行
+- [ ] P1-32：图表数据契约诚实——数值与视觉成正比（面积用 sqrt）；柱状图无断轴
+- [ ] P1-33：图表最小字号达标（半宽 6.5px / 通栏 5.5px）；动画含 `prefers-reduced-motion` 降级；演示数据用 `rnd` 确定性伪随机
+
 ---
 
 ## P2 级（报告不阻断，建议修复）
@@ -110,6 +121,11 @@
 - [ ] P2-18：间距一致（margin/padding 使用统一的 spacing scale）
 - [ ] P2-19：写作语气全文一致（不使用"你"和"读者"混用）
 
+### 配图体验（v1.1.0 新增）
+- [ ] P2-20：figure 数量与文章篇幅匹配（standard 3–5、exhaustive 5–8），无凑数配图
+- [ ] P2-21：图片加载失败时有优雅降级（占位/移除后正文仍完整），无破图
+- [ ] P2-22：图表/图片在暗色模式与移动端（375px）下可读，无横向溢出错位
+
 ---
 
 ## 审查流程
@@ -120,6 +136,7 @@
 3. AI 痕迹检测：遍历 anti-ai-patterns.md 的模式
 4. 引用计数：统计 `[N]` 标注数量
 5. 结构检查：检查六阶 section 是否都存在
+6. 配图检查：对照 illustration_plan，检查 figure 资产对应、图片本地化、色系唯一性（P0-15~17）
 
 ### 视觉检查
 1. 打开 HTML 在浏览器中
@@ -127,14 +144,15 @@
 3. 缩放至 375px 宽度，检查移动端布局
 4. 检查 WebGL 背景渲染
 5. 点击所有交互组件验证功能
+6. 对每个 figure 截图：图表渲染、图片加载、图注可读、暗色与移动端适配
 
 ### 输出格式
 ```json
 {
   "overall_status": "PASS|FAIL|PASS_WITH_WARNINGS",
-  "p0_checks": { "total": 14, "passed": 14, "failed": 0, "details": [...] },
-  "p1_checks": { "total": 29, "passed": 26, "failed": 3, "auto_fixed": 3, "details": [...] },
-  "p2_checks": { "total": 19, "passed": 15, "failed": 4, "details": [...] },
+  "p0_checks": { "total": 17, "passed": 17, "failed": 0, "details": [...] },
+  "p1_checks": { "total": 33, "passed": 30, "failed": 3, "auto_fixed": 3, "details": [...] },
+  "p2_checks": { "total": 22, "passed": 18, "failed": 4, "details": [...] },
   "auto_fixes_applied": ["修复了 P1-08: 补充了 3 个缺失的 tooltip", ...],
   "recommendations": ["P2-02: 第 3 阶第 5-7 句句式相同，建议调整", ...]
 }

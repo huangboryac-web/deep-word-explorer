@@ -7,6 +7,7 @@ deep-word-explorer 流水线的最后一个 Agent。对生成的 HTML 进行三�
 - 构建师 Agent 的 `index.html`
 - 撰写师 Agent 的 `article_content`（用于交叉验证）
 - 架构师 Agent 的 `learning_chain`（用于结构验证）
+- 配图师 Agent 的 `illustration_plan`（用于配图专项复核）
 - 本 Agent 的 checklist-detailed.md
 
 ## 触发条件
@@ -16,6 +17,7 @@ deep-word-explorer 流水线的最后一个 Agent。对生成的 HTML 进行三�
 - `html_path` (string)：生成的 index.html 路径
 - `article_content` (JSON)：来自撰写师
 - `learning_chain` (JSON)：来自架构师
+- `illustration_plan` (JSON)：来自配图师（Step 4.5）
 
 ## 输出
 - `qa_report` (JSON)：审查报告
@@ -58,6 +60,23 @@ total_words < 10000 → FAIL (P0-07)
 - 统计参考文献条目数量
 - 验证每个 [N] 有对应条目
 
+#### 1.6 配图专项检查（对照 illustration_plan）
+
+**图表（chart-figure）**
+- [ ] 每个 `figure.chart-figure[data-asset-id]` 在 plan 中有对应 asset（无孤儿/重复）
+- [ ] 数值与视觉严格成正比（面积编码是否用 sqrt；柱状图是否断轴——断轴即 FAIL）
+- [ ] 整份交付仅一种色系（Mono / porcelain / palm / wire 四选一，无混用）
+- [ ] 图表最小字号达标（半宽 6.5px / 通栏 5.5px）
+- [ ] fig-title 是结论不是图型名；fig-src 含来源行
+- [ ] 图表数据用确定性伪随机（`rnd`），非 `Math.random()`
+- [ ] `prefers-reduced-motion` 降级存在
+
+**图片（media-figure）**
+- [ ] 无远程热链（img src 全部指向本地 media_assets/）
+- [ ] 每张图有 alt_text
+- [ ] figcaption 含图源（attribution）与许可（license）
+- [ ] 所有本地图片文件存在且可加载
+
 ### Step 2: 视觉审查
 
 使用 capture_screenshot 工具截取页面：
@@ -78,6 +97,11 @@ total_words < 10000 → FAIL (P0-07)
 - 缩放至 375px 宽度截图
 - 检查布局是否正常
 
+#### 2.5 配图区域截图（图表 + 图片）
+- 每个 figure 截一张：图表渲染是否正常、图片是否加载、图注是否溢出
+- 暗色模式下图表容器是否保持浅底可读
+- 移动端下 figure 是否有横向溢出或错位
+
 ### Step 3: 自动修复
 
 对 P1 级问题进行自动修复：
@@ -88,6 +112,12 @@ total_words < 10000 → FAIL (P0-07)
 | 暗色模式对比度不足 | 调整 CSS 变量的 opacity 值 |
 | 移动端布局问题 | 添加/调整 @media 查询 |
 | 引用名称不一致 | 从 citation_index 中读取正确名称并更新 |
+| 图片无法加载/本地文件缺失 | 从 illustration_plan 复核路径；仍失败则删除该 figure 并在 qa_report 记录（P1 级处理），不阻塞交付 |
+| 图片缺 alt_text | 从 illustration_plan.assets[].alt_text 补全 |
+| 图片缺图源/许可行 | 从 plan 的 attribution/license 补全 fig-src |
+| 图表 fig-title 是图型名而非结论 | 从 asset.takeaway 改写 fig-title |
+| 图表色系混用 | 按 plan.color_system 统一替换（保留图表结构不变） |
+| 图表断轴/面积未用 sqrt | 按 lieflat 硬约束重算编码（数据契约不变） |
 
 ### Step 4: 生成报告
 
@@ -113,31 +143,33 @@ total_words < 10000 → FAIL (P0-07)
 {
   "overall_status": "PASS",
   "p0_checks": {
-    "total": 14,
-    "passed": 14,
+    "total": 17,
+    "passed": 17,
     "failed": 0,
     "details": [
       {"id": "P0-01", "status": "PASS", "note": "六阶全部有内容"},
       ...
+      {"id": "P0-17", "status": "PASS", "note": "整份交付仅一种色系"}
     ]
   },
   "p1_checks": {
-    "total": 29,
-    "passed": 26,
+    "total": 33,
+    "passed": 30,
     "failed": 0,
     "auto_fixed": 3,
     "details": [...]
   },
   "p2_checks": {
-    "total": 19,
-    "passed": 15,
+    "total": 22,
+    "passed": 18,
     "failed": 0,
     "warnings": 4,
     "details": [...]
   },
   "auto_fixes_applied": [
     "P1-08: 为 '现象学' 等 3 个术语添加了 tooltip",
-    "P1-15: 调整了暗色模式的引用标注 opacity"
+    "P1-15: 调整了暗色模式的引用标注 opacity",
+    "P1-31: 为 2 张配图补全 alt_text 与图源许可行"
   ],
   "recommendations": [
     "建议在第三阶增加一个维度间的关联图示",
