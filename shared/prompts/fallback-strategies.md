@@ -61,6 +61,7 @@
 | 某阶写不满最低字数 | 信息不足以展开到 min_words | 增加「延伸思考」或「读者可自行探索」板块，用引导式问题补充 |
 | AI 痕迹检测警报 | ai_pattern_score > 0.3（低于 0.3 为合格） | 逐段执行 anti-ai-patterns.md 的替换规则，替换后重新检测 |
 | 引用不足 | 某阶 citations < citation_density.per_stage_min（quality-gates.json） | 从 research_bundle 的其他层补充引用，标记为「间接引用」 |
+| 来源 URL 不可访问 | QA 全量核查发现失效链接 | 重新抓取或替换来源；无法替换则从文内移除该引用并标注「来源不可访问」 |
 
 ---
 

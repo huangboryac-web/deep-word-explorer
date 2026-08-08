@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "预设配置 (Preset)",
+  "description": "全局（~/.deep-word-explorer.json）与项目级（.deep-word-explorer.json）预设；Step 0 读取后主动逐项确认，命中项标注「来自预设」。",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "speed": { "type": "string", "enum": ["fast", "standard", "deep"] },
+    "depth": { "type": "string", "enum": ["intro", "mid", "pro"] },
+    "scope": { "type": "string", "enum": ["point", "related", "panorama"] },
+    "format": { "type": "string", "enum": ["html", "markdown", "pdf"] },
+    "illustrations": { "type": "boolean" },
+    "tone": { "type": "string", "enum": ["popular", "academic", "editorial"] },
+    "citation_density": { "type": "string", "enum": ["low", "standard", "high"] },
+    "theme": { "type": "string" },
+    "language": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] },
+    "custom": { "type": "array", "items": { "type": "string" } },
+    "ask_before_run": {
+      "type": "boolean",
+      "description": "是否每次调用前主动逐项询问可配置项；默认 true"
+    }
+  }
+}

@@ -157,6 +157,12 @@ scope=panorama 时，另把 learning_chain.extras 映射为 article_content.extr
 - `defined_terms_count`：定义术语总数
 - `ai_pattern_score`：AI 痕迹得分（< 0.3 为合格）
 
+#### 5.5 glossary 数组
+从全文各阶 `cached_terms` 汇总去重，每项含：
+- `term`：术语
+- `definition`：一句话定义（与全文 tooltip 一致）
+- `first_stage`：首次出现阶（1-6）
+
 ---
 
 ## 特殊处理
@@ -193,6 +199,7 @@ scope=panorama 时，另把 learning_chain.extras 映射为 article_content.extr
 - [ ] 严格符合 shared/schemas/article-content.json schema
 - [ ] scope=related/panorama 时每阶含 related_sidebar；scope=panorama 时 extras 齐全
 - [ ] 行文风格与 options.tone 一致（科普 / 学术 / 杂志）
+- [ ] glossary 与各阶 cached_terms 一致（无遗漏、无定义冲突）
 
 ### 必须检查
 - [ ] 禁用词库全部避开

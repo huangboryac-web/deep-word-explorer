@@ -25,6 +25,10 @@
 8. **批量与断点**：`words` 支持 2–8 个词，并发上限在 `shared/config/quality-gates.json`
    的 `batch` 段；每词每阶段产物写入 `{output_dir}/{word}/checkpoints/`，
    `manifest.json` 是续跑唯一依据；options 变更必须换新目录或显式覆盖。
+9. **预设与命令**：预设按 全局 `~/.deep-word-explorer.json` → 项目 `./.deep-word-explorer.json`
+   → 显式 `preset` 文件 合并；`ask_before_run` 默认 true（Step 0 主动逐项询问）；
+   `/deep-explore` 命令入口在 `commands/deep-explore.md`，预设结构见
+   `shared/schemas/preset.json`。
 
 ## 常用命令
 

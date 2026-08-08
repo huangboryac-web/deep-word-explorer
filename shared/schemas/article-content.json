@@ -112,6 +112,19 @@
         }
       }
     },
+    "glossary": {
+      "type": "array",
+      "description": "术语表：全文术语、一句话定义与首次出现阶；交付时渲染为术语表章节",
+      "items": {
+        "type": "object",
+        "required": ["term", "definition", "first_stage"],
+        "properties": {
+          "term": { "type": "string" },
+          "definition": { "type": "string" },
+          "first_stage": { "type": "integer", "minimum": 1, "maximum": 6 }
+        }
+      }
+    },
     "statistics": {
       "type": "object",
       "properties": {

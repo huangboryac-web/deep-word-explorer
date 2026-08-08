@@ -166,6 +166,7 @@ for fixture in sorted((ROOT / "tests" / "fixtures").glob("article-content.*.json
             extras.get("panorama_intro") and len(extras.get("further_reading", [])) >= 5,
             f"{fixture.relative_to(ROOT)}: panorama 含全景导览与 ≥5 条延伸阅读",
         )
+        check(bool(inst.get("glossary")), f"{fixture.relative_to(ROOT)}: panorama 含 glossary")
 for fixture in sorted((ROOT / "tests" / "fixtures").glob("learning-chain.*.json")):
     inst = json.loads(fixture.read_text(encoding="utf-8"))
     opts = inst.get("meta", {}).get("options", {})
@@ -277,6 +278,7 @@ PREFIX_WHITELIST = (
     "scripts/",
     "examples/",
     ".github/",
+    "commands/",
 )
 LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 CODE_PATH_RE = re.compile(r"`([A-Za-z0-9_./-]+)`")
@@ -331,6 +333,16 @@ THRESHOLD_ASSERTIONS = [
     ("agents/qa/references/checklist-detailed.md", "82 项"),
     ("SKILL.md", "Step 6.5"),
     ("AGENTS.md", "8 个子 Agent"),
+    ("SKILL.md", "ask_before_run"),
+    ("README.md", "预设"),
+    ("README.en.md", "preset"),
+    ("commands/deep-explore.md", "deep-explore"),
+    ("agents/qa/SKILL.md", "P0-18"),
+    ("agents/qa/references/checklist-detailed.md", "P0-18"),
+    ("agents/writer/SKILL.md", "glossary"),
+    ("agents/builder/SKILL.md", "glossary"),
+    ("README.md", "P0 18 / P1 36 / P2 28"),
+    ("README.en.md", "P0 18 / P1 36 / P2 28"),
 ]
 for rel, phrase in THRESHOLD_ASSERTIONS:
     text = (ROOT / rel).read_text(encoding="utf-8")

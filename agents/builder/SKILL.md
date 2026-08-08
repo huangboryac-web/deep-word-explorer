@@ -131,6 +131,7 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 - 每阶的 `content`（Markdown 格式）→ 转换为 HTML 段落
 - 每阶的 `cached_terms` → 渲染为 `<abbr class="abbr-term">` 标签
 - 每阶之间的 `transitions` → 渲染为居中过渡问题块
+- `article_content.glossary` → 渲染为术语表章节（HTML：`<details>` 可折叠附录；markdown：文末附录）
 
 ### Step 8: 注入引用
 
@@ -216,6 +217,7 @@ document.querySelectorAll('.chain-section').forEach(el => {
 - [ ] scope=related/panorama：每阶 related_sidebar 已渲染；scope=panorama：extras 已渲染
 - [ ] compare=true：对比页已渲染（总览表 / 时间线 / 交叉引用 / 差异），各词子页可跳转
 - [ ] 无障碍：lang 属性、图标按钮 aria-label、figure 标注、focus-visible 样式齐全
+- [ ] glossary 已渲染（html 附录 / markdown 文末），条目与 cached_terms 一致
 
 ---
 

@@ -90,6 +90,33 @@
     { "id": 11, "type": "official", "title": "示例白皮书" },
     { "id": 12, "type": "news", "title": "示例深度报道" }
   ],
+  "glossary": [
+    {
+      "term": "存在先于本质",
+      "definition": "人先存在，再通过选择定义自身",
+      "first_stage": 1
+    },
+    {
+      "term": "自欺",
+      "definition": "人用借口逃避自由与责任的心理状态",
+      "first_stage": 3
+    },
+    {
+      "term": "本真性",
+      "definition": "个体直面自由与责任的存在状态",
+      "first_stage": 3
+    },
+    {
+      "term": "现象学",
+      "definition": "以意识体验为起点的哲学方法",
+      "first_stage": 5
+    },
+    {
+      "term": "结构主义",
+      "definition": "强调结构先于个体的思想流派",
+      "first_stage": 6
+    }
+  ],
   "statistics": {
     "total_words": 16000,
     "total_citations": 12,

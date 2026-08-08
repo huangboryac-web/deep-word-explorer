@@ -37,6 +37,7 @@ license: AGPL-3.0
 | `theme` | enum | ❌ | 视觉主题，从 5 套中选，默认自动推荐 |
 | `language` | string | ❌ | 输出语言，默认 zh |
 | `custom` | array | ❌ | 自由扩展要求（高级用户），直接追加到 Step 0 确认 |
+| `preset` | file | ❌ | 显式指定预设文件路径（最高优先级，覆盖全局/项目预设） |
 
 ---
 
@@ -44,7 +45,14 @@ license: AGPL-3.0
 
 ### Step 0: 参数确认与需求对齐
 
-**交互方式**：一次性确认「三轴档位 + 面板配置」，未指定项用默认值：
+**预设加载**（按优先级从低到高合并，细粒度覆盖粗粒度）：
+1. 全局预设 `~/.deep-word-explorer.json`
+2. 项目预设 `./.deep-word-explorer.json`（当前工作目录）
+3. 消息 / 命令中显式指定的参数或 `preset` 文件（最高优先级）
+
+**交互方式**：读取预设后**主动逐项询问**未在消息中指定的可配置项；预设命中项标注
+「来自预设」。支持「全部默认 / 全部按预设」快捷确认；`ask_before_run=false`
+（预设中）或带 `--no-ask` 时跳过询问。
 
 | 轴/项 | 档位/取值 | 默认 |
 |------|----------|------|
@@ -137,6 +145,7 @@ license: AGPL-3.0
 4. 生成 5 个过渡问题（自然衔接，不机械；任何档位均为 5 个）
 5. 构建引用索引（按 academic / official / deep_content / news / encyclopedia 分组）
 6. 按 options 处理广度：depth 乘子决定每阶 min_words；scope=related 生成 related_sidebars，scope=panorama 额外生成 extras（全景导览 + 延伸阅读）
+7. 汇总术语表 glossary：从全文 cached_terms 去重，记录首次出现阶
 
 **阶段输出**：向用户展示学习链大纲：
 > 学习链已构建。六阶预估字数：500 + 2,500 + 4,000 + 3,000 + 2,000 + 2,000 = 14,000 字。包含 16 条引用。过渡问题已生成。
@@ -157,6 +166,7 @@ license: AGPL-3.0
 4. 润色过渡问题
 5. 全文一致性检查（术语/引用/AI 痕迹/渐进披露）
 6. 按 tone / citation_density / format 调整行文、引用密度与交付形态（markdown 直接产出 .md 正文）
+7. 构建 glossary（术语、定义、首次出现阶），与各阶 cached_terms 保持一致
 
 **阶段输出**：向用户汇报撰写结果：
 > 全文撰写完成。总字数：14,230 字。16 条引用。AI 痕迹得分：0.12（合格）。36 个专业术语已添加 tooltip。
@@ -202,6 +212,7 @@ license: AGPL-3.0
 5. 装配 7 个交互组件（进度条 / TOC / 学习链 / tooltip / 引用框 / 暗色 / PDF）
 6. **嵌入配图**：按 illustration-embedding.md 将图表片段（figure.chart-figure + 作用域样式）与网络图片/插画（figure.media-figure + 来源/许可行）嵌入到对应段落后
 7. 添加滚动渐入动效
+8. 渲染术语表章节（HTML：可折叠附录；markdown：文末附录）
 
 **阶段输出**：`index.html` 已保存到 `output_path`
 
@@ -220,6 +231,7 @@ license: AGPL-3.0
 3. P2 级自动化检查（22 项）+ 建议
 4. 配图专项检查（图表编码诚实 / 单色系 / 图片来源许可 / alt / 加载降级）
 5. 视觉截图验证（hero / 正文 / 图表区 / 暗色 / 移动端）
+6. 引用来源 URL 全量核查（P0-18：不可访问 → 标注降级或替换）
 
 **阶段输出**：向用户汇报 QA 结果 + 交付
 
@@ -284,6 +296,8 @@ license: AGPL-3.0
 | manifest options 与当前不一致 | 要求新输出目录或显式覆盖 |
 | 某词某阶段连续失败 2 次 | 停止该词并标记 failed，其他词继续；汇总报告 |
 | 宿主环境无多 Agent 派发能力 | 自动回退顺序执行，产物与 manifest 结构不变 |
+| 预设文件缺失或 JSON 损坏 | 忽略该级预设并提示用户；不阻断流程 |
+| 引用来源 URL 不可访问 | 重新抓取或替换来源；无法替换则从文内移除并标注「来源不可访问」 |
 
 ### 内容阶段异常
 | 异常 | 处理 |
@@ -323,9 +337,10 @@ deep-word-explorer/
 │   └── comparator/SKILL.md               ← 对比师（Step 6.5 批量对比）
 ├── shared/
 │   ├── config/quality-gates.json         ← 唯一阈值事实源（三轴档位/字数公式/引用/AI 痕迹）
-│   ├── schemas/                          ← 7个JSON Schema（含 manifest / comparison-report）
+│   ├── schemas/                          ← 8个JSON Schema（含 manifest / comparison-report / preset）
 │   ├── themes/themes.css                 ← 5套主题
 │   └── prompts/                          ← 系统提示词 + 降级策略
+├── commands/deep-explore.md              ← /deep-explore 快速命令（预设 + 参数）
 ├── scripts/validate.py                   ← 一致性校验脚本（CI 运行）
 ├── scripts/generate_goldens.py           ← 分类 golden 生成器
 ├── examples/                             ← 示例输出（真实样例：新泽西/）

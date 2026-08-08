@@ -71,6 +71,8 @@ Agent 会自动加载本 skill，依次走完六阶段并交付一个 `index.htm
 - 🔍 **五层漏斗搜索**：从百科事实到学术论文、专家解读、关联概念、时效信息，逐层深挖，显式标注信息缺口。
 - 🪜 **六阶学习链**：强制由浅入深，每段配过渡提问，读者可顺序递进也可跳跃阅读。
 - 📚 **严谨引用**：正文内联 `[N]` 上标 + 三级参考文献（百科 / 学术 / 官方），反 AI 痕迹检测保障行文自然。
+- 🔗 **引用全量核查**：QA 对全部来源 URL 全量校验，失效链接自动替换或标注「来源不可访问」。
+- 📖 **术语表交付**：全文术语自动汇总为可折叠术语表（HTML / Markdown 均含）。
 - 📊 **数据图表**：数据密集段落按数据形状从 lieflat-chart 的 Lupi/Basics/Glance 模板选型，单文件 HTML 图表片段嵌入，一张图一个结论。
 - 🖼 **双轨配图**：网络来源（许可安全 + 本地化 + 图源标注）与自生成（SVG 纹样 / AI 插画 / 图表）双轨并行，整份交付锁定唯一色系。
 - 🎨 **5 套主题**：墨水经典 / 靛蓝瓷 / 森林墨 / 牛皮纸 / 沙丘，配色锁定，不允许自定义 hex，保护美学一致性。
@@ -110,7 +112,7 @@ Agent 会自动加载本 skill，依次走完六阶段并交付一个 `index.htm
 - **比一镜到底更稳**：单 Agent 长文容易前半段翔实、后半段注水；六阶段 + 每段质量门禁把「深度」锁死。
 - **比 Markdown 表现力更高**：HTML/CSS 可做精细排版、空间定位、渐进披露、暗色模式与交互组件。
 - **交付更轻**：单文件 HTML 可直接打开、演示、发送、截图，阅读工具随文件一起交付。
-- **更容易做质量控制**：QA 阶段用 82 项检查清单（P0 17 / P1 37 / P2 28）拦截结构、引用、AI 痕迹、配图图表、无障碍、暗色与移动端问题。
+- **更容易做质量控制**：QA 阶段用 82 项检查清单（P0 18 / P1 36 / P2 28）拦截结构、引用（含 URL 全量核查）、AI 痕迹、配图图表、无障碍、暗色与移动端问题。
 
 ## 平台支持
 
@@ -164,7 +166,9 @@ ls ~/.workbuddy/skills/deep-word-explorer/
 
 ## 输入参数
 
-支持「三轴档位 + 配置面板」：`speed`（fast/standard/deep，快→慢）、`depth`（intro/mid/pro，浅→深）、`scope`（point/related/panorama，点→面），以及 `words`（2–8 个词批量）、`compare`（对比页开关）、`format`（html/markdown/pdf）、`illustrations`、`tone`（科普/学术/杂志）、`citation_density`、`theme`、`language`、`custom`。
+支持「三轴档位 + 配置面板」：`speed`（fast/standard/deep，快→慢）、`depth`（intro/mid/pro，浅→深）、`scope`（point/related/panorama，点→面），以及 `words`（2–8 个词批量）、`compare`（对比页开关）、`format`（html/markdown/pdf）、`illustrations`、`tone`（科普/学术/杂志）、`citation_density`、`theme`、`language`、`custom`、`preset`（预设文件）。
+
+预设支持全局（`~/.deep-word-explorer.json`）与项目级（`./.deep-word-explorer.json`）两级；调用前 Step 0 会**主动逐项询问**未指定项，预设命中项标注「来自预设」。
 
 完整参数表与默认值见 [`SKILL.md`](./SKILL.md)（Step 0）。默认组合：standard × mid × point、html、配图开、科普语气、标准引用密度、中文。
 
@@ -203,7 +207,7 @@ Skill 本身是结构化工作流，Agent 会逐步引导：参数确认 → 分
 
 ## 目录结构
 
-仓库结构见 [`SKILL.md`](./SKILL.md)「相关资源」。核心目录：`agents/`（8 个角色，含对比师）、`shared/`（阈值配置 + JSON Schema + 主题 + 提示词）、`scripts/`（校验与 golden 生成）、`examples/`（真实样例）、`tests/`（测试用例、fixtures 与 goldens）。
+仓库结构见 [`SKILL.md`](./SKILL.md)「相关资源」。核心目录：`agents/`（8 个角色，含对比师）、`shared/`（阈值配置 + JSON Schema + 主题 + 提示词）、`commands/deep-explore.md`（快速命令）、`scripts/`（校验与 golden 生成）、`examples/`（真实样例）、`tests/`（测试用例、fixtures 与 goldens）。
 
 ## 主题色预设
 
@@ -274,6 +278,12 @@ JSON 交接、阶段门禁、降级标注、单文件交付、三轴档位可组
 
 **中断了怎么办？**
 每词每阶段产物都会落盘到 `checkpoints/`，`manifest.json` 记录进度；重跑同一输出目录时选择「续跑」即可跳过已完成阶段。修改档位后需换新目录或显式覆盖。
+
+**能记住我的偏好，少问几遍吗？**
+可以。把常用配置写进 `~/.deep-word-explorer.json`（全局）或项目根目录的 `.deep-word-explorer.json`，Step 0 会读取并标注「来自预设」；不想每次询问可设 `"ask_before_run": false` 或使用 `/deep-explore ... --no-ask`。
+
+**引用可靠吗？有术语表吗？**
+QA 会对全部引用 URL 做全量可访问性核查（P0-18），失效链接自动替换或标注；每篇文章会交付术语表（术语、定义、首次出现阶），HTML 与 Markdown 输出都包含。
 
 **支持英文输出吗？**
 支持。`language` 参数控制输出语言，默认 `zh`；模板与文案均做了本地化。

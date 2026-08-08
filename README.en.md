@@ -72,6 +72,8 @@ Typical triggers:
 - 🔍 **Five-layer funnel search**: from encyclopedia facts to papers, expert takes, related concepts, timeliness — deepening, with explicit gap labeling.
 - 🪜 **Six-stage learning chain**: enforces shallow-to-deep; each segment has a transition question; read sequentially or jump.
 - 📚 **Rigorous citations**: inline `[N]` superscripts + three-tier references (encyclopedia / academic / official); anti-AI-pattern detection keeps prose natural.
+- 🔗 **Full URL verification**: QA validates every citation URL, replacing or labeling dead links as "source unavailable".
+- 📖 **Glossary delivery**: all terms are aggregated into a collapsible glossary (in both HTML and Markdown).
 - 📊 **Data charts**: data-dense passages are charted from lieflat-chart's Lupi/Basics/Glance template families; single-file HTML chart fragments, one figure one conclusion.
 - 🖼 **Dual-track illustration**: network-sourced (license-safe, localized, attributed) + self-generated (SVG motifs / AI illustrations / charts), with one global color system per delivery.
 - 🎨 **5 themes**: Ink Classic / Indigo Porcelain / Forest Ink / Kraft Paper / Dune. Colors locked, no custom hex, protecting aesthetic consistency.
@@ -111,7 +113,7 @@ Typical triggers:
 - **More stable than one-shot**: a single long generation tends to be rich early and watered-down late; six stages + per-stage gates lock in "depth".
 - **Higher expressiveness than Markdown**: HTML/CSS enables precise typography, spatial layout, progressive disclosure, dark mode, interactive components.
 - **Lighter delivery**: single-file HTML opens, presents, sends, screenshots directly; reading tools ship with the file.
-- **Easier quality control**: QA runs an 82-item checklist (P0 17 / P1 37 / P2 28) catching structure, citations, AI traces, charts & figures, accessibility, dark mode, mobile issues.
+- **Easier quality control**: QA runs an 82-item checklist (P0 18 / P1 36 / P2 28) catching structure, citations (incl. full URL verification), AI traces, charts & figures, accessibility, dark mode, mobile issues.
 
 ## Platform support
 
@@ -163,7 +165,9 @@ After install, the Agent auto-discovers and invokes it. Trigger keywords (zh/en)
 
 ## Input parameters
 
-Three tier axes plus a config panel: `speed` (fast/standard/deep), `depth` (intro/mid/pro), `scope` (point/related/panorama), plus `words` (2–8 words batch), `compare` (comparison page toggle), `format` (html/markdown/pdf), `illustrations`, `tone` (popular/academic/editorial), `citation_density`, `theme`, `language`, and `custom`.
+Three tier axes plus a config panel: `speed` (fast/standard/deep), `depth` (intro/mid/pro), `scope` (point/related/panorama), plus `words` (2–8 words batch), `compare` (comparison page toggle), `format` (html/markdown/pdf), `illustrations`, `tone` (popular/academic/editorial), `citation_density`, `theme`, `language`, `custom`, and `preset`.
+
+Presets are loaded from `~/.deep-word-explorer.json` (global) and `./.deep-word-explorer.json` (project); Step 0 proactively asks about unset options and marks preset hits as "from preset".
 
 Full parameter table and defaults live in [`SKILL.md`](./SKILL.md) (Step 0). Default combo: standard × mid × point, html, illustrations on, popular tone, standard citation density, Chinese.
 
@@ -202,7 +206,7 @@ When any layer is thin, degrade per `shared/prompts/fallback-strategies.md` and 
 
 ## Directory structure
 
-See [`SKILL.md`](./SKILL.md) ("Related resources") for the full tree. Key directories: `agents/` (8 roles, incl. comparator), `shared/` (thresholds + JSON Schemas + themes + prompts), `scripts/` (validation + golden generation), `examples/` (real samples), `tests/` (test cases, fixtures & goldens).
+See [`SKILL.md`](./SKILL.md) ("Related resources") for the full tree. Key directories: `agents/` (8 roles, incl. comparator), `shared/` (thresholds + JSON Schemas + themes + prompts), `commands/deep-explore.md` (quick command), `scripts/` (validation + golden generation), `examples/` (real samples), `tests/` (test cases, fixtures & goldens).
 
 ## Theme palettes
 
@@ -271,6 +275,12 @@ Yes. `words` accepts 2–8 words (parallel, up to 3 concurrent), each producing 
 
 **What if the run is interrupted?**
 Every stage artifact is written to `checkpoints/`, and `manifest.json` tracks progress. Re-running the same output directory and choosing "resume" skips completed stages. Changing tiers requires a new directory or explicit overwrite.
+
+**Can I save my preferences and stop being asked so often?**
+Yes. Put common settings in `~/.deep-word-explorer.json` (global) or `.deep-word-explorer.json` (project). Step 0 reads them and marks hits as "from preset"; set `"ask_before_run": false` or use `/deep-explore ... --no-ask` to skip the interview.
+
+**Are citations verified? Is there a glossary?**
+QA fully verifies every citation URL (P0-18) and replaces or labels dead links. Every article ships a glossary (term, definition, first appearance stage) in both HTML and Markdown.
 
 **Does it support English output?**
 Yes. The `language` parameter controls output language, default `zh`; template and copy are localized.

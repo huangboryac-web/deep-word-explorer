@@ -44,6 +44,7 @@ deep-word-explorer 流水线的最后一个 Agent。对生成的 HTML 进行三�
 - 验证参考文献 section 存在
 - scope=related/panorama：验证每阶 related_sidebar 存在
 - scope=panorama：验证「全景导览」与「知识地图/延伸阅读」章节存在
+- glossary 存在且与全文 cached_terms 一致（并入 P1-09）
 
 #### 1.3 禁用词搜索
 搜索以下禁用词（来自 style-guide.md）：
@@ -65,6 +66,7 @@ deep-word-explorer 流水线的最后一个 Agent。对生成的 HTML 进行三�
 - 验证每个 [N] 有对应条目
 - 文内标注下限：每阶 ≥ citation_density.per_stage_min × 6（low ≥6 / standard ≥12 / high ≥18）
 - 参考文献列表 ≥ citation_density.reference_list_min（low 6 / standard 8 / high 12）
+- 来源 URL 全量核查（P0-18：全部可访问；失败项标注降级或替换）
 
 #### 1.6 配图专项检查（对照 illustration_plan）
 
@@ -87,7 +89,7 @@ deep-word-explorer 流水线的最后一个 Agent。对生成的 HTML 进行三�
 
 #### 1.7 无障碍检查（混合 P1+P2）
 
-无障碍项并入后，完整清单共 **82 项（P0 17 / P1 37 / P2 28）**。
+无障碍项并入后，完整清单共 **82 项（P0 18 / P1 36 / P2 28）**。
 
 **P1（自动修复）**：
 - [ ] P1-34：纯图标按钮有 `aria-label`（暗色切换 / PDF 导出 / TOC 折叠）
@@ -169,8 +171,8 @@ deep-word-explorer 流水线的最后一个 Agent。对生成的 HTML 进行三�
 {
   "overall_status": "PASS",
   "p0_checks": {
-    "total": 17,
-    "passed": 17,
+    "total": 18,
+    "passed": 18,
     "failed": 0,
     "details": [
       {"id": "P0-01", "status": "PASS", "note": "六阶全部有内容"},
@@ -179,8 +181,8 @@ deep-word-explorer 流水线的最后一个 Agent。对生成的 HTML 进行三�
     ]
   },
   "p1_checks": {
-    "total": 37,
-    "passed": 34,
+    "total": 36,
+    "passed": 33,
     "failed": 0,
     "auto_fixed": 4,
     "details": [...]
