@@ -298,6 +298,9 @@ for rel, needles in style_templates.items():
     check(all(n in tpl_text for n in needles), f"{rel}: 占位符与专属组件齐全")
     for design_token in ("fonts.googleapis", "lucide", "prefers-reduced-motion", "aria-label"):
         check(design_token in tpl_text, f"{rel}: 含 {design_token}")
+    check("html.dw-anim main section" in tpl_text, f"{rel}: 渐进增强隐藏态存在（默认可见）")
+    check("document.documentElement.classList.add('dw-anim')" in tpl_text, f"{rel}: 揭示注册后才开启动画模式")
+    check("if(window.lucide)" in tpl_text, f"{rel}: 主脚本以 lucide 守卫开头")
 
 # 5.9 Step 0 硬性门禁防回归（未确认不得开始；无免问开关）
 skill_doc = (ROOT / "SKILL.md").read_text(encoding="utf-8")
