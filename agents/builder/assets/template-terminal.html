@@ -194,7 +194,8 @@ main{padding-bottom:3rem}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  html.dw-anim main section,html.dw-anim .transition-question,html.dw-anim .references,html.dw-anim .hero .prompt,html.dw-anim .hero h1,html.dw-anim .hero .tagline,html.dw-anim .chain-row{opacity:1!important;transform:none!important;clip-path:inset(0)!important;filter:none!important;animation:none!important}
+  html.dw-anim main section,html.dw-anim .transition-question,html.dw-anim .references{transform:none!important;filter:none!important}
+  html.dw-anim .hero .prompt,html.dw-anim .hero h1,html.dw-anim .hero .tagline,html.dw-anim .chain-row{opacity:1!important;transform:none!important;animation:none!important}
   body::before,body::after,.hero h1::after,.hero .prompt .cursor,footer.statusbar .cursor,.hero h1.typed{animation:none!important}
   main section[data-chain]::before{transform:none!important;transition:none!important}
   main section:hover{transform:none!important}
@@ -223,19 +224,26 @@ main{padding-bottom:3rem}
 (function(){
   try{
     var t=[].slice.call(document.querySelectorAll('main section,.transition-question,.references'));
-    function inView(el){var r=el.getBoundingClientRect();var vh=window.innerHeight||document.documentElement.clientHeight;return r.top<vh&&r.bottom>0;}
-    function showVisible(){t.forEach(function(e){if(inView(e))e.classList.add('visible');});}
-    function showAll(){t.forEach(function(e){e.classList.add('visible');});}
-    showVisible();
-    if('IntersectionObserver' in window){
-      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:.1});
-      t.forEach(function(e){io.observe(e);});
+    function addVisible(e){e.classList.add('visible');}
+    function revealViewport(){
+      var vh=window.innerHeight||document.documentElement.clientHeight;
+      t.forEach(function(e){
+        var r=e.getBoundingClientRect();
+        if(r.top<vh&&r.bottom>0){addVisible(e);}
+      });
     }
-    window.addEventListener('scroll',showVisible,{passive:true});
-    window.addEventListener('resize',showVisible,{passive:true});
+    if(!('IntersectionObserver' in window)){
+      t.forEach(addVisible);
+      document.documentElement.classList.add('dw-anim');
+      return;
+    }
+    var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){addVisible(en.target);io.unobserve(en.target);}});},{rootMargin:'0px 0px -8% 0px',threshold:.1});t.forEach(function(e){io.observe(e);});
     document.documentElement.classList.add('dw-anim');
-    setTimeout(showVisible,1500);
-    setTimeout(showAll,8000);
+    requestAnimationFrame(function(){requestAnimationFrame(revealViewport);});
+    setTimeout(revealViewport,600);
+    setTimeout(function(){
+      var shown=t.some(function(e){return e.classList.contains('visible');});if(!shown){t.forEach(addVisible);}
+    },2500);
   }catch(e){document.documentElement.classList.remove('dw-anim');}
 })();
 </script>

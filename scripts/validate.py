@@ -301,7 +301,20 @@ for rel, needles in style_templates.items():
     check("html.dw-anim main section" in tpl_text, f"{rel}: 渐进增强隐藏态存在（默认可见）")
     check("document.documentElement.classList.add('dw-anim')" in tpl_text, f"{rel}: 揭示注册后才开启动画模式")
     check("if(window.lucide)" in tpl_text, f"{rel}: 主脚本以 lucide 守卫开头")
-
+    # 滚动揭示只由 IO 驱动：零揭示兜底 + 无抢跑兜底 + RM 保留淡入
+    check("var shown=t.some(function(e){return e.classList.contains('visible');});" in tpl_text, f"{rel}: 零揭示兜底存在（滚动动画不被抢跑）")
+    check("var ioAlive=" not in tpl_text, f"{rel}: 无 ioAlive 冗余探测")
+    check("setTimeout(showVisible,1500)" not in tpl_text, f"{rel}: 无 1.5s 抢跑兜底")
+    check("setTimeout(showAll,8000)" not in tpl_text, f"{rel}: 无 8s 全显兜底")
+    check("var revealTargets=" not in tpl_text, f"{rel}: 无重复揭示逻辑")
+    rm_match = re.search(r"@media[^{]*prefers-reduced-motion[^{]*\{(.*?)\n\}", tpl_text, re.S)
+    rm_keeps_fade = False
+    if rm_match:
+        rm_keeps_fade = all(
+            "main section" not in sel or "opacity:1!important" not in dec
+            for sel, dec in re.findall(r"([^{}]+)\{([^{}]*)\}", rm_match.group(1))
+        )
+    check(rm_keeps_fade, f"{rel}: reduced-motion 保留正文淡入揭示（不强制全显）")
 # 5.9 Step 0 硬性门禁防回归（未确认不得开始；无免问开关）
 skill_doc = (ROOT / "SKILL.md").read_text(encoding="utf-8")
 check("未确认不得进入 Step 1" in skill_doc, "SKILL.md: Step 0 硬性门禁声明存在")
