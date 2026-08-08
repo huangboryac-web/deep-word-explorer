@@ -194,7 +194,7 @@ main{padding-bottom:3rem}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
-  main section,.transition-question,.references,.hero .prompt,.hero h1,.hero .tagline,.chain-row{opacity:1!important;transform:none!important}
+  main section,.transition-question,.references,.hero .prompt,.hero h1,.hero .tagline,.chain-row{opacity:1!important;transform:none!important;clip-path:inset(0)!important;filter:none!important}
 }
 </style>
 </head>
@@ -220,15 +220,18 @@ main{padding-bottom:3rem}
 (function(){
   try{
     var t=[].slice.call(document.querySelectorAll('main section,.transition-question,.references'));
+    function inView(el){var r=el.getBoundingClientRect();var vh=window.innerHeight||document.documentElement.clientHeight;return r.top<vh&&r.bottom>0;}
+    function showVisible(){t.forEach(function(e){if(inView(e))e.classList.add('visible');});}
     function showAll(){t.forEach(function(e){e.classList.add('visible');});}
+    showVisible();
     if('IntersectionObserver' in window){
       var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});},{threshold:.1});
       t.forEach(function(e){io.observe(e);});
-      document.documentElement.classList.add('dw-anim');
-    }else{
-      showAll();
-      document.documentElement.classList.add('dw-anim');
     }
+    window.addEventListener('scroll',showVisible,{passive:true});
+    window.addEventListener('resize',showVisible,{passive:true});
+    document.documentElement.classList.add('dw-anim');
+    setTimeout(showAll,1500);
   }catch(e){document.documentElement.classList.remove('dw-anim');}
 })();
 </script>
