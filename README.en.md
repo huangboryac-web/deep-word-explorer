@@ -206,7 +206,7 @@ When any layer is thin, degrade per `shared/prompts/fallback-strategies.md` and 
 
 ## Directory structure
 
-See [`SKILL.md`](./SKILL.md) ("Related resources") for the full tree. Key directories: `agents/` (8 roles, incl. comparator), `shared/` (thresholds + JSON Schemas + themes + prompts), `commands/deep-explore.md` (quick command), `scripts/` (validation + golden generation), `examples/` (real samples), `tests/` (test cases, fixtures & goldens).
+See [`SKILL.md`](./SKILL.md) ("Related resources") for the full tree. Key directories: `agents/` (8 roles, incl. comparator), `shared/` (thresholds + JSON Schemas + themes + prompts), `commands/deep-explore.md` (quick command), `scripts/` (validation + golden generation), `examples/` (real samples), `tests/` (test cases, fixtures & expected-outputs goldens).
 
 ## Theme palettes
 
@@ -250,11 +250,10 @@ A bundled sample output: [`examples/新泽西/index.html`](./examples/新泽西/
 
 ## Roadmap
 
-- Add more real samples and openable HTML explainer pages
-- Add more theme packs, while keeping custom colors locked
-- Strengthen QA automated visual checks (dark / mobile / overflow)
-- Explore related-concept knowledge-graph visualization at `scope=panorama`
-- Provide more domain benchmark outputs under `examples/`
+- Build an interactive knowledge-graph component for `scope=panorama`
+- Automate QA visual checks (dark / mobile / overflow screenshot diffs)
+- Add more real samples (markdown / no-illustration / batch comparison)
+- Add more theme packs (custom colors stay locked)
 
 ## FAQ
 

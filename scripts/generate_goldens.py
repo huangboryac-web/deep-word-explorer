@@ -4,6 +4,7 @@
 golden 是分类器规则的参考实现（不接入 LLM runner）：按本体类型补充搜索源、
 按难度/争议计算 depth_modifier、按热词/时效启用 Layer 5，并写入 options 快照。
 运行：python scripts/generate_goldens.py
+输出：tests/expected-outputs/classification-profiles.json
 """
 
 from __future__ import annotations
@@ -109,7 +110,7 @@ def main() -> None:
                 },
             }
         )
-    out = ROOT / "tests" / "goldens" / "classification-profiles.json"
+    out = ROOT / "tests" / "expected-outputs" / "classification-profiles.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(
         json.dumps(

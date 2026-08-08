@@ -3,7 +3,7 @@ name: deep-word-explorer
 displayName: 兴趣词汇解析
 description: 输入任意「词」（地点/名词/热词/书籍/国家/历史/学术概念…），多 Agent 协作产出由浅入深、带完整引用与数据图表配图的深度解析网页，快慢/深浅/点面档位可调。
 author: Boryac
-version: 1.2.0
+version: 1.3.0
 license: AGPL-3.0
 ---
 
@@ -226,8 +226,8 @@ license: AGPL-3.0
 **输出**：qa_report JSON + 修复后的 HTML
 
 **关键动作**：
-1. P0 级自动化检查（17 项；字数按 quality-gates.json 公式、结构按 options.scope、引用按 citation_density、配图按 illustrations 开关）
-2. P1 级自动化检查（33 项）+ 自动修复
+1. P0 级自动化检查（18 项；字数按 quality-gates.json 公式、结构按 options.scope、引用按 citation_density、配图按 illustrations 开关、来源 URL 全量核查）
+2. P1 级自动化检查（36 项）+ 自动修复
 3. P2 级自动化检查（22 项）+ 建议
 4. 配图专项检查（图表编码诚实 / 单色系 / 图片来源许可 / alt / 加载降级）
 5. 视觉截图验证（hero / 正文 / 图表区 / 暗色 / 移动端）
@@ -344,7 +344,7 @@ deep-word-explorer/
 ├── scripts/validate.py                   ← 一致性校验脚本（CI 运行）
 ├── scripts/generate_goldens.py           ← 分类 golden 生成器
 ├── examples/                             ← 示例输出（真实样例：新泽西/）
-└── tests/                                ← 测试用例（test-words.json + fixtures/ + goldens/）
+└── tests/                                ← 测试用例（test-words.json + fixtures/ + expected-outputs/ golden）
 ```
 
 ## 设计原则

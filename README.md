@@ -207,7 +207,7 @@ Skill 本身是结构化工作流，Agent 会逐步引导：参数确认 → 分
 
 ## 目录结构
 
-仓库结构见 [`SKILL.md`](./SKILL.md)「相关资源」。核心目录：`agents/`（8 个角色，含对比师）、`shared/`（阈值配置 + JSON Schema + 主题 + 提示词）、`commands/deep-explore.md`（快速命令）、`scripts/`（校验与 golden 生成）、`examples/`（真实样例）、`tests/`（测试用例、fixtures 与 goldens）。
+仓库结构见 [`SKILL.md`](./SKILL.md)「相关资源」。核心目录：`agents/`（8 个角色，含对比师）、`shared/`（阈值配置 + JSON Schema + 主题 + 提示词）、`commands/deep-explore.md`（快速命令）、`scripts/`（校验与 golden 生成）、`examples/`（真实样例）、`tests/`（测试用例、fixtures 与 expected-outputs golden）。
 
 ## 主题色预设
 
@@ -253,11 +253,10 @@ JSON 交接、阶段门禁、降级标注、单文件交付、三轴档位可组
 
 ## Roadmap
 
-- 补充更多真实示例与可打开的 HTML 解析页
-- 增加更多主题包，但继续限制自定义颜色
-- 强化 QA 阶段的自动化视觉校验（暗色 / 移动端 / 溢出）
-- 探索 `scope=panorama` 的关联知识图谱可视化
-- 提供 `examples/` 下更多领域的标杆产出
+- 探索 `scope=panorama` 的关联知识图谱交互组件
+- 强化 QA 自动化视觉校验（暗色 / 移动端 / 溢出截图比对）
+- 补充更多真实示例（markdown / 无配图 / 批量对比）
+- 增加更多主题包（继续限制自定义颜色）
 
 ## FAQ
 

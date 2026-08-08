@@ -8,7 +8,7 @@
 |----|----|
 | 解析词 | 新泽西（美国新泽西州） |
 | 本体类型 | 地理实体 · 入门 · 共识 · 缓慢演变 |
-| 深度 | `exhaustive`（穷尽式，全六阶 + 全五层搜索） |
+| 深度 | `speed=deep, depth=pro, scope=panorama`（穷尽式，全六阶 + 全五层搜索） |
 | 主题 | 🌿 森林墨（Forest Ink） |
 | 字数 | 9,089 个汉字（正文可见文本）；含标点、字母与数字约 12,124 字符 |
 | 引用 | 正文 31 处 `[N]` 上标 + 20 条三级参考文献 |
@@ -19,11 +19,11 @@
 把下面任意一条发给 Agent：
 
 ```text
-用 deep-word-explorer 解析「新泽西」，主题用森林墨，深度 exhaustive。
+用 deep-word-explorer 解析「新泽西」，主题用森林墨，speed=deep、depth=pro、scope=panorama。
 ```
 
 ```text
-帮我深度解析一下「新泽西」，深度 exhaustive，主题森林墨。
+帮我深度解析一下「新泽西」，speed=deep、depth=pro、scope=panorama，主题森林墨。
 ```
 
 ## 说明

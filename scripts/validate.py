@@ -227,7 +227,7 @@ check(
 )
 
 # 5.5 Golden profiles（与 test-words 一致 + 分类器规则断言）
-golden = load_json("tests/goldens/classification-profiles.json")
+golden = load_json("tests/expected-outputs/classification-profiles.json")
 golden_map = {p.get("word"): p for p in golden.get("profiles", [])}
 tw_map = {e["word"]: e for e in tw.get("test_words", [])}
 check(set(golden_map) == set(tw_map), "golden: 覆盖全部测试词且无多余词")
@@ -269,6 +269,16 @@ for idx in sorted((ROOT / "examples").glob("*/index.html")):
         m is not None and int(m.group(1).replace(",", "")) == hanzi,
         f"{readme.relative_to(ROOT)}: 字数标注与实际汉字数一致（{hanzi}）",
     )
+
+# 5.7 版本一致性（SKILL frontmatter ↔ CHANGELOG 最新版本）
+skill_text = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+m_ver = re.search(r"^version:\s*(\d+\.\d+\.\d+)", skill_text, re.M)
+changelog_text = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+changelog_versions = re.findall(r"^## \[(\d+\.\d+\.\d+)\]", changelog_text, re.M)
+check(
+    bool(m_ver) and bool(changelog_versions) and m_ver.group(1) == changelog_versions[0],
+    "版本一致性：SKILL frontmatter 与 CHANGELOG 最新版本一致",
+)
 
 # 6. Markdown 相对链接与仓库内路径引用
 PREFIX_WHITELIST = (
@@ -343,6 +353,8 @@ THRESHOLD_ASSERTIONS = [
     ("agents/builder/SKILL.md", "glossary"),
     ("README.md", "P0 18 / P1 36 / P2 28"),
     ("README.en.md", "P0 18 / P1 36 / P2 28"),
+    ("examples/README.md", "deep × pro × panorama"),
+    ("examples/新泽西/README.md", "speed=deep, depth=pro, scope=panorama"),
 ]
 for rel, phrase in THRESHOLD_ASSERTIONS:
     text = (ROOT / rel).read_text(encoding="utf-8")

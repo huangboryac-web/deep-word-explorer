@@ -33,6 +33,10 @@ PR 请基于 `main` 分支，并在描述里关联对应 Issue。PR 模板见 `.
 - [ ] 新增搜索源已同步 `agents/researcher/references/search-sources.md`
 - [ ] 新增/调整学习链模板已同步 `agents/architect/references/`
 - [ ] 踩过的坑已写入 `agents/qa/references/checklist-detailed.md` 对应 P0/P1/P2 级别
+- [ ] 运行 `python scripts/validate.py` 全部通过（含 golden 一致性）
+- [ ] 修改 `tests/expected-outputs/classification-profiles.json` 时同步运行 `scripts/generate_goldens.py`
+- [ ] 预设 / manifest / comparison-report / glossary 契约改动同步对应 `shared/schemas/` 文件
+- [ ] 命令参数改动同步 `commands/deep-explore.md`
 - [ ] README / README.en.md 中相关说明已更新
 - [ ] 未引入自定义主题 hex（颜色只能从 5 套预设中选）
 - [ ] 未删除或弱化引用标注与反 AI 痕迹机制

@@ -20,4 +20,4 @@ jobs:
       - name: Verify golden profiles are up to date
         run: |
           python scripts/generate_goldens.py
-          git diff --exit-code -- tests/goldens/classification-profiles.json
+          git diff --exit-code -- tests/expected-outputs/classification-profiles.json
