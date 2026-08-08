@@ -35,7 +35,7 @@
 
 一个适配 WorkBuddy / Claude Code / Codex 等 Agent 环境的**多 Agent 协作知识生产流水线**。输入任意一个「词」——地点、名词、热词、书籍、国家、历史概念、学术术语、科技名词、人物、机构……按 Step 0–6.5（含 Step 4.5）流水线处理，产出一篇篇**由浅入深、带完整引用来源、配数据图表与视觉素材、视觉精美**的深度解析单页网页；多词模式额外生成对比页（字数下限由 speed / depth / scope 档位组合决定）。
 
-> 当前版本：**v1.3.0** · [更新日志](./CHANGELOG.md) · [GitHub Releases](https://github.com/huangboryac-web/deep-word-explorer/releases)
+> 当前版本：**v1.4.0** · [更新日志](./CHANGELOG.md) · [GitHub Releases](https://github.com/huangboryac-web/deep-word-explorer/releases)
 
 内置核心能力：
 

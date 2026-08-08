@@ -35,7 +35,7 @@
 
 A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs the pipeline as **Step 0–6.5 (incl. Step 4.5)**, producing **progressively-structured, fully-cited, illustrated with data charts, visually polished deep-explainer pages as single-file HTML**; multi-word batches also generate a comparison page. The word-count floor is set by the `speed` / `depth` / `scope` tier combination.
 
-> Current version: **v1.3.0** · [Changelog](./CHANGELOG.md) · [GitHub Releases](https://github.com/huangboryac-web/deep-word-explorer/releases)
+> Current version: **v1.4.0** · [Changelog](./CHANGELOG.md) · [GitHub Releases](https://github.com/huangboryac-web/deep-word-explorer/releases)
 
 Core capabilities:
 

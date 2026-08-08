@@ -3,7 +3,7 @@ name: deep-word-explorer
 displayName: 兴趣词汇解析
 description: 输入任意「词」（地点/名词/热词/书籍/国家/历史/学术概念…），多 Agent 协作产出由浅入深、带完整引用与数据图表配图的深度解析网页，快慢/深浅/点面档位可调；调用后必须先完成 Step 0 参数确认，未确认不得开始。
 author: Boryac
-version: 1.3.0
+version: 1.4.0
 license: AGPL-3.0
 ---
 

@@ -2,14 +2,19 @@
 
 本文件遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/) 约定，版本号采用语义化版本（[SemVer](https://semver.org/lang/zh-CN/)）。
 
+## [1.4.0] - 2026-08-08
+
+### 新增
+- **3 套风格主题（完整重构）**：终端绿 / 朱印和纸 / 孟菲斯波普 并入 8 套主题色板，并为其实现完整皮肤层（themes.css「主题风格层」）、独立 HTML 模板与专属组件（终端状态栏 / 和纸章节索引条 / 波普贴纸目录）；自动推荐与 lieflat 色系映射同步。
+- **Step 0 参数硬性门禁**：任何调用必须展示完整参数清单并取得用户明确确认后才能开始；删除「全部默认 / 全部按预设」快捷通道与 `--no-ask` / `ask_before_run` 免问开关；触发语映射只作推荐值，不自动生效。
+- **文档与校验同步**：README 双语版本标注、AGENTS.md 门禁约定、validate.py 新增门禁 / 模板防回归断言。
+
 ## [1.3.0] - 2026-08-08
 
 ### 新增
 - **预设与快速命令**：支持全局（`~/.deep-word-explorer.json`）与项目级（`./.deep-word-explorer.json`）两级预设，新增 `preset` 参数与 `commands/deep-explore.md` 命令入口；Step 0 读取预设后**主动逐项询问**未指定项（命中项标注「来自预设」），`ask_before_run=false` 或 `--no-ask` 可跳过询问。
 - **引用全量核查**：QA 引用检查升级，来源 URL 由「抽查 5 个」改为全量校验（P0-18），失效链接自动替换或标注「来源不可访问」；清单结构调整为 P0 18 / P1 36 / P2 28（总数仍 82）。
 - **术语表交付**：撰写师汇总全文术语生成 `glossary`（术语 / 定义 / 首次出现阶），构建师在 HTML（可折叠附录）与 Markdown（文末附录）中渲染；QA 校验 glossary 与全文 cached_terms 一致。
-- **新增 3 套主题预设**：终端绿（Phosphor Terminal）/ 朱印和纸（Vermilion Washi）/ 孟菲斯波普（Memphis Pop），主题总数 5 → 8；自动推荐、lieflat 色系映射、命令参数与双语文档同步。
-- **Step 0 硬性门禁**：任何调用必须向用户展示完整参数清单并取得明确确认后才能开始；删除「全部默认 / 全部按预设」快捷通道与 `--no-ask` / `ask_before_run` 免问开关；触发语映射只作推荐值，不自动生效。
 
 ## [1.2.0] - 2026-08-08
 
@@ -72,6 +77,7 @@
 
 ## 版本链接
 
+[1.4.0]: https://github.com/huangboryac-web/deep-word-explorer/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/huangboryac-web/deep-word-explorer/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/huangboryac-web/deep-word-explorer/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/huangboryac-web/deep-word-explorer/compare/v1.0.0...v1.1.0
