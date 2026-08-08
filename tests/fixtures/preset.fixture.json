@@ -7,6 +7,5 @@
   "tone": "popular",
   "citation_density": "standard",
   "theme": "forest-ink",
-  "language": "zh",
-  "ask_before_run": true
+  "language": "zh"
 }

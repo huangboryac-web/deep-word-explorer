@@ -177,7 +177,7 @@ ls ~/.workbuddy/skills/deep-word-explorer/
 
 支持「三轴档位 + 配置面板」：`speed`（fast/standard/deep，快→慢）、`depth`（intro/mid/pro，浅→深）、`scope`（point/related/panorama，点→面），以及 `words`（2–8 个词批量）、`compare`（对比页开关）、`format`（html/markdown/pdf）、`illustrations`、`tone`（科普/学术/杂志）、`citation_density`、`theme`、`language`、`custom`、`preset`（预设文件）。
 
-预设支持全局（`~/.deep-word-explorer.json`）与项目级（`./.deep-word-explorer.json`）两级；调用前 Step 0 会**主动逐项询问**未指定项，预设命中项标注「来自预设」。
+预设支持全局（`~/.deep-word-explorer.json`）与项目级（`./.deep-word-explorer.json`）两级；调用前 Step 0 会展示完整参数清单（预设命中项标注「来自预设」）并要求确认，**确认前不会开始**。
 
 完整参数表与默认值见 [`SKILL.md`](./SKILL.md)（Step 0）。默认组合：standard × mid × point、html、配图开、科普语气、标准引用密度、中文。
 
@@ -291,7 +291,7 @@ JSON 交接、阶段门禁、降级标注、单文件交付、三轴档位可组
 每词每阶段产物都会落盘到 `checkpoints/`，`manifest.json` 记录进度；重跑同一输出目录时选择「续跑」即可跳过已完成阶段。修改档位后需换新目录或显式覆盖。
 
 **能记住我的偏好，少问几遍吗？**
-可以。把常用配置写进 `~/.deep-word-explorer.json`（全局）或项目根目录的 `.deep-word-explorer.json`，Step 0 会读取并标注「来自预设」；不想每次询问可设 `"ask_before_run": false` 或使用 `/deep-explore ... --no-ask`。
+可以。把常用配置写进 `~/.deep-word-explorer.json`（全局）或项目根目录的 `.deep-word-explorer.json`，Step 0 会读取并标注「来自预设」；每次仍会先展示清单，回复「按以上配置开始」即可快速确认（无 `--no-ask` 免问开关）。
 
 **引用可靠吗？有术语表吗？**
 QA 会对全部引用 URL 做全量可访问性核查（P0-18），失效链接自动替换或标注；每篇文章会交付术语表（术语、定义、首次出现阶），HTML 与 Markdown 输出都包含。

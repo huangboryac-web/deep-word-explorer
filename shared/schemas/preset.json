@@ -14,10 +14,6 @@
     "citation_density": { "type": "string", "enum": ["low", "standard", "high"] },
     "theme": { "type": "string" },
     "language": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] },
-    "custom": { "type": "array", "items": { "type": "string" } },
-    "ask_before_run": {
-      "type": "boolean",
-      "description": "是否每次调用前主动逐项询问可配置项；默认 true"
-    }
+    "custom": { "type": "array", "items": { "type": "string" } }
   }
 }

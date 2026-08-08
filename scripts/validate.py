@@ -297,6 +297,19 @@ for rel, needles in style_templates.items():
     tpl_text = (ROOT / rel).read_text(encoding="utf-8")
     check(all(n in tpl_text for n in needles), f"{rel}: 占位符与专属组件齐全")
 
+# 5.9 Step 0 硬性门禁防回归（未确认不得开始；无免问开关）
+skill_doc = (ROOT / "SKILL.md").read_text(encoding="utf-8")
+check("未确认不得进入 Step 1" in skill_doc, "SKILL.md: Step 0 硬性门禁声明存在")
+cmd_text = (ROOT / "commands/deep-explore.md").read_text(encoding="utf-8")
+check("--no-ask" not in cmd_text, "commands/deep-explore.md: 无 --no-ask 参数")
+sys_prompts_text = (ROOT / "shared/prompts/system-prompts.md").read_text(encoding="utf-8")
+check("未确认不得进入 Step 1" in sys_prompts_text, "system-prompts.md: 硬性门禁声明存在")
+check("ask_before_run" not in load_json("shared/schemas/preset.json"), "preset.json: 不残留 ask_before_run")
+readme_zh = (ROOT / "README.md").read_text(encoding="utf-8")
+check("确认前不会开始" in readme_zh, "README.md: 确认门禁说明存在")
+readme_en = (ROOT / "README.en.md").read_text(encoding="utf-8")
+check("no `--no-ask` bypass" in readme_en, "README.en.md: 无免问开关说明存在")
+
 # 6. Markdown 相对链接与仓库内路径引用
 PREFIX_WHITELIST = (
     "agents/",
@@ -360,7 +373,6 @@ THRESHOLD_ASSERTIONS = [
     ("agents/qa/references/checklist-detailed.md", "82 项"),
     ("SKILL.md", "Step 6.5"),
     ("AGENTS.md", "8 个子 Agent"),
-    ("SKILL.md", "ask_before_run"),
     ("README.md", "预设"),
     ("README.en.md", "preset"),
     ("commands/deep-explore.md", "deep-explore"),
@@ -387,6 +399,10 @@ THRESHOLD_ASSERTIONS = [
     ("agents/builder/SKILL.md", "template-washi.html"),
     ("agents/builder/SKILL.md", "template-memphis.html"),
     ("agents/builder/references/theme-injection.md", "washi-index"),
+    ("SKILL.md", "未确认不得进入 Step 1"),
+    ("AGENTS.md", "硬性门禁"),
+    ("README.md", "按以上配置开始"),
+    ("commands/deep-explore.md", "确认"),
 ]
 for rel, phrase in THRESHOLD_ASSERTIONS:
     text = (ROOT / rel).read_text(encoding="utf-8")

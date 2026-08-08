@@ -288,7 +288,7 @@ Yes. `words` accepts 2–8 words (parallel, up to 3 concurrent), each producing 
 Every stage artifact is written to `checkpoints/`, and `manifest.json` tracks progress. Re-running the same output directory and choosing "resume" skips completed stages. Changing tiers requires a new directory or explicit overwrite.
 
 **Can I save my preferences and stop being asked so often?**
-Yes. Put common settings in `~/.deep-word-explorer.json` (global) or `.deep-word-explorer.json` (project). Step 0 reads them and marks hits as "from preset"; set `"ask_before_run": false` or use `/deep-explore ... --no-ask` to skip the interview.
+Yes. Put common settings in `~/.deep-word-explorer.json` (global) or `.deep-word-explorer.json` (project). Step 0 reads them and marks hits as "from preset"; it still shows the full parameter list first — reply "confirm to start" (or "按以上配置开始") to confirm quickly. There is no `--no-ask` bypass.
 
 **Are citations verified? Is there a glossary?**
 QA fully verifies every citation URL (P0-18) and replaces or labels dead links. Every article ships a glossary (term, definition, first appearance stage) in both HTML and Markdown.

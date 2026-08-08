@@ -26,9 +26,9 @@
    的 `batch` 段；每词每阶段产物写入 `{output_dir}/{word}/checkpoints/`，
    `manifest.json` 是续跑唯一依据；options 变更必须换新目录或显式覆盖。
 9. **预设与命令**：预设按 全局 `~/.deep-word-explorer.json` → 项目 `./.deep-word-explorer.json`
-   → 显式 `preset` 文件 合并；`ask_before_run` 默认 true（Step 0 主动逐项询问）；
-   `/deep-explore` 命令入口在 `commands/deep-explore.md`，预设结构见
-   `shared/schemas/preset.json`。
+   → 显式 `preset` 文件 合并；Step 0 为**硬性门禁**：必须展示参数清单并取得用户确认
+   后才能开始，无 `--no-ask` / `ask_before_run` 免问开关；`/deep-explore` 命令入口在
+   `commands/deep-explore.md`，预设结构见 `shared/schemas/preset.json`。
 10. **质量门禁**：引用来源 URL 全量核查（P0-18）与术语表一致性（glossary ↔ cached_terms）
     是 v1.3 固定门禁，改动 QA 清单时保持 P0 18 / P1 36 / P2 28 的计数同步。
 

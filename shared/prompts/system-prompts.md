@@ -6,7 +6,8 @@
 > **事实源声明**：完整规则正本在 `agents/<name>/SKILL.md`；所有阈值（三轴档位、
 > 字数公式、引用密度、AI 痕迹等）统一来自 `shared/config/quality-gates.json`。
 > 本文件与规则正本冲突时，以 SKILL 与配置为准。
-> Step 0 的预设加载与主动逐项询问见 SKILL.md（`preset` 文件 / `ask_before_run` / `--no-ask`）。
+> Step 0 为**硬性门禁**：任何调用都必须先向用户展示完整参数清单并取得明确确认，
+> 未确认不得进入 Step 1；无 `--no-ask` / `ask_before_run` 免问开关。
 
 ---
 
