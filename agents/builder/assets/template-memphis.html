@@ -239,8 +239,9 @@ body.theme-dark #chain-indicator .step{background:var(--ink)}
   .layout{display:block}
 }
 @media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important}
-  .hero .badge,.hero h1,.hero .tagline,main section,.transition-question,.references,#memphis-chips a{opacity:1!important;transform:none!important;clip-path:inset(0)!important;filter:none!important}
+  html{scroll-behavior:auto}
+  html.dw-anim main section,html.dw-anim .transition-question,html.dw-anim .references,html.dw-anim #memphis-chips a,html.dw-anim .hero .badge,html.dw-anim .hero h1,html.dw-anim .hero .tagline{opacity:1!important;transform:none!important;clip-path:inset(0)!important;filter:none!important;animation:none!important}
+  body::before,.ticker-track,.shape,.hero h1::before,#progress-bar,.sticker-btn:hover i{animation:none!important}
 }
 </style>
 </head>
@@ -280,7 +281,8 @@ body.theme-dark #chain-indicator .step{background:var(--ink)}
       window.addEventListener('scroll',showVisible,{passive:true});
       window.addEventListener('resize',showVisible,{passive:true});
       document.documentElement.classList.add('dw-anim');
-      setTimeout(showAll,1500);
+      setTimeout(showVisible,1500);
+      setTimeout(showAll,8000);
     }catch(e){document.documentElement.classList.remove('dw-anim');}
   })();
   </script>
