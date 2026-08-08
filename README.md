@@ -33,11 +33,11 @@
 - [作者与许可](#作者与许可)
 - [更新日志](./CHANGELOG.md)
 
-一个适配 WorkBuddy / Claude Code / Codex 等 Agent 环境的**多 Agent 协作知识生产流水线**。输入任意一个「词」——地点、名词、热词、书籍、国家、历史概念、学术术语、科技名词、人物、机构……经过七阶段处理，产出一篇**万字以上、由浅入深、带完整引用来源、配数据图表与视觉素材、视觉精美**的深度解析单页网页。
+一个适配 WorkBuddy / Claude Code / Codex 等 Agent 环境的**多 Agent 协作知识生产流水线**。输入任意一个「词」——地点、名词、热词、书籍、国家、历史概念、学术术语、科技名词、人物、机构……按 Step 0–6（含 Step 4.5）流水线处理，产出一篇**由浅入深、带完整引用来源、配数据图表与视觉素材、视觉精美**的深度解析单页网页（standard / exhaustive 万字以上，quick 约 5,000 字）。
 
 内置核心能力：
 
-- **七阶段流水线**：分类器 → 研究员 → 架构师 → 撰写师 → **配图师** → 构建师 → 质量审查，Agent 之间通过 JSON Schema 结构化交接，每段都有独立质量门禁。
+- **多 Agent 流水线（7 个角色）**：分类器 → 研究员 → 架构师 → 撰写师 → **配图师** → 构建师 → 质量审查，Agent 之间通过 JSON Schema 结构化交接，每段都有独立质量门禁。
 - **五层漏斗搜索**：百科骨架 → 学术论文 → 专家解读 → 关联概念 → 时效信息，逐层加深，不足即降级标注。
 - **六阶学习链**：原初印象 → 时空坐标 → 核心要素拆解 → 深层机制 → 关联网络 → 批判视角，段间用过渡提问自然衔接，强制「由浅入深」。
 - **文字配图流程（双轨制）**：数据密集段落用 [lieflat-chart](https://redskill.xiaohongshu.net) 模板化生成数据图表（一张图一个结论）；强视觉实体走网络来源（仅采用许可安全且本地化的图片，标注图源与许可）；抽象概念用 SVG 纹样 / AI 插画自生成。整份交付锁定唯一色系，与文章主题协调。
@@ -166,7 +166,7 @@ ls ~/.workbuddy/skills/deep-word-explorer/
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `word` | string | ✅ | 待解析的词汇（地点/名词/热词/书籍/国家/历史概念/学术术语……） |
-| `depth` | enum | ❌ | `quick`（轻量，约 5,000 字）/ `standard`（默认，全六阶，约 12,000–15,000 字）/ `exhaustive`（穷尽，全六阶+全五层搜索，约 15,000–20,000 字） |
+| `depth` | enum | ❌ | `quick`（1–3 阶，约 5,000 字）/ `standard`（默认，全六阶，约 12,000–15,000 字）/ `exhaustive`（全六阶+全五层搜索，约 15,000–20,000 字）；硬性下限见 `shared/config/quality-gates.json` |
 | `theme` | enum | ❌ | 视觉主题，从 5 套中选，默认按本体类型自动推荐 |
 | `language` | string | ❌ | 输出语言，默认 `zh` |
 
@@ -184,7 +184,8 @@ Skill 本身是结构化工作流，Agent 会逐步引导：
 8. **质量审查** — QA 跑 72 项检查清单（P0 必过、P1 自动修复、P2 建议），含配图专项（编码诚实 / 单色系 / 图片来源许可 / 无障碍），必要时截图验证。
 9. **交付** — 通过预览工具打开 `index.html`，并口头说明学习链、图表与交互组件用法。
 
-详细说明见 [`SKILL.md`](./SKILL.md)。各 Agent 的细分指令在 `agents/<role>/SKILL.md`。
+详细说明见 [`SKILL.md`](./SKILL.md)。各 Agent 的细分指令在 `agents/<role>/SKILL.md`；
+字数 / 阶数 / 引用 / AI 痕迹等阈值统一来自 `shared/config/quality-gates.json`。
 
 ## 六阶学习链
 
@@ -198,6 +199,8 @@ Skill 本身是结构化工作流，Agent 会逐步引导：
 | 6 | 批判视角 / Critique | 留出反思空间 | 争议、局限、常见误解、未解问题 |
 
 每段之间由架构师生成**过渡提问**（自然衔接，不机械），引导读者从「知道」走向「理解」。
+
+> `quick` 深度只产出前 3 阶与 2 个过渡提问；`standard` / `exhaustive` 产出完整六阶与 5 个过渡提问。
 
 ## 五层漏斗搜索
 
@@ -216,13 +219,14 @@ Skill 本身是结构化工作流，Agent 会逐步引导：
 ```
 deep-word-explorer/
 ├── SKILL.md                              ← 主编排器：工作流、参数、异常处理
+├── AGENTS.md                             ← 贡献者与 Agent 协作约定
 ├── README.md                             ← 本文件（中文）
 ├── README.en.md                          ← English version
 ├── LICENSE                               ← AGPL-3.0
 ├── CONTRIBUTING.md                       ← 贡献指南
 ├── CODE_OF_CONDUCT.md                    ← 行为准则
 ├── SECURITY.md                           ← 安全披露政策
-├── .github/                              ← Issue / PR 模板
+├── .github/                              ← Issue / PR 模板 + CI 工作流
 ├── agents/
 │   ├── classifier/SKILL.md               ← 分类器（四维判定 + 搜索策略）
 │   ├── researcher/SKILL.md               ← 研究员（五层漏斗搜索）
@@ -239,11 +243,13 @@ deep-word-explorer/
 │   └── qa/SKILL.md                       ← 质量审查（72 项清单，含配图专项）
 │       └── references/                   ← 详细检查清单
 ├── shared/
+│   ├── config/quality-gates.json         ← 唯一阈值事实源（字数/阶数/引用/AI 痕迹）
 │   ├── schemas/                          ← 5 个 JSON Schema（阶段间数据契约，含 illustration-plan）
 │   ├── themes/themes.css                 ← 5 套主题色
 │   └── prompts/                          ← 系统提示词 + 降级策略
+├── scripts/validate.py                   ← 一致性校验脚本（CI 运行）
 ├── examples/                             ← 示例输出（如 新泽西/index.html）
-└── tests/                                ← 测试用例（test-words.json）
+└── tests/                                ← 测试用例（test-words.json + fixtures/ + expected-outputs/）
 ```
 
 ## 主题色预设
@@ -270,6 +276,7 @@ deep-word-explorer/
 6. **由浅入深是硬约束** — 学习链强制六阶递进，过渡提问负责衔接节奏。
 7. **反 AI 痕迹** — 50+ 模式检测，行文自然、有观点、有批判，不像机器生成。
 8. **配图双轨制** — 数据图表走 lieflat-chart 模板化生成（一张图一个结论）；概念图优先 SVG；网络图只采用许可安全且本地化的来源；整份交付锁定唯一色系。
+9. **阈值单一事实源** — 字数、阶数、引用、AI 痕迹等数字统一在 `shared/config/quality-gates.json`，文档与校验脚本共用，防止漂移。
 
 ## 示例请求
 
@@ -287,7 +294,7 @@ deep-word-explorer/
 深度解析「碳中和」，科技主题，输出英文。
 ```
 
-已附带的示例产物见 [`examples/新泽西/index.html`](./examples/新泽西/index.html)（exhaustive 深度，森林墨主题，约 9,000+ 中文字符，31 处引用）。
+已附带的示例产物见 [`examples/新泽西/index.html`](./examples/新泽西/index.html)（exhaustive 深度，森林墨主题，9,089 个汉字、含标点/字母/数字约 12,124 字符，31 处引用）。
 
 ## 致谢
 
@@ -334,6 +341,8 @@ Bug、排版问题、新布局需求、新主题——欢迎开 Issue 或 PR。�
 - 新增/调整主题色同步更新 `shared/themes/themes.css` 与 README 的主题表
 - 新增搜索源同步更新 `agents/researcher/references/search-sources.md`
 - 把踩过的坑写到 `agents/qa/references/checklist-detailed.md` 对应的 P0/P1/P2 级别
+- 阈值类改动只改 `shared/config/quality-gates.json`，并同步相关 SKILL/README 文字
+- 提交前运行 `python scripts/validate.py`，全部通过后再开 PR
 - 提交前请阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)
 
 ## 作者与许可

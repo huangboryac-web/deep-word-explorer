@@ -71,7 +71,7 @@ deep-word-explorer 流水线的第五个 Agent（Step 4.5，位于撰写师与�
 
 ### Step 3: 色系与主题锁定
 
-按 illustration-guide.md §4 的映射表，为**整份交付**锁定唯一色系（`mono` / `porcelain` / `palm` / `wire`），写入 `illustration_plan.color_system`，并给出一句话选择理由。**同一份交付禁止混用色系**；图表、插画、文章主题三者必须协调。
+按 illustration-guide.md §5 的映射表，为**整份交付**锁定唯一色系（`mono` / `porcelain` / `palm` / `wire`），写入 `illustration_plan.color_system`，并给出一句话选择理由。**同一份交付禁止混用色系**；图表、插画、文章主题三者必须协调。
 
 ### Step 4: 组装 illustration_plan
 

@@ -1,0 +1,26 @@
+{
+  "word": "存在主义",
+  "classification": {
+    "ontology": "学术术语",
+    "subtype": "哲学概念",
+    "difficulty": "进阶",
+    "controversy": "存在争议",
+    "timeliness": "永恒",
+    "geographic_scope": "欧洲（法德为中心）",
+    "era": "19-20世纪",
+    "domain": "哲学",
+    "language_origin": "德文",
+    "estimated_reader_familiarity": "有所耳闻"
+  },
+  "search_profile": {
+    "layer_1_sources": ["wikipedia", "baidu_baike", "wikidata"],
+    "layer_2_sources": ["google_scholar", "sep"],
+    "layer_3_sources": ["zhihu", "douban"],
+    "layer_4_enabled": false,
+    "layer_5_enabled": false,
+    "query_languages": ["zh", "en", "de"],
+    "depth_modifier": 1.2,
+    "preferred_academic_databases": ["sep", "jstor"],
+    "timeline_importance": "高"
+  }
+}

@@ -33,11 +33,11 @@
 - [Author & License](#author--license)
 - [Changelog](./CHANGELOG.md)
 
-A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs a seven-stage pipeline that produces a **10,000+ word, progressively-structured, fully-cited, illustrated with data charts, visually polished deep-explainer as a single-file HTML page**.
+A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs the pipeline as **Step 0–6 (incl. Step 4.5)**, producing a **progressively-structured, fully-cited, illustrated with data charts, visually polished deep-explainer as a single-file HTML page** (10,000+ words for standard/exhaustive, ~5,000 for quick).
 
 Core capabilities:
 
-- **Seven-stage pipeline**: Classifier → Researcher → Architect → Writer → **Illustrator** → Builder → QA. Agents hand off via JSON Schema; each stage has its own quality gate.
+- **Multi-Agent pipeline (7 roles)**: Classifier → Researcher → Architect → Writer → **Illustrator** → Builder → QA. Agents hand off via JSON Schema; each stage has its own quality gate.
 - **Five-layer funnel search**: encyclopedia skeleton → academic papers → expert interpretation → related concepts → timeliness, deepening layer by layer, with explicit degradation when data is thin.
 - **Six-stage learning chain**: First Impression → Spatiotemporal Context → Anatomy → Mechanism → Ecosystem → Critique, connected by transition questions that enforce "shallow-to-deep".
 - **Text-illustration flow (dual-track)**: data-dense passages get template-driven charts from [lieflat-chart](https://redskill.xiaohongshu.net) (one figure, one conclusion); strong visual entities go the network track (license-safe, localized images with source/attribution); abstract concepts go self-generated (SVG motifs / AI illustrations). One global color system per delivery, aligned with the article theme.
@@ -53,7 +53,7 @@ Send this to an AI Agent with shell access (WorkBuddy shown):
 Give me a deep explainer on "New Jersey", default theme, standard depth.
 ```
 
-The Agent auto-loads this skill, runs all seven stages, and delivers an `index.html`. You can also specify parameters:
+The Agent auto-loads this skill, runs all stages (Step 0–6, incl. Step 4.5), and delivers an `index.html`. You can also specify parameters:
 
 ```text
 Use deep-word-explorer to explain "Existentialism", theme kraft-paper, depth exhaustive.
@@ -165,7 +165,7 @@ After install, the Agent auto-discovers and invokes it. Trigger keywords (zh/en)
 | Param | Type | Required | Notes |
 |-------|------|----------|-------|
 | `word` | string | ✅ | The word to explain (place/noun/buzzword/book/country/historical concept/academic term…) |
-| `depth` | enum | ❌ | `quick` (~5,000 words) / `standard` (default, full six stages, ~12,000–15,000) / `exhaustive` (full stages + all five search layers, ~15,000–20,000) |
+| `depth` | enum | ❌ | `quick` (stages 1–3, ~5,000 words) / `standard` (default, full six stages, ~12,000–15,000) / `exhaustive` (full stages + all five search layers, ~15,000–20,000); hard floors in `shared/config/quality-gates.json` |
 | `theme` | enum | ❌ | Visual theme from 5 presets; auto-recommended by ontology if omitted |
 | `language` | string | ❌ | Output language, default `zh` |
 
@@ -183,7 +183,8 @@ The Skill is a structured workflow the Agent guides step by step:
 8. **QA** — QA runs the 72-item checklist (P0 must pass, P1 auto-fix, P2 suggest), including illustration checks (honest encoding / single color system / image licensing / accessibility), screenshots if needed.
 9. **Deliver** — open `index.html` via preview tool, explain learning chain, charts & components.
 
-Full detail in [`SKILL.md`](./SKILL.md). Per-Agent instructions in `agents/<role>/SKILL.md`.
+Full detail in [`SKILL.md`](./SKILL.md). Per-Agent instructions in `agents/<role>/SKILL.md`;
+word-count / stage / citation / AI-trace thresholds live in `shared/config/quality-gates.json`.
 
 ## Six-stage learning chain
 
@@ -197,6 +198,8 @@ Full detail in [`SKILL.md`](./SKILL.md). Per-Agent instructions in `agents/<role
 | 6 | Critique | Leave room for reflection | Controversy, limits, common misunderstandings, open questions |
 
 Between segments the architect generates **transition questions** (natural, not mechanical), guiding the reader from "knowing" to "understanding".
+
+> `quick` depth produces only stages 1–3 with 2 transition questions; `standard` / `exhaustive` produce all six stages with 5 transition questions.
 
 ## Five-layer funnel search
 
@@ -215,13 +218,14 @@ When any layer is thin, degrade per `shared/prompts/fallback-strategies.md` and 
 ```
 deep-word-explorer/
 ├── SKILL.md                              ← main orchestrator: workflow, params, exceptions
+├── AGENTS.md                             ← contributor & agent collaboration conventions
 ├── README.md                             ← Chinese README
 ├── README.en.md                          ← this file
 ├── LICENSE                               ← AGPL-3.0
 ├── CONTRIBUTING.md                       ← contribution guide
 ├── CODE_OF_CONDUCT.md                    ← code of conduct
 ├── SECURITY.md                           ← security disclosure policy
-├── .github/                              ← Issue / PR templates
+├── .github/                              ← Issue / PR templates + CI workflow
 ├── agents/
 │   ├── classifier/SKILL.md               ← classifier (4-dim judgment + search strategy)
 │   ├── researcher/SKILL.md               ← researcher (5-layer funnel)
@@ -238,11 +242,13 @@ deep-word-explorer/
 │   └── qa/SKILL.md                       ← QA (72-item checklist incl. illustration)
 │       └── references/                   ← detailed checklist
 ├── shared/
+│   ├── config/quality-gates.json         ← single source of truth for thresholds
 │   ├── schemas/                          ← 5 JSON Schemas (inter-stage data contracts, incl. illustration-plan)
 │   ├── themes/themes.css                 ← 5 theme palettes
 │   └── prompts/                          ← system prompts + fallback strategies
+├── scripts/validate.py                   ← consistency validation script (runs in CI)
 ├── examples/                             ← sample outputs (e.g. 新泽西/index.html)
-└── tests/                                ← test cases (test-words.json)
+└── tests/                                ← test cases (test-words.json + fixtures/ + expected-outputs/)
 ```
 
 ## Theme palettes
@@ -269,6 +275,7 @@ Theme recommendation: philosophy/humanities/general → Ink Classic; tech/AI/mat
 6. **Shallow-to-deep is a hard constraint** — learning chain enforces six-stage progression; transition questions handle pacing.
 7. **Anti-AI traces** — 50+ pattern detection keeps prose natural, opinionated, critical.
 8. **Dual-track illustration** — data charts are template-driven via lieflat-chart (one figure, one conclusion); concept art prefers SVG; network images must be license-safe and localized; one global color system per delivery.
+9. **Single source of truth for thresholds** — word counts, stages, citations, AI-trace scores all live in `shared/config/quality-gates.json`, shared by docs and the validation script to prevent drift.
 
 ## Example requests
 
@@ -284,7 +291,7 @@ Use deep-word-explorer to explain "Existentialism", theme kraft-paper, depth exh
 Deep explainer on "Carbon Neutrality", tech theme, output in English.
 ```
 
-A bundled sample output: [`examples/新泽西/index.html`](./examples/新泽西/index.html) (exhaustive depth, Forest Ink, ~9,000+ CJK chars, 31 citations).
+A bundled sample output: [`examples/新泽西/index.html`](./examples/新泽西/index.html) (exhaustive depth, Forest Ink, 9,089 CJK chars — ≈12,124 chars incl. punctuation/Latin/digits, 31 citations).
 
 ## Acknowledgements
 
@@ -331,6 +338,8 @@ Bugs, typos, new layouts, new themes — Issues and PRs welcome. Prefer:
 - Sync new/adjusted theme colors with `shared/themes/themes.css` and the README theme table
 - Sync new search sources with `agents/researcher/references/search-sources.md`
 - Write pitfalls into the matching P0/P1/P2 level of `agents/qa/references/checklist-detailed.md`
+- Change thresholds only in `shared/config/quality-gates.json`, then sync the wording in related SKILL/README files
+- Run `python scripts/validate.py` and get a clean pass before opening a PR
 - Read [CONTRIBUTING.md](./CONTRIBUTING.md) before submitting
 
 ## Author & License

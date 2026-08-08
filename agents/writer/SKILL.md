@@ -42,7 +42,7 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 
 ### Step 2: 逐阶撰写
 
-对 learning_chain 中的 stage_1 到 stage_6，按顺序逐阶撰写。
+对 learning_chain 中的 stage_1 到 stage_N（N 由 depth_level 决定：quick=3，standard/exhaustive=6），按顺序逐阶撰写。
 
 #### 每阶的撰写流程
 
@@ -81,7 +81,7 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 
 ### Step 3: 过渡问题润色
 
-将 learning_chain.transitions 中的 5 个过渡问题，在正文中以居中大字的方式呈现：
+将 learning_chain.transitions 中的过渡问题（quick 2 个，standard/exhaustive 5 个），在正文中以居中大字的方式呈现：
 
 ```
 <div class="transition-question">
@@ -123,7 +123,7 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 ### Step 5: 构建最终 article_content
 
 #### 5.1 sections 数组
-将六阶的撰写结果包装为 sections 数组，每阶包含：
+将全部阶的撰写结果包装为 sections 数组（quick 3 阶，standard/exhaustive 6 阶），每阶包含：
 - `stage`：阶号（1-6）
 - `title`：阶标题
 - `content`：Markdown 格式正文（含引用标注和术语标记）
@@ -132,7 +132,7 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 - `visual_assets`：可视化需求（如有）
 
 #### 5.2 transitions 数组
-5 个过渡问题，含 from_stage 和 to_stage。
+过渡问题（quick 2 个，standard/exhaustive 5 个），含 from_stage 和 to_stage。
 
 #### 5.3 citations 数组
 从 learning_chain.citation_index 转换，添加 access_date。
@@ -176,10 +176,10 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 ## 质量门禁
 
 ### 必须通过
-- [ ] 六阶全部撰写完成，无空阶
-- [ ] 总字数 ≥ 10,000
-- [ ] 过渡问题 5 个，无机械过渡
-- [ ] 引用标注 ≥ 12 条
+- [ ] 对应深度的阶全部撰写完成，无空阶（quick：1–3；standard/exhaustive：1–6）
+- [ ] 总字数 ≥ shared/config/quality-gates.json 下限（quick 4,000 / standard 10,000 / exhaustive 12,000）
+- [ ] 过渡问题数量符合深度（quick 2 / 其余 5），无机械过渡
+- [ ] 引用标注 ≥ 每阶 2 条 × 阶数（quick ≥6；standard/exhaustive ≥12）
 - [ ] ai_pattern_score < 0.3
 - [ ] 严格符合 shared/schemas/article-content.json schema
 

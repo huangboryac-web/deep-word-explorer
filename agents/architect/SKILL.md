@@ -103,7 +103,7 @@ deep-word-explorer 流水线的第三个 Agent。将研究员产出的结构化�
 5. 润色
 6. 验证（如像机械引导则重选）
 
-生成的 5 个过渡问题写入 transitions 对象。
+生成的过渡问题写入 transitions 对象：quick 2 个（t1_2、t2_3），standard/exhaustive 5 个（t1_2..t5_6）。
 
 ### Step 5: 构建引用索引
 
@@ -121,14 +121,14 @@ deep-word-explorer 流水线的第三个 Agent。将研究员产出的结构化�
 ## 质量门禁
 
 ### 结构完整性
-- [ ] 六阶全部非空（有内容和 content_outline）
+- [ ] 对应深度的阶全部非空（quick：stage_1-3；standard/exhaustive：stage_1-6）
 - [ ] 每阶的必填字段已填充
-- [ ] 5 个过渡问题全部生成且不机械
-- [ ] citation_index 至少 8 条引用
+- [ ] 过渡问题数量符合深度（quick 2 / 其余 5）且不机械
+- [ ] citation_index 至少 8 条引用（quality-gates.json: citation_index_min）
 
 ### 字数保证
 - [ ] 每阶 min_words 设定 ≥ chain-templates.md 的最少字数
-- [ ] 六阶 min_words 合计 ≥ 12,500
+- [ ] min_words 合计 ≥ shared/config/quality-gates.json 对应深度下限（quick 4,000 / standard 10,000 / exhaustive 12,000）
 
 ### 逻辑一致性
 - [ ] 过渡问题自然衔接前后阶

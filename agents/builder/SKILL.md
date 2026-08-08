@@ -6,7 +6,7 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 ## 前置依赖
 - 撰写师 Agent 的 `article_content`
 - 配图师 Agent 的 `illustration_plan`（含 `media_assets/`、`chart_fragments/`）
-- 用户选择的 `theme`（从 5 套中选一，默认墨水经典）
+- 用户选择的 `theme`（从 5 套中选一；未指定时由主编排器按分类自动推荐）
 - guizang-ppt-skill 的原始 template.html（改造基础）
 - 本 Agent 的 adaptation-guide.md、component-library.md、theme-injection.md、illustration-embedding.md
 

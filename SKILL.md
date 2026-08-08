@@ -11,7 +11,7 @@ license: AGPL-3.0
 
 ## 技能定位
 
-一个多 Agent 协作的知识生产流水线。输入任意一个词（地点、名词、热词、书籍、国家、历史概念等），经过七阶段处理，产出一篇万字以上的、由浅入深的、有完整引用来源的、带数据图表与配图、视觉精美的深度解析网页。
+一个多 Agent 协作的知识生产流水线。输入任意一个词（地点、名词、热词、书籍、国家、历史概念等），按 Step 0–6（含 Step 4.5）顺序处理，产出一篇由浅入深、有完整引用来源的、带数据图表与配图、视觉精美的深度解析网页（standard/exhaustive 万字以上，quick 约 5,000 字）。
 
 ## 触发条件
 
@@ -25,13 +25,13 @@ license: AGPL-3.0
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `word` | string | ✅ | 待解析的词汇 |
-| `depth` | enum | ❌ | quick（跳4-6阶）/ standard（默认，全六阶）/ exhaustive（全六阶+全搜索层） |
+| `depth` | enum | ❌ | quick（1–3 阶）/ standard（默认，全六阶）/ exhaustive（全六阶+全搜索层）；阶数与字数阈值见 `shared/config/quality-gates.json` |
 | `theme` | enum | ❌ | 视觉主题，从 5 套中选，默认自动推荐 |
 | `language` | string | ❌ | 输出语言，默认 zh |
 
 ---
 
-## 工作流（7 阶段，顺序执行）
+## 工作流（Step 0–6，含 Step 4.5，顺序执行）
 
 ### Step 0: 参数确认与需求对齐
 
@@ -50,6 +50,8 @@ license: AGPL-3.0
    - 如不指定，输出到当前项目的 `.workbuddy/deep-explorer/{word}/index.html`
 
 **输出**：确认的参数集 `{word, depth, theme, output_path}`
+
+> 各深度硬性下限（字数 / 阶数 / 过渡问题数量）统一见 `shared/config/quality-gates.json`。
 
 ---
 
@@ -175,7 +177,7 @@ license: AGPL-3.0
 
 **调度**：QA Agent（`agents/qa/SKILL.md`）
 
-**输入**：html_path + article_content + learning_chain + illustration_plan
+**输入**：html_path + article_content + learning_chain + illustration_plan + depth_level
 **输出**：qa_report JSON + 修复后的 HTML
 
 **关键动作**：
@@ -231,6 +233,7 @@ license: AGPL-3.0
 ```
 deep-word-explorer/
 ├── SKILL.md                              ← 你正在读（主编排器）
+├── AGENTS.md                             ← 贡献者与 Agent 协作约定
 ├── agents/
 │   ├── classifier/SKILL.md               ← 分类器
 │   ├── researcher/SKILL.md               ← 研究员
@@ -247,11 +250,13 @@ deep-word-explorer/
 │   └── qa/SKILL.md                       ← 质量审查
 │       └── references/                   ← P0/P1/P2 检查清单（含配图专项）
 ├── shared/
+│   ├── config/quality-gates.json         ← 唯一阈值事实源（字数/阶数/引用/AI 痕迹）
 │   ├── schemas/                          ← 5个JSON Schema（含 illustration-plan）
 │   ├── themes/themes.css                 ← 5套主题
 │   └── prompts/                          ← 系统提示词 + 降级策略
-├── examples/                             ← 示例输出（待生成）
-└── tests/                                ← 测试用例
+├── scripts/validate.py                   ← 一致性校验脚本（CI 运行）
+├── examples/                             ← 示例输出（真实样例：新泽西/）
+└── tests/                                ← 测试用例（test-words.json + fixtures/）
 ```
 
 ## 设计原则

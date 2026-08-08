@@ -2,6 +2,17 @@
 
 本文件遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/) 约定，版本号采用语义化版本（[SemVer](https://semver.org/lang/zh-CN/)）。
 
+## [Unreleased]
+
+### 结构与治理
+- **阈值单一事实源**：新增 `shared/config/quality-gates.json`，字数 / 阶数 / 引用 / AI 痕迹等阈值统一收口；`shared/prompts/system-prompts.md` 收敛为调度注入骨架，不再另立数字。
+- **深度门禁参数化**：`quick` / `standard` / `exhaustive` 的字数下限、阶数与过渡提问数量按深度区分；QA P0 改为按 `depth_level` 校验（quick：1–3 阶、≥4,000 字；standard：六阶、≥10,000 字；exhaustive：六阶、≥12,000 字）。
+- **Schema 支持 quick**：`article-content.json` 与 `learning-chain.json` 增加基于 `meta.depth_level` 的条件约束（quick 3 阶 / 2 个过渡提问，其余 6 阶 / 5 个过渡提问）。
+- **测试与 CI**：新增 `scripts/validate.py` 与 `.github/workflows/ci.yml`（JSON / Schema / fixture / 文档链接 / 阈值防漂移校验）；新增 `tests/fixtures/`（含 standard 与 quick 两套实例）；`tests/expected-outputs/` 补 README 明确用途。
+- **AGENTS.md**：新增仓库协作约定（规则正本、阈值事实源、schema 同步、校验前置）。
+- **示例字数如实标注**：`examples/新泽西/README.md` 与双语 README 改为实测口径（9,089 个汉字，含标点 / 字母 / 数字约 12,124 字符）。
+- **文档收敛**：`SKILL.md` 资源树与实际结构同步（scripts / config / AGENTS.md / fixtures）；统一「Step 0–6（含 Step 4.5）」表述；修正 `agent/builder/` 路径笔误与 illustration-guide 章节引用（§4 → §5）。
+
 ## [1.1.0] - 2026-08-08
 
 ### 新增

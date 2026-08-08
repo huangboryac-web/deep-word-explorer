@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "word": "存在主义",
+    "generated_at": "2026-08-08T00:00:00Z",
+    "depth_level": "standard",
+    "total_sources_consulted": 12,
+    "search_duration_seconds": 1800,
+    "degradations_applied": []
+  },
+  "layer_1": {
+    "definition": "存在主义是一组以人的自由、选择与责任为核心的哲学思潮的统称（示例定义）。",
+    "aliases": [],
+    "category": {
+      "primary": "哲学",
+      "secondary": []
+    },
+    "timeline": [
+      {
+        "date": "1844",
+        "event": "克尔凯郭尔出版《非此即彼》",
+        "significance": "被视为存在主义思想源头之一",
+        "source": "示例来源"
+      }
+    ],
+    "key_figures": [
+      {
+        "name": "萨特",
+        "role": "哲学家",
+        "contribution": "提出「存在先于本质」",
+        "lifespan": "1905-1980"
+      }
+    ],
+    "geographic_scope": "欧洲",
+    "parent_concepts": ["欧陆哲学"],
+    "etymology": "existentialism 源自拉丁文 existere",
+    "sources": [
+      {
+        "name": "Wikipedia",
+        "url": "https://example.com/wikipedia",
+        "type": "encyclopedia",
+        "access_date": "2026-08-08"
+      }
+    ]
+  },
+  "layer_2": {
+    "consensus_view": "学术界普遍认为存在主义关注个体在无意义世界中的自由选择与责任（示例共识文本）。",
+    "key_debates": [],
+    "milestone_papers": [],
+    "schools_of_thought": [],
+    "latest_research_directions": [],
+    "sources": [
+      {
+        "name": "Stanford Encyclopedia of Philosophy",
+        "url": "https://example.com/sep",
+        "type": "encyclopedia",
+        "access_date": "2026-08-08"
+      }
+    ]
+  },
+  "layer_3": {
+    "expert_interpretations": [
+      {
+        "author": "示例作者",
+        "author_credential": "哲学教授",
+        "key_insight": "存在主义不是悲观主义，而是对自由的重估。",
+        "source": "示例专栏",
+        "url": "https://example.com/essay",
+        "trust_score": 0.8
+      }
+    ],
+    "vivid_analogies": [],
+    "common_misconceptions": [],
+    "learning_path": [],
+    "sources": [
+      {
+        "name": "示例专栏",
+        "url": "https://example.com/essay",
+        "type": "expert_article",
+        "access_date": "2026-08-08"
+      }
+    ]
+  },
+  "layer_4": {
+    "prerequisites": [],
+    "parallel_concepts": [],
+    "downstream_concepts": [],
+    "concept_map_edges": []
+  },
+  "layer_5": {
+    "recent_developments": [],
+    "public_sentiment": {
+      "overall_tone": "中性",
+      "key_narratives": []
+    },
+    "trend_analysis": "",
+    "future_projections": [],
+    "sources": []
+  }
+}

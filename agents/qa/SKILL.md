@@ -18,6 +18,7 @@ deep-word-explorer 流水线的最后一个 Agent。对生成的 HTML 进行三�
 - `article_content` (JSON)：来自撰写师
 - `learning_chain` (JSON)：来自架构师
 - `illustration_plan` (JSON)：来自配图师（Step 4.5）
+- `depth_level` (string)：quick / standard / exhaustive，决定结构、字数与引用门禁
 
 ## 输出
 - `qa_report` (JSON)：审查报告
@@ -32,13 +33,14 @@ deep-word-explorer 流水线的最后一个 Agent。对生成的 HTML 进行三�
 #### 1.1 字数统计
 ```javascript
 // 从 article_content.statistics 获取
-total_words ≥ 10000 → PASS
-total_words < 10000 → FAIL (P0-07)
+// 硬性下限（shared/config/quality-gates.json）：
+// quick ≥ 4000 → PASS；standard ≥ 10000 → PASS；exhaustive ≥ 12000 → PASS
+// 低于对应深度下限 → FAIL (P0-07)
 ```
 
 #### 1.2 结构检查
-- 验证六阶 section（data-chain="1"~"6"）都存在
-- 验证 5 个 transition-question 块
+- 验证对应深度的 section（quick：data-chain="1"~"3"；standard/exhaustive：data-chain="1"~"6"）都存在
+- 验证 transition-question 块（quick 2 个；standard/exhaustive 5 个）
 - 验证参考文献 section 存在
 
 #### 1.3 禁用词搜索
@@ -59,6 +61,7 @@ total_words < 10000 → FAIL (P0-07)
 - 统计文内 [N] 标注数量
 - 统计参考文献条目数量
 - 验证每个 [N] 有对应条目
+- 文内标注下限：每阶 ≥ 2 条 × 阶数（quick ≥6；standard/exhaustive ≥12）
 
 #### 1.6 配图专项检查（对照 illustration_plan）
 
@@ -147,7 +150,7 @@ total_words < 10000 → FAIL (P0-07)
     "passed": 17,
     "failed": 0,
     "details": [
-      {"id": "P0-01", "status": "PASS", "note": "六阶全部有内容"},
+      {"id": "P0-01", "status": "PASS", "note": "对应深度的阶全部有内容"},
       ...
       {"id": "P0-17", "status": "PASS", "note": "整份交付仅一种色系"}
     ]

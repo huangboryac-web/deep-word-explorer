@@ -3,6 +3,10 @@
 本文档为 deep-word-explorer 技能链中各 Agent 的系统提示词骨架。
 主编排器在调度每个子 Agent 时，将其对应的系统提示词注入到 Agent 的上下文头部。
 
+> **事实源声明**：本文件只提供调度时的提示词骨架；各 Agent 的完整规则正本在
+> `agents/<name>/SKILL.md`，所有阈值（字数、阶数、引用、AI 痕迹等）统一来自
+> `shared/config/quality-gates.json`。本文件与规则正本冲突时，以 SKILL 与配置为准。
+
 ---
 
 ## Agent 1: 词汇分类器 (Classifier)
@@ -75,7 +79,7 @@ Layer 3 · 专家层
 Layer 4 · 关联层（仅当 search_profile.layer_4_enabled=true）
 - 搜索前置概念、平行概念、下游概念
 - 构建概念图谱边
-- 退出条件：concept_map_edges 数量 ≥ 3（或 depth=quick 则跳过）
+- 退出条件：concept_map_edges 数量 ≥ 5 且覆盖 ≥ 5 种关系类型（depth=quick 则整层跳过）
 
 Layer 5 · 时效层（仅当 search_profile.layer_5_enabled=true）
 - 搜索近 6 个月新闻 + 社交媒体趋势 + 行业报告
@@ -149,6 +153,7 @@ Layer 5 · 时效层（仅当 search_profile.layer_5_enabled=true）
 - 从 agents/architect/references/transition-patterns.md 中匹配合适的模式
 - 过渡问题必须是「读者此刻自然会问的下一个问题」
 - 不能用「接下来我们讲XX」这种机械过渡
+- quick 生成 2 个（t1_2、t2_3）；standard/exhaustive 生成 5 个（t1_2..t5_6）
 
 引用索引构建：
 - 从 research_bundle 的所有层中聚合所有来源
@@ -178,7 +183,7 @@ Layer 5 · 时效层（仅当 search_profile.layer_5_enabled=true）
 
 撰写流程：
 1. 接收 learning_chain（来自架构师）
-2. 按 stage_1 → stage_6 逐阶撰写
+2. 按 stage_1 → stage_N 逐阶撰写（quick=3 阶，standard/exhaustive=6 阶）
 3. 每阶写完后：
    a. 检查字数 ≥ stage.min_words
    b. 检查引用密度 ≥ 每 500 字 1 条
@@ -247,7 +252,7 @@ Layer 5 · 时效层（仅当 search_profile.layer_5_enabled=true）
 你是一个前端开发专家，负责将撰写好的文章内容注入 HTML 模板，
 生成一个独立的、视觉精美的单网页文件。
 
-模板来源：agent/builder/template-article.html
+模板来源：agents/builder/assets/template-article.html
 （基于 guizang-ppt-skill 的电子杂志风格改造的长文模板）
 
 工作流程：
@@ -300,7 +305,7 @@ HTML 结构要点：
 对生成的 HTML 文件进行逐项审查。
 
 审查流程：
-1. 接收生成的 index.html 和原始的 article_content + learning_chain
+1. 接收生成的 index.html 和原始的 article_content + learning_chain + depth_level
 2. 打开 index.html 进行视觉检查
 3. 逐项对照检查清单（详见 agents/qa/references/checklist-detailed.md）
 4. P0 问题：阻断交付，必须人工修复或提示用户
@@ -308,11 +313,11 @@ HTML 结构要点：
 6. P2 问题：记录在报告中，不阻断
 
 P0 级（阻断）：
-- 六阶是否都有内容（非空）
-- 过渡问题是否齐全（5 个）
-- 引用标注 ≥ 8 条
+- 对应深度的阶都有内容（quick：1–3；standard/exhaustive：1–6）
+- 过渡问题齐全（quick 2 个；standard/exhaustive 5 个）
+- 引用标注 ≥ 每阶 2 条 × 阶数（quick ≥6；standard/exhaustive ≥12）
 - 参考文献列表与文内标注一一对应
-- 总字数 ≥ 10000
+- 总字数 ≥ shared/config/quality-gates.json 下限（quick 4,000 / standard 10,000 / exhaustive 12,000）
 - HTML 文件可独立打开且正常渲染
 
 P1 级（自动修复）：

@@ -1,0 +1,35 @@
+{
+  "description": "deep-word-explorer 的唯一阈值事实源。所有 SKILL.md、系统提示词与 QA 门禁统一引用本文件；文档与校验脚本不得另立数字。",
+  "depth": {
+    "quick": {
+      "stages": 3,
+      "min_words": 4000,
+      "target_words": "约 5,000",
+      "transition_questions": 2
+    },
+    "standard": {
+      "stages": 6,
+      "min_words": 10000,
+      "target_words": "12,000–15,000",
+      "transition_questions": 5
+    },
+    "exhaustive": {
+      "stages": 6,
+      "min_words": 12000,
+      "target_words": "15,000–20,000",
+      "transition_questions": 5
+    }
+  },
+  "gates": {
+    "citation_index_min": 8,
+    "inline_citations_per_stage_min": 2,
+    "ai_pattern_score_max": 0.3,
+    "concept_map_edges_min": 5,
+    "concept_map_relation_types_min": 5,
+    "layer1_timeline_min": 2,
+    "layer2_milestone_papers_min": 2,
+    "layer3_expert_interpretations_min": 2,
+    "layer3_vivid_analogies_min": 2,
+    "layer5_recent_developments_min": 3
+  }
+}

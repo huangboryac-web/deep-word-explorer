@@ -1,0 +1,38 @@
+{
+  "word": "新泽西",
+  "color_system": "palm",
+  "color_system_reason": "森林墨主题映射 palm 色系",
+  "assets": [
+    {
+      "id": "chart-01",
+      "track": "generated",
+      "type": "chart",
+      "stage_no": 2,
+      "takeaway": "新泽西人口密度位居全美前列",
+      "caption": "人口密度对比",
+      "alt_text": "新泽西与周边州人口密度对比图",
+      "generated": {
+        "type_id": "G10",
+        "gallery_source": "templates/basics-gallery.html · Diverging Bar",
+        "data_contract": "人/平方英里",
+        "html_fragment_path": "chart_fragments/chart-01.html",
+        "requires_cdn": false
+      }
+    },
+    {
+      "id": "media-01",
+      "track": "network",
+      "type": "image",
+      "stage_no": 1,
+      "takeaway": "新泽西海岸线的经典航拍",
+      "caption": "航拍：新泽西海岸",
+      "alt_text": "新泽西海岸航拍照片",
+      "network": {
+        "attribution": "示例机构",
+        "license": "Public Domain",
+        "source_url": "https://example.com/source",
+        "local_path": "media_assets/media-01.jpg"
+      }
+    }
+  ]
+}
