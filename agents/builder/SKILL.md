@@ -76,6 +76,7 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 1. 根据 `theme` 参数选择对应的 CSS 变量块
 2. 替换模板 `<style>` 中 `:root` 的 6 个变量
 3. 为 `<body>` 添加主题类名
+4. 若主题有风格层（themes.css 底部 `body.theme-*` 皮肤块，终端绿 / 朱印和纸 / 孟菲斯波普），追加到 `<style>` 末尾
 
 ### Step 6: 组装 HTML 结构
 

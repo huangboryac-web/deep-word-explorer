@@ -1,6 +1,6 @@
 # 主题注入规则 (Theme Injection)
 
-本文档定义如何将 5 套主题之一注入到 HTML 模板中。
+本文档定义如何将 8 套主题之一注入到 HTML 模板中。
 
 ---
 
@@ -30,6 +30,9 @@
 | 自然/地理/生态/生物 | 🌿 森林墨 | `theme-forest-ink` |
 | 文学/艺术/书籍/怀旧 | 🍂 牛皮纸 | `theme-kraft-paper` |
 | 设计/建筑/抽象概念 | 🌙 沙丘 | `theme-dune` |
+| 科技/编程/极客文化 | 🟢 终端绿 | `theme-phosphor-terminal` |
+| 东方文化/东方人物与机构 | 🧧 朱印和纸 | `theme-vermilion-washi` |
+| 艺术设计/热词/青年文化 | 🎨 孟菲斯波普 | `theme-memphis-pop` |
 
 ---
 
@@ -38,6 +41,9 @@
 1. 从 `shared/themes/themes.css` 中读取对应主题的 CSS 变量块
 2. 将 6 个变量值替换到模板的 `:root` 中
 3. 在 `<body>` 上添加对应主题类名（如 `class="theme-light theme-ink-classic"`）
+4. 若该主题在 themes.css 底部「主题风格层」有 `body.theme-*` 皮肤块
+   （目前为终端绿 / 朱印和纸 / 孟菲斯波普），将其追加到 `<style>` 末尾；
+   其余 5 套主题无风格层，仅做变量替换
 
 ---
 
@@ -91,4 +97,34 @@
 --paper-rgb: 240, 230, 210;
 --paper-tint: #e3d7bf;
 --ink-tint: #2d2620;
+```
+
+### 🟢 终端绿
+```css
+--ink: #0f2418;
+--ink-rgb: 15, 36, 24;
+--paper: #eef7ef;
+--paper-rgb: 238, 247, 239;
+--paper-tint: #d8ecd9;
+--ink-tint: #0a7a3d;
+```
+
+### 🧧 朱印和纸
+```css
+--ink: #2b2118;
+--ink-rgb: 43, 33, 24;
+--paper: #faf5ea;
+--paper-rgb: 250, 245, 234;
+--paper-tint: #f0e4cd;
+--ink-tint: #b23a2a;
+```
+
+### 🎨 孟菲斯波普
+```css
+--ink: #26232a;
+--ink-rgb: 38, 35, 42;
+--paper: #fff6ec;
+--paper-rgb: 255, 246, 236;
+--paper-tint: #ffe0c7;
+--ink-tint: #d6336c;
 ```
