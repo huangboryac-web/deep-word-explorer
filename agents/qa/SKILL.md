@@ -85,6 +85,24 @@ deep-word-explorer 流水线的最后一个 Agent。对生成的 HTML 进行三�
 - [ ] figcaption 含图源（attribution）与许可（license）
 - [ ] 所有本地图片文件存在且可加载
 
+#### 1.7 无障碍检查（混合 P1+P2）
+
+无障碍项并入后，完整清单共 **82 项（P0 17 / P1 37 / P2 28）**。
+
+**P1（自动修复）**：
+- [ ] P1-34：纯图标按钮有 `aria-label`（暗色切换 / PDF 导出 / TOC 折叠）
+- [ ] P1-35：figure 有 `aria-label` 或 figcaption，图片 `alt` 完整
+- [ ] P1-36：`<html lang>` 属性与 options.language 一致
+- [ ] P1-37：tooltip / 引用弹层键盘焦点可见（focus-visible 样式存在）
+
+**P2（建议）**：
+- [ ] P2-23：触控目标 ≥ 44px（移动端所有可点元素）
+- [ ] P2-24：`prefers-reduced-motion` 覆盖滚动渐入 / WebGL / tooltip 动效
+- [ ] P2-25：屏幕阅读器阅读顺序与视觉顺序一致（抽查主要区块）
+- [ ] P2-26：Tab 导航时焦点样式清晰可见
+- [ ] P2-27：对比页（多词模式）总览表与差异分析完整
+- [ ] P2-28：断点续跑后的产物与重跑产物一致（回放校验）
+
 ### Step 2: 视觉审查
 
 使用 capture_screenshot 工具截取页面：
@@ -161,15 +179,15 @@ deep-word-explorer 流水线的最后一个 Agent。对生成的 HTML 进行三�
     ]
   },
   "p1_checks": {
-    "total": 33,
-    "passed": 30,
+    "total": 37,
+    "passed": 34,
     "failed": 0,
-    "auto_fixed": 3,
+    "auto_fixed": 4,
     "details": [...]
   },
   "p2_checks": {
-    "total": 22,
-    "passed": 18,
+    "total": 28,
+    "passed": 24,
     "failed": 0,
     "warnings": 4,
     "details": [...]

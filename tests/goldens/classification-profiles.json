@@ -1,0 +1,1089 @@
+{
+  "description": "20 个测试词的完整分类 golden 快照（由 scripts/generate_goldens.py 确定性生成）",
+  "profiles": [
+    {
+      "word": "青藏高原",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "地理实体",
+        "subtype": "自然地理",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "缓慢演变"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata",
+          "openstreetmap",
+          "geonames"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "geography_journals",
+          "unesco"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "geography_journals",
+          "unesco"
+        ],
+        "timeline_importance": "高"
+      }
+    },
+    {
+      "word": "法国大革命",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "历史概念",
+        "subtype": "历史事件",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "永恒"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "jstor",
+          "project_muse"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en",
+          "fr"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "jstor",
+          "project_muse"
+        ],
+        "timeline_importance": "高"
+      }
+    },
+    {
+      "word": "存在主义",
+      "options": {
+        "speed": "standard",
+        "depth": "mid",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "学术术语",
+        "subtype": "哲学概念",
+        "difficulty": "进阶",
+        "controversy": "存在争议",
+        "timeliness": "永恒"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "sep",
+          "arxiv",
+          "jstor",
+          "cnki"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en",
+          "de"
+        ],
+        "depth_modifier": 1.2,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "sep",
+          "arxiv",
+          "jstor",
+          "cnki"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "百年孤独",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "文化符号",
+        "subtype": "书籍",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "永恒"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "jstor",
+          "project_muse"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "jstor",
+          "project_muse"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "Transformer",
+      "options": {
+        "speed": "standard",
+        "depth": "mid",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "科技名词",
+        "subtype": "算法/架构",
+        "difficulty": "进阶",
+        "controversy": "共识",
+        "timeliness": "缓慢演变"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata",
+          "mdn",
+          "devdocs"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "arxiv",
+          "acm",
+          "ieee"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "arxiv",
+          "acm",
+          "ieee"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "内卷",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "热词/流行语",
+        "subtype": "社会现象简称",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "快速迭代"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "google_scholar"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": true,
+        "query_languages": [
+          "zh"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "google_scholar"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "苏格拉底",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "人物",
+        "subtype": "历史人物",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "永恒"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata",
+          "biography_databases"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "google_scholar"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "google_scholar"
+        ],
+        "timeline_importance": "高"
+      }
+    },
+    {
+      "word": "联合国",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "组织/机构",
+        "subtype": "国际组织",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "缓慢演变"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "official_reports",
+          "un_documents"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "official_reports",
+          "un_documents"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "黑洞",
+      "options": {
+        "speed": "standard",
+        "depth": "mid",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "自然现象",
+        "subtype": "天文现象",
+        "difficulty": "进阶",
+        "controversy": "共识",
+        "timeliness": "缓慢演变"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "nature",
+          "science"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "nature",
+          "science"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "通货膨胀",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "经济概念",
+        "subtype": "宏观经济",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "永恒"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "ssrn",
+          "nber",
+          "repec"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "ssrn",
+          "nber",
+          "repec"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "城市化",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "社会现象",
+        "subtype": "人口/地理",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "缓慢演变"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "jstor",
+          "project_muse"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "jstor",
+          "project_muse"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "量子纠缠",
+      "options": {
+        "speed": "standard",
+        "depth": "pro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "学术术语",
+        "subtype": "物理学概念",
+        "difficulty": "专业",
+        "controversy": "共识",
+        "timeliness": "永恒"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "sep",
+          "arxiv",
+          "jstor",
+          "cnki"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.3,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "sep",
+          "arxiv",
+          "jstor",
+          "cnki"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "AGI",
+      "options": {
+        "speed": "standard",
+        "depth": "mid",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "科技名词",
+        "subtype": "人工智能概念",
+        "difficulty": "进阶",
+        "controversy": "共识",
+        "timeliness": "快速迭代"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata",
+          "mdn",
+          "devdocs"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "arxiv",
+          "acm",
+          "ieee"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": true,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "arxiv",
+          "acm",
+          "ieee"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "故宫",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "地理实体",
+        "subtype": "建筑/文化遗产",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "永恒"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata",
+          "openstreetmap",
+          "geonames"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "geography_journals",
+          "unesco"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "geography_journals",
+          "unesco"
+        ],
+        "timeline_importance": "高"
+      }
+    },
+    {
+      "word": "魏晋风度",
+      "options": {
+        "speed": "standard",
+        "depth": "mid",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "历史概念",
+        "subtype": "文化时期/社会风气",
+        "difficulty": "进阶",
+        "controversy": "共识",
+        "timeliness": "永恒"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "jstor",
+          "project_muse"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "jstor",
+          "project_muse"
+        ],
+        "timeline_importance": "高"
+      }
+    },
+    {
+      "word": "哥德尔不完备定理",
+      "options": {
+        "speed": "standard",
+        "depth": "pro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "学术术语",
+        "subtype": "数学/逻辑学",
+        "difficulty": "专业",
+        "controversy": "共识",
+        "timeliness": "永恒"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "sep",
+          "arxiv",
+          "jstor",
+          "cnki"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.3,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "sep",
+          "arxiv",
+          "jstor",
+          "cnki"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "比特币",
+      "options": {
+        "speed": "standard",
+        "depth": "mid",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "科技名词",
+        "subtype": "加密货币/金融科技",
+        "difficulty": "进阶",
+        "controversy": "存在争议",
+        "timeliness": "快速迭代"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata",
+          "mdn",
+          "devdocs"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "arxiv",
+          "acm",
+          "ieee"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": true,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.2,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "arxiv",
+          "acm",
+          "ieee"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "达尔文",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "人物",
+        "subtype": "科学家",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "永恒"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata",
+          "biography_databases"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "google_scholar"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "google_scholar"
+        ],
+        "timeline_importance": "高"
+      }
+    },
+    {
+      "word": "三体",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "文化符号",
+        "subtype": "书籍/科幻小说",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "永恒"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "jstor",
+          "project_muse"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh",
+          "en"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "jstor",
+          "project_muse"
+        ],
+        "timeline_importance": "中"
+      }
+    },
+    {
+      "word": "粤港澳大湾区",
+      "options": {
+        "speed": "standard",
+        "depth": "intro",
+        "scope": "point",
+        "format": "html",
+        "illustrations": true,
+        "tone": "popular",
+        "citation_density": "standard",
+        "language": "zh"
+      },
+      "classification": {
+        "ontology": "地理实体",
+        "subtype": "经济区域",
+        "difficulty": "入门",
+        "controversy": "共识",
+        "timeliness": "缓慢演变"
+      },
+      "search_profile": {
+        "layer_1_sources": [
+          "wikipedia",
+          "baidu_baike",
+          "wikidata",
+          "openstreetmap",
+          "geonames"
+        ],
+        "layer_2_sources": [
+          "google_scholar",
+          "geography_journals",
+          "unesco"
+        ],
+        "layer_3_sources": [
+          "zhihu",
+          "medium_substack",
+          "douban",
+          "goodreads",
+          "youtube",
+          "bilibili"
+        ],
+        "layer_4_enabled": false,
+        "layer_5_enabled": false,
+        "query_languages": [
+          "zh"
+        ],
+        "depth_modifier": 1.0,
+        "preferred_academic_databases": [
+          "google_scholar",
+          "geography_journals",
+          "unesco"
+        ],
+        "timeline_importance": "高"
+      }
+    }
+  ]
+}

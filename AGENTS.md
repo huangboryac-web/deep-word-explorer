@@ -1,7 +1,8 @@
 # AGENTS.md
 
 本仓库是一个可安装的 skill 包（`deep-word-explorer` / 兴趣词汇解析）：根目录
-`SKILL.md` 是主编排器，负责按 Step 0–6（含 Step 4.5）调度 `agents/` 下的 7 个子 Agent。
+`SKILL.md` 是主编排器，负责按 Step 0–6.5（含 Step 4.5）调度 `agents/` 下的 8 个子 Agent
+（分类器 / 研究员 / 架构师 / 撰写师 / 配图师 / 构建师 / 质检 / 对比师）。
 
 ## 仓库约定（改动前必读）
 
@@ -21,6 +22,9 @@
    确保 Markdown 链接与目录树引用不失效。
 7. **示例如实标注**：`examples/<词>/index.html` 是真实产出，README 中的字数必须按
    正文可见汉字数如实填写，不用「约 X,000+」夸大。
+8. **批量与断点**：`words` 支持 2–8 个词，并发上限在 `shared/config/quality-gates.json`
+   的 `batch` 段；每词每阶段产物写入 `{output_dir}/{word}/checkpoints/`，
+   `manifest.json` 是续跑唯一依据；options 变更必须换新目录或显式覆盖。
 
 ## 常用命令
 

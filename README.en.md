@@ -33,11 +33,11 @@
 - [Author & License](#author--license)
 - [Changelog](./CHANGELOG.md)
 
-A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs the pipeline as **Step 0–6 (incl. Step 4.5)**, producing a **progressively-structured, fully-cited, illustrated with data charts, visually polished deep-explainer as a single-file HTML page**. The word-count floor is set by the `speed` / `depth` / `scope` tier combination.
+A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs the pipeline as **Step 0–6.5 (incl. Step 4.5)**, producing **progressively-structured, fully-cited, illustrated with data charts, visually polished deep-explainer pages as single-file HTML**; multi-word batches also generate a comparison page. The word-count floor is set by the `speed` / `depth` / `scope` tier combination.
 
 Core capabilities:
 
-- **Multi-Agent pipeline (7 roles)**: Classifier → Researcher → Architect → Writer → **Illustrator** → Builder → QA. Agents hand off via JSON Schema; each stage has its own quality gate.
+- **Multi-Agent pipeline (8 roles)**: Classifier → Researcher → Architect → Writer → **Illustrator** → Builder → QA → **Comparator**. Agents hand off via JSON Schema; each stage has its own quality gate.
 - **Five-layer funnel search**: encyclopedia skeleton → academic papers → expert interpretation → related concepts → timeliness, deepening layer by layer, with explicit degradation when data is thin.
 - **Six-stage learning chain**: First Impression → Spatiotemporal Context → Anatomy → Mechanism → Ecosystem → Critique, connected by transition questions that enforce "shallow-to-deep".
 - **Text-illustration flow (dual-track)**: data-dense passages get template-driven charts from [lieflat-chart](https://redskill.xiaohongshu.net) (one figure, one conclusion); strong visual entities go the network track (license-safe, localized images with source/attribution); abstract concepts go self-generated (SVG motifs / AI illustrations). One global color system per delivery, aligned with the article theme.
@@ -53,7 +53,7 @@ Send this to an AI Agent with shell access (WorkBuddy shown):
 Give me a deep explainer on "New Jersey", default theme, standard tiers.
 ```
 
-The Agent auto-loads this skill, runs all stages (Step 0–6, incl. Step 4.5), and delivers an `index.html`. You can also specify parameters:
+The Agent auto-loads this skill, runs all stages (Step 0–6.5, incl. Step 4.5), and delivers `index.html` page(s), plus a comparison page for multi-word batches. You can also specify parameters:
 
 ```text
 Use deep-word-explorer to explain "Existentialism", theme kraft-paper, speed=deep, depth=pro, scope=panorama.
@@ -99,6 +99,7 @@ Typical triggers:
 |------|-------------|
 | Understand an unfamiliar place/country | default combo, theme auto (geography → Forest Ink) |
 | Tackle a hard academic concept | `speed=deep, depth=pro, scope=panorama`, full search |
+| Compare two concepts/places | `words=[A, B]`, generates a comparison page (overview + key differences) |
 | Decode a buzzword | classifier auto-tags "buzzword", enables timeliness Layer 5 |
 | Make a reader's guide for a book/film | ontology "cultural symbol", theme "Kraft Paper" |
 | Generate a shareable study page | open HTML in browser → Print → Save as PDF |
@@ -110,7 +111,7 @@ Typical triggers:
 - **More stable than one-shot**: a single long generation tends to be rich early and watered-down late; six stages + per-stage gates lock in "depth".
 - **Higher expressiveness than Markdown**: HTML/CSS enables precise typography, spatial layout, progressive disclosure, dark mode, interactive components.
 - **Lighter delivery**: single-file HTML opens, presents, sends, screenshots directly; reading tools ship with the file.
-- **Easier quality control**: QA runs a 72-item checklist (P0/P1/P2) catching structure, citations, AI traces, charts & figures, dark mode, mobile issues.
+- **Easier quality control**: QA runs an 82-item checklist (P0 17 / P1 37 / P2 28) catching structure, citations, AI traces, charts & figures, accessibility, dark mode, mobile issues.
 
 ## Platform support
 
@@ -162,13 +163,13 @@ After install, the Agent auto-discovers and invokes it. Trigger keywords (zh/en)
 
 ## Input parameters
 
-Three tier axes plus a config panel: `speed` (fast/standard/deep), `depth` (intro/mid/pro), `scope` (point/related/panorama), plus `format` (html/markdown/pdf), `illustrations`, `tone` (popular/academic/editorial), `citation_density`, `theme`, `language`, and `custom`.
+Three tier axes plus a config panel: `speed` (fast/standard/deep), `depth` (intro/mid/pro), `scope` (point/related/panorama), plus `words` (2–8 words batch), `compare` (comparison page toggle), `format` (html/markdown/pdf), `illustrations`, `tone` (popular/academic/editorial), `citation_density`, `theme`, `language`, and `custom`.
 
 Full parameter table and defaults live in [`SKILL.md`](./SKILL.md) (Step 0). Default combo: standard × mid × point, html, illustrations on, popular tone, standard citation density, Chinese.
 
 ## Workflow
 
-The Skill is a structured workflow the Agent guides step by step: param alignment → classify → research → architect → write → illustrate → build → QA → deliver (Step 0–6, incl. Step 4.5). Stages hand off via JSON with independent quality gates.
+The Skill is a structured workflow the Agent guides step by step: param alignment → classify → research → architect → write → illustrate → build → QA → compare (multi-word) → deliver (Step 0–6.5, incl. Step 4.5). Stages hand off via JSON with independent quality gates; every stage artifact is checkpointed for resume.
 
 Full detail in [`SKILL.md`](./SKILL.md); per-Agent instructions in `agents/<role>/SKILL.md`; all thresholds live in `shared/config/quality-gates.json`.
 
@@ -201,7 +202,7 @@ When any layer is thin, degrade per `shared/prompts/fallback-strategies.md` and 
 
 ## Directory structure
 
-See [`SKILL.md`](./SKILL.md) ("Related resources") for the full tree. Key directories: `agents/` (7 roles), `shared/` (thresholds + JSON Schemas + themes + prompts), `scripts/validate.py` (consistency validation, runs in CI), `examples/` (real samples), `tests/` (test cases & fixtures).
+See [`SKILL.md`](./SKILL.md) ("Related resources") for the full tree. Key directories: `agents/` (8 roles, incl. comparator), `shared/` (thresholds + JSON Schemas + themes + prompts), `scripts/` (validation + golden generation), `examples/` (real samples), `tests/` (test cases, fixtures & goldens).
 
 ## Theme palettes
 
@@ -264,6 +265,12 @@ Any thin layer is handled by the fallback strategy and **explicitly labeled** (e
 
 **How to choose tiers?**
 `speed=fast, depth=intro, scope=point` for a quick look; the default combo for systematic learning; `speed=deep, depth=pro, scope=panorama` for study material, hard concepts, or a full landscape. The three axes combine freely.
+
+**Can I parse multiple words at once?**
+Yes. `words` accepts 2–8 words (parallel, up to 3 concurrent), each producing its own page, plus an `index.html` comparison page (overview table / side-by-side timelines / cross-references / key differences).
+
+**What if the run is interrupted?**
+Every stage artifact is written to `checkpoints/`, and `manifest.json` tracks progress. Re-running the same output directory and choosing "resume" skips completed stages. Changing tiers requires a new directory or explicit overwrite.
 
 **Does it support English output?**
 Yes. The `language` parameter controls output language, default `zh`; template and copy are localized.

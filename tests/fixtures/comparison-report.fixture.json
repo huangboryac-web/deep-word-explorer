@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "words": ["新泽西", "存在主义"],
+    "options": {
+      "speed": "standard",
+      "depth": "mid",
+      "scope": "related",
+      "format": "html",
+      "illustrations": true,
+      "tone": "academic",
+      "citation_density": "standard",
+      "language": "zh"
+    },
+    "generated_at": "2026-08-08T01:10:00Z"
+  },
+  "overview": [
+    {
+      "word": "新泽西",
+      "ontology": "地理实体",
+      "difficulty": "入门",
+      "controversy": "共识",
+      "timeliness": "缓慢演变",
+      "definition": "美国东北部大西洋沿岸的一个州。",
+      "timeline_span": "17 世纪至今",
+      "related_concepts": ["纽约都会区", "费城都会区"],
+      "word_count": 12000,
+      "citation_count": 31
+    },
+    {
+      "word": "存在主义",
+      "ontology": "学术术语",
+      "difficulty": "进阶",
+      "controversy": "存在争议",
+      "timeliness": "永恒",
+      "definition": "个体先存在、后定义自身的哲学立场。",
+      "timeline_span": "19 世纪至今",
+      "related_concepts": ["现象学", "结构主义"],
+      "word_count": 12000,
+      "citation_count": 16
+    }
+  ],
+  "insights": {
+    "commonalities": [
+      "两者都强调「语境」对理解的重要性：一个是地理语境，一个是思想语境。",
+      "都要求由浅入深：先建立直觉，再进入机制与批判。"
+    ],
+    "differences": [
+      "新泽西是共识型、缓慢演变的地理实体；存在主义是存在争议、永恒的学术概念。",
+      "新泽西的时间线以殖民与城市化为主；存在主义以哲学文本与思想运动为主。"
+    ]
+  },
+  "cross_references": {
+    "shared_sources": [],
+    "note": "两词研究来源无重叠，交叉引用为空。"
+  },
+  "timeline_data": [
+    {
+      "word": "新泽西",
+      "events": [
+        { "date": "1664", "event": "英属新泽西省建立" },
+        { "date": "1787", "event": "批准美国宪法" }
+      ]
+    },
+    {
+      "word": "存在主义",
+      "events": [
+        { "date": "1844", "event": "《非此即彼》出版" },
+        { "date": "1943", "event": "《存在与虚无》出版" }
+      ]
+    }
+  ],
+  "recommendations": [
+    "对比阅读时，可先读新泽西的时空坐标阶，再读存在主义的批判视角阶。",
+    "若想延伸，可分别补充城市史与哲学史两条阅读路径。"
+  ]
+}

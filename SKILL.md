@@ -11,7 +11,7 @@ license: AGPL-3.0
 
 ## 技能定位
 
-一个多 Agent 协作的知识生产流水线。输入任意一个词（地点、名词、热词、书籍、国家、历史概念等），按 Step 0–6（含 Step 4.5）顺序处理，产出一篇由浅入深、有完整引用来源的、带数据图表与配图、视觉精美的深度解析网页。字数下限由 `speed` / `depth` / `scope` 档位组合决定，见 `shared/config/quality-gates.json`。
+一个多 Agent 协作的知识生产流水线。输入一个词或 2–8 个词（地点、名词、热词、书籍、国家、历史概念等），按 Step 0–6.5（含 Step 4.5）处理，产出一篇篇由浅入深、有完整引用来源、带数据图表与配图的深度解析网页；多词模式额外生成对比页。字数下限由 `speed` / `depth` / `scope` 档位组合决定，见 `shared/config/quality-gates.json`。
 
 ## 触发条件
 
@@ -24,7 +24,9 @@ license: AGPL-3.0
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `word` | string | ✅ | 待解析的词汇 |
+| `word` | string | ✅* | 待解析的词汇（与 `words` 二选一） |
+| `words` | array | ✅* | 待解析词汇列表，2–8 个（去重；与 `word` 二选一，多词默认生成对比页） |
+| `compare` | boolean | ❌ | 多词时是否生成对比页，默认 true（单词时忽略） |
 | `speed` | enum | ❌ | fast / standard / deep：搜索强度与打磨轮次（默认 standard） |
 | `depth` | enum | ❌ | intro / mid / pro：认知门槛与字数乘子（默认 mid） |
 | `scope` | enum | ❌ | point / related / panorama：内容广度（默认 point） |
@@ -38,7 +40,7 @@ license: AGPL-3.0
 
 ---
 
-## 工作流（Step 0–6，含 Step 4.5，顺序执行）
+## 工作流（Step 0–6.5，含 Step 4.5；批量并行）
 
 ### Step 0: 参数确认与需求对齐
 
@@ -68,11 +70,16 @@ license: AGPL-3.0
 | 全景 / 知识地图 / 学科坐标 | scope=panorama |
 
 **输出位置**（可选，默认当前项目目录）：
-- 如不指定，输出到当前项目的 `.workbuddy/deep-explorer/{word}/index.html`（format=markdown 时为同名 `.md`）
+- 单词：`.workbuddy/deep-explorer/{word}/index.html`（format=markdown 时为同名 `.md`）
+- 批量：每个词独立目录 `{output_dir}/{word}/`；compare=true 时对比页输出到 `{output_dir}/index.html`
 
 **输出**：确认的参数集 `{word, speed, depth, scope, format, illustrations, tone, citation_density, theme, language, custom, output_path}`
 
 > 档位语义、字数公式与引用密度统一见 `shared/config/quality-gates.json`。
+
+**批量与续跑确认**：
+- 批量：`words` 去重后 2–8 个（全重复报错）；默认并行，并发上限 3（`batch.max_parallel`），宿主环境不支持多 Agent 派发时自动回退顺序执行
+- 续跑：`output_dir` 已存在 `manifest.json` 时询问「续跑 / 重跑 / 新目录」；options 与 manifest 不一致时必须新目录或显式覆盖；续跑跳过 done 阶段、重跑 failed/pending（每阶段最多 2 次尝试，仍失败则停止并报告）
 
 ---
 
@@ -218,6 +225,28 @@ license: AGPL-3.0
 
 ---
 
+### Step 6.5: 多词对比（批量模式）
+
+**调度**：对比师 Agent（`agents/comparator/SKILL.md`）
+
+**触发**：`words` ≥ 2 且 `compare=true`
+
+**输入**：全部词的 classification_profile / research_bundle / learning_chain / article_content（可选 illustration_plan）+ options + manifest
+**输出**：`comparison_report` JSON
+
+**关键动作**：
+1. 汇总每词总览（定义 / 本体 / 难度 / 争议 / 时效 / 时间线跨度 / 关联概念 / 字数 / 引用数）
+2. 提炼共同点与关键差异（只引用既有产物，不发起新研究）
+3. 找出跨词共享来源
+4. 组装并排时间线（事件全部来自各词 research_bundle）
+5. 给出对比阅读建议
+
+**阶段输出**：向用户展示对比摘要（共同点 / 关键差异 / 共享来源数）
+
+> 对比页 HTML 由构建师按 `comparison_report` 渲染到 `{output_dir}/index.html`。
+
+---
+
 ## 最终交付
 
 交付物通过 `present_files` 工具呈现给用户：
@@ -235,6 +264,8 @@ license: AGPL-3.0
 - `markdown`：独立 `.md` 轻量文本（保留 [N] 与术语标注）
 - `pdf`：HTML + 打印样式，浏览器「打印 → 另存为 PDF」
 
+**批量模式额外交付**：`{output_dir}/index.html` 对比页（总览表 / 并排时间线 / 交叉引用 / 关键差异），每个词可跳转到自己的子页。
+
 ---
 
 ## 异常处理
@@ -245,6 +276,14 @@ license: AGPL-3.0
 | 百科无条目（罕见概念） | 从碎片化来源拼接，标注"该概念在主流百科中暂无条目" |
 | 学术搜索无结果 | 降级为 Layer 2b（官方/机构来源），标注"学术研究有限" |
 | 专家解读不足 | 降级为 Layer 3b（扩大搜索范围），标注"可获取的通俗解读较少" |
+
+### 批量/断点阶段异常
+| 异常 | 处理 |
+|------|------|
+| words 全部重复或超过 8 个 | Step 0 报错并请用户修正 |
+| manifest options 与当前不一致 | 要求新输出目录或显式覆盖 |
+| 某词某阶段连续失败 2 次 | 停止该词并标记 failed，其他词继续；汇总报告 |
+| 宿主环境无多 Agent 派发能力 | 自动回退顺序执行，产物与 manifest 结构不变 |
 
 ### 内容阶段异常
 | 异常 | 处理 |
@@ -279,16 +318,18 @@ deep-word-explorer/
 │   ├── builder/SKILL.md                  ← 构建师
 │   │   ├── assets/template-article.html  ← 长文HTML模板
 │   │   └── references/                   ← 改造指南 + 组件库 + 主题注入 + 配图嵌入
-│   └── qa/SKILL.md                       ← 质量审查
-│       └── references/                   ← P0/P1/P2 检查清单（含配图专项）
+│   ├── qa/SKILL.md                       ← 质量审查
+│   │   └── references/                   ← P0/P1/P2 检查清单（含配图与无障碍专项）
+│   └── comparator/SKILL.md               ← 对比师（Step 6.5 批量对比）
 ├── shared/
 │   ├── config/quality-gates.json         ← 唯一阈值事实源（三轴档位/字数公式/引用/AI 痕迹）
-│   ├── schemas/                          ← 5个JSON Schema（含 illustration-plan）
+│   ├── schemas/                          ← 7个JSON Schema（含 manifest / comparison-report）
 │   ├── themes/themes.css                 ← 5套主题
 │   └── prompts/                          ← 系统提示词 + 降级策略
 ├── scripts/validate.py                   ← 一致性校验脚本（CI 运行）
+├── scripts/generate_goldens.py           ← 分类 golden 生成器
 ├── examples/                             ← 示例输出（真实样例：新泽西/）
-└── tests/                                ← 测试用例（test-words.json + fixtures/）
+└── tests/                                ← 测试用例（test-words.json + fixtures/ + goldens/）
 ```
 
 ## 设计原则
@@ -301,6 +342,7 @@ deep-word-explorer/
 6. **配图双轨制**：数据图表走 lieflat-chart 模板化生成（一张图一个结论），概念图优先 SVG、网络图只采用许可安全且本地化的来源；整份交付锁定唯一色系
 7. **引用与署名完整**：文字引用、图片来源与许可、图表数据契约，三者缺一不可
 8. **档位可组合**：快慢/深浅/点面三轴正交（3×3×3），默认值开箱即用，高级需求经 custom 扩展
+9. **可续跑可对比**：批量词并行隔离，阶段产物落盘可断点续跑；对比页只综合既有产物，不引入新研究
 
 ---
 

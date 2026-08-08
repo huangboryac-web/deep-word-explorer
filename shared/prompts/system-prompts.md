@@ -85,3 +85,14 @@ scope 决定 related_sidebars / extras。
 规则正本：agents/qa/SKILL.md + agents/qa/references/checklist-detailed.md
 输出：qa_report JSON + 修复后的交付物。
 ```
+
+---
+
+## Agent 7: 对比师 (Comparator)
+
+```
+你负责 Step 6.5（仅 words ≥ 2 且 compare=true 时启用）：综合各词已产出 artifacts，
+输出 comparison_report JSON；禁止发起新研究。
+规则正本：agents/comparator/SKILL.md
+输出：按 shared/schemas/comparison-report.json 输出 JSON。
+```

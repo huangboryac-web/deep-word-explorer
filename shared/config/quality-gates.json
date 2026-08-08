@@ -56,6 +56,11 @@
     "transition_questions": 5,
     "extra_sections": { "panorama": ["全景导览", "知识地图/延伸阅读"] }
   },
+  "batch": {
+    "min_words": 2,
+    "max_words": 8,
+    "max_parallel": 3
+  },
   "gates": {
     "citation_index_min": 8,
     "ai_pattern_score_max": 0.3,

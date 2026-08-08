@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "对比报告 (Comparison Report)",
+  "description": "对比师（Step 6.5）的输出：对 2-8 个词的产物做综合与对比，只引用既有产物，不发起新研究。",
+  "type": "object",
+  "required": ["meta", "overview", "insights", "cross_references", "timeline_data", "recommendations"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["words", "options", "generated_at"],
+      "properties": {
+        "words": { "type": "array", "minItems": 2, "maxItems": 8, "items": { "type": "string" } },
+        "options": { "$ref": "#/definitions/options" },
+        "generated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "overview": {
+      "type": "array",
+      "minItems": 2,
+      "description": "每词一行的对比总览",
+      "items": {
+        "type": "object",
+        "required": ["word", "ontology", "difficulty", "controversy", "timeliness", "definition", "word_count", "citation_count"],
+        "properties": {
+          "word": { "type": "string" },
+          "ontology": { "type": "string" },
+          "difficulty": { "type": "string", "enum": ["入门", "进阶", "专业"] },
+          "controversy": { "type": "string", "enum": ["共识", "存在争议", "高度争议"] },
+          "timeliness": { "type": "string", "enum": ["永恒", "缓慢演变", "快速迭代"] },
+          "definition": { "type": "string" },
+          "timeline_span": { "type": "string" },
+          "related_concepts": { "type": "array", "items": { "type": "string" } },
+          "word_count": { "type": "integer" },
+          "citation_count": { "type": "integer" }
+        }
+      }
+    },
+    "insights": {
+      "type": "object",
+      "required": ["commonalities", "differences"],
+      "properties": {
+        "commonalities": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "differences": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      }
+    },
+    "cross_references": {
+      "type": "object",
+      "properties": {
+        "shared_sources": { "type": "array", "items": { "type": "string" } },
+        "note": { "type": "string" }
+      }
+    },
+    "timeline_data": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["word", "events"],
+        "properties": {
+          "word": { "type": "string" },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": { "type": "string" },
+                "event": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "recommendations": { "type": "array", "minItems": 1, "items": { "type": "string" } }
+  },
+  "definitions": {
+    "options": {
+      "type": "object",
+      "required": ["speed", "depth", "scope", "format", "illustrations", "tone", "citation_density", "language"],
+      "properties": {
+        "speed": { "type": "string", "enum": ["fast", "standard", "deep"] },
+        "depth": { "type": "string", "enum": ["intro", "mid", "pro"] },
+        "scope": { "type": "string", "enum": ["point", "related", "panorama"] },
+        "format": { "type": "string", "enum": ["html", "markdown", "pdf"] },
+        "illustrations": { "type": "boolean" },
+        "tone": { "type": "string", "enum": ["popular", "academic", "editorial"] },
+        "citation_density": { "type": "string", "enum": ["low", "standard", "high"] },
+        "language": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] },
+        "custom": { "type": "array", "items": { "type": "string" } }
+      },
+      "description": "Step 0 确认的统一配置面板快照，见 shared/config/quality-gates.json"
+    }
+  }
+}

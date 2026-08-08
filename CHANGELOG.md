@@ -11,6 +11,9 @@
 - **Schema 按档位约束**：`article-content.json` 与 `learning-chain.json` 的 `meta.options` 承载面板；citation 下限按 citation_density；scope=related/panorama 要求 related_sidebars，scope=panorama 要求 extras（全景导览 + 延伸阅读）。
 - **测试与 CI**：新增 `scripts/validate.py` 与 `.github/workflows/ci.yml`（JSON / Schema / fixture / 文档链接 / 阈值防漂移 / 档位矩阵校验）；`tests/fixtures/` 迁移为三档组合实例（fast+intro+point / standard+mid+related / deep+pro+panorama）；`tests/expected-outputs/` 补 README 明确用途。
 - **AGENTS.md**：新增仓库协作约定（规则正本、阈值事实源、档位模型、schema 同步、校验前置）。
+- **批量对比 + 断点续跑**：新增 `words`（2–8 个词，并行上限 3，无多 Agent 派发时回退顺序）与 `compare` 参数；新增第 8 个角色「对比师」（Step 6.5，`agents/comparator/SKILL.md`），只综合既有产物输出 `comparison_report`，对比页由构建师渲染；每词每阶段产物落盘 `checkpoints/`，`manifest.json` 支持续跑 / 重跑 / 新目录，options 变更必须换目录或覆盖；新增 `shared/schemas/manifest.json` 与 `shared/schemas/comparison-report.json`。
+- **Golden 测试与示例核对**：新增 `tests/goldens/classification-profiles.json`（20 词完整 golden，由 `scripts/generate_goldens.py` 确定性生成）；validate.py 增加 golden 一致性、规则断言与示例字数自动核对。
+- **QA 无障碍增强**：检查清单由 72 项增至 82 项（P0 17 / P1 37 / P2 28）；P1 新增 aria-label、figure 标注、lang 属性、focus-visible 自动修复，P2 新增触控目标、reduced-motion、屏幕阅读器顺序、焦点样式、对比页与断点回放检查。
 - **示例字数如实标注**：`examples/新泽西/README.md` 与双语 README 改为实测口径（9,089 个汉字，含标点 / 字母 / 数字约 12,124 字符）。
 - **文档收敛**：`SKILL.md` 资源树与实际结构同步（scripts / config / AGENTS.md / fixtures）；统一「Step 0–6（含 Step 4.5）」表述；修正 `agent/builder/` 路径笔误与 illustration-guide 章节引用（§4 → §5）。
 

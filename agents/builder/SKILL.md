@@ -19,6 +19,7 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 - `theme` (string)：主题名称（ink-classic / indigo-porcelain / forest-ink / kraft-paper / dune）
 - `output_path` (string)：输出文件的完整路径
 - `options` (object)：统一配置面板；`format` 决定交付形态
+- `comparison_report` (JSON，可选)：来自对比师 Agent（Step 6.5），`compare=true` 时提供
 
 ## 输出
 - `index.html`：单文件完整网页
@@ -35,6 +36,9 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
   scope=panorama 时追加 `extras` 章节
 - `format=pdf`：按 html 流程构建，并追加 `@media print` 打印样式
   （A4 分页、隐藏交互组件、图表浅底），交付时指引用户「打印 → 另存为 PDF」
+- `compare=true`（且 words ≥ 2）：每个词照常渲染到 `{output_dir}/{word}/index.html`，
+  再按 `comparison_report` 额外渲染 `{output_dir}/index.html` 对比页
+  （总览表 + 并排时间线 + 交叉引用 + 关键差异），链接各词子页
 
 ### Step 1: 准备模板
 
@@ -157,6 +161,12 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 6. 暗色模式切换
 7. 导出 PDF
 
+**无障碍属性（所有组件通用）**：
+- `<html lang>` 与 `options.language` 一致
+- 纯图标按钮（暗色切换 / PDF 导出 / TOC 折叠）必须有 `aria-label`
+- 每个 figure 有 `aria-label` 或 figcaption，图片有 `alt`
+- tooltip / 引用弹层支持键盘聚焦，并提供 `focus-visible` 可见焦点样式
+
 ### Step 10: 添加滚动动效
 
 使用 Motion One 库为内容区块添加滚动渐入动画：
@@ -204,6 +214,8 @@ document.querySelectorAll('.chain-section').forEach(el => {
 - [ ] format=markdown：输出为独立 .md，标注与章节完整，无 HTML 组件残留
 - [ ] format=pdf：打印样式生效，交互组件隐藏，页面可正常分页
 - [ ] scope=related/panorama：每阶 related_sidebar 已渲染；scope=panorama：extras 已渲染
+- [ ] compare=true：对比页已渲染（总览表 / 时间线 / 交叉引用 / 差异），各词子页可跳转
+- [ ] 无障碍：lang 属性、图标按钮 aria-label、figure 标注、focus-visible 样式齐全
 
 ---
 

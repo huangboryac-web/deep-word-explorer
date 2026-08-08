@@ -17,6 +17,7 @@ JSON Schema 元校验 + 实例校验（CI 中会安装）。
 from __future__ import annotations
 
 import json
+import html as html_module
 import re
 import sys
 from pathlib import Path
@@ -94,6 +95,13 @@ check(
 check(
     cfg["structure"]["stages"] == 6 and cfg["structure"]["transition_questions"] == 5,
     "quality-gates.json: 固定结构 6 阶 / 5 个过渡问题",
+)
+batch_cfg = cfg.get("batch", {})
+check(
+    batch_cfg.get("min_words") == 2
+    and batch_cfg.get("max_words") == 8
+    and batch_cfg.get("max_parallel") == 3,
+    "quality-gates.json: 批量 2-8 词、默认并发 3",
 )
 
 
@@ -217,6 +225,50 @@ check(
     f"test-words.json: 覆盖全部 {len(non_other)} 种非「其他」本体类型",
 )
 
+# 5.5 Golden profiles（与 test-words 一致 + 分类器规则断言）
+golden = load_json("tests/goldens/classification-profiles.json")
+golden_map = {p.get("word"): p for p in golden.get("profiles", [])}
+tw_map = {e["word"]: e for e in tw.get("test_words", [])}
+check(set(golden_map) == set(tw_map), "golden: 覆盖全部测试词且无多余词")
+label_to_depth = {"入门": "intro", "进阶": "mid", "专业": "pro"}
+for word, exp in tw_map.items():
+    g = golden_map[word]
+    cls = g.get("classification", {})
+    check(cls.get("ontology") == exp.get("expected_ontology"), f"golden[{word}]: ontology 与 test-words 一致")
+    check(cls.get("subtype") == exp.get("expected_subtype"), f"golden[{word}]: subtype 与 test-words 一致")
+    check(cls.get("difficulty") == exp.get("expected_difficulty"), f"golden[{word}]: difficulty 与 test-words 一致")
+    check(cls.get("timeliness") == exp.get("expected_timeliness"), f"golden[{word}]: timeliness 与 test-words 一致")
+    if "expected_controversy" in exp:
+        check(cls.get("controversy") == exp["expected_controversy"], f"golden[{word}]: controversy 与 test-words 一致")
+    opts = g.get("options", {})
+    sp = g.get("search_profile", {})
+    check(opts.get("depth") == label_to_depth.get(cls.get("difficulty")), f"golden[{word}]: options.depth 与 difficulty 一致")
+    check(sp.get("layer_4_enabled") == (opts.get("scope") == "panorama"), f"golden[{word}]: layer_4_enabled 与 scope 一致")
+    expect_l5 = cls.get("ontology") == "热词/流行语" or cls.get("timeliness") == "快速迭代"
+    check(sp.get("layer_5_enabled") == expect_l5, f"golden[{word}]: layer_5_enabled 与规则一致")
+    check("zh" in sp.get("query_languages", []), f"golden[{word}]: query_languages 含 zh")
+    if Draft7Validator is not None:
+        inst_errors = list(Draft7Validator(class_schema).iter_errors(g))
+        check(not inst_errors, f"golden[{word}]: 通过 classification-profile schema")
+
+# 5.6 示例字数自动核对（README 标注 = 实际可见汉字数）
+for idx in sorted((ROOT / "examples").glob("*/index.html")):
+    readme = idx.parent / "README.md"
+    if not readme.exists():
+        continue
+    raw = idx.read_text(encoding="utf-8")
+    text = re.sub(r"<script\b.*?</script>", " ", raw, flags=re.S | re.I)
+    text = re.sub(r"<style\b.*?</style>", " ", text, flags=re.S | re.I)
+    text = re.sub(r"<[^>]+>", " ", text)
+    text = html_module.unescape(text)
+    hanzi = len(re.findall(r"[\u4e00-\u9fff\u3400-\u4dbf]", text))
+    doc = readme.read_text(encoding="utf-8")
+    m = re.search(r"\|\s*字数\s*\|\s*([\d,]+)\s*个汉字", doc)
+    check(
+        m is not None and int(m.group(1).replace(",", "")) == hanzi,
+        f"{readme.relative_to(ROOT)}: 字数标注与实际汉字数一致（{hanzi}）",
+    )
+
 # 6. Markdown 相对链接与仓库内路径引用
 PREFIX_WHITELIST = (
     "agents/",
@@ -271,6 +323,14 @@ THRESHOLD_ASSERTIONS = [
     ("agents/writer/SKILL.md", "citation_density"),
     ("agents/qa/SKILL.md", "illustrations"),
     ("SKILL.md", "speed"),
+    ("README.md", "82 项"),
+    ("README.en.md", "82-item"),
+    ("README.md", "8 个角色"),
+    ("README.en.md", "8 roles"),
+    ("agents/qa/SKILL.md", "82 项"),
+    ("agents/qa/references/checklist-detailed.md", "82 项"),
+    ("SKILL.md", "Step 6.5"),
+    ("AGENTS.md", "8 个子 Agent"),
 ]
 for rel, phrase in THRESHOLD_ASSERTIONS:
     text = (ROOT / rel).read_text(encoding="utf-8")

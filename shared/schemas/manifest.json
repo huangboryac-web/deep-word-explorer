@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "运行清单 (Run Manifest)",
+  "description": "批量 / 断点续跑的全局状态清单：options 快照、词列表、每词每阶段状态与产物路径。",
+  "type": "object",
+  "required": ["version", "options", "words", "output_dir", "created_at", "updated_at", "stages"],
+  "properties": {
+    "version": { "type": "string", "enum": ["1.0"] },
+    "options": { "$ref": "#/definitions/options" },
+    "words": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "output_dir": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "stages": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/stage_state" }
+    }
+  },
+  "definitions": {
+    "options": {
+      "type": "object",
+      "required": ["speed", "depth", "scope", "format", "illustrations", "tone", "citation_density", "language"],
+      "properties": {
+        "speed": { "type": "string", "enum": ["fast", "standard", "deep"] },
+        "depth": { "type": "string", "enum": ["intro", "mid", "pro"] },
+        "scope": { "type": "string", "enum": ["point", "related", "panorama"] },
+        "format": { "type": "string", "enum": ["html", "markdown", "pdf"] },
+        "illustrations": { "type": "boolean" },
+        "tone": { "type": "string", "enum": ["popular", "academic", "editorial"] },
+        "citation_density": { "type": "string", "enum": ["low", "standard", "high"] },
+        "language": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] },
+        "custom": { "type": "array", "items": { "type": "string" } }
+      },
+      "description": "Step 0 确认的统一配置面板快照，见 shared/config/quality-gates.json"
+    },
+    "stage_state": {
+      "type": "object",
+      "required": ["word", "stage", "status", "attempts", "updated_at"],
+      "properties": {
+        "word": { "type": "string" },
+        "stage": {
+          "type": "string",
+          "enum": ["classifier", "researcher", "architect", "writer", "illustrator", "builder", "qa", "comparator"]
+        },
+        "status": { "type": "string", "enum": ["pending", "running", "done", "failed"] },
+        "artifact_path": { "type": "string" },
+        "schema": { "type": "string" },
+        "attempts": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "error": { "type": "string" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}
