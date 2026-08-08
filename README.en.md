@@ -43,7 +43,7 @@ Core capabilities:
 - **Five-layer funnel search**: encyclopedia skeleton → academic papers → expert interpretation → related concepts → timeliness, deepening layer by layer, with explicit degradation when data is thin.
 - **Six-stage learning chain**: First Impression → Spatiotemporal Context → Anatomy → Mechanism → Ecosystem → Critique, connected by transition questions that enforce "shallow-to-deep".
 - **Text-illustration flow (dual-track)**: data-dense passages get template-driven charts from [lieflat-chart](https://redskill.xiaohongshu.net) (one figure, one conclusion); strong visual entities go the network track (license-safe, localized images with source/attribution); abstract concepts go self-generated (SVG motifs / AI illustrations). One global color system per delivery, aligned with the article theme.
-- **Single-file HTML delivery**: "Editorial × Electronic Ink" aesthetic, 5 theme palettes, 7 interactive components (reading progress bar / TOC sidebar / learning-chain indicator / term tooltip / citation popup / dark mode / PDF export), open directly in a browser.
+- **Single-file HTML delivery**: "Editorial × Electronic Ink" aesthetic, 8 theme palettes, 7 interactive components (reading progress bar / TOC sidebar / learning-chain indicator / term tooltip / citation popup / dark mode / PDF export), open directly in a browser.
 
 > The HTML template is adapted from [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) (by [op7418](https://x.com/op7418), AGPL-3.0) and redesigned for long-form articles. Released under AGPL-3.0 in inheritance; see [Acknowledgements](#acknowledgements) and [Author & License](#author--license).
 
@@ -85,7 +85,7 @@ Typical triggers:
 - 📖 **Glossary delivery**: all terms are aggregated into a collapsible glossary (in both HTML and Markdown).
 - 📊 **Data charts**: data-dense passages are charted from lieflat-chart's Lupi/Basics/Glance template families; single-file HTML chart fragments, one figure one conclusion.
 - 🖼 **Dual-track illustration**: network-sourced (license-safe, localized, attributed) + self-generated (SVG motifs / AI illustrations / charts), with one global color system per delivery.
-- 🎨 **5 themes**: Ink Classic / Indigo Porcelain / Forest Ink / Kraft Paper / Dune. Colors locked, no custom hex, protecting aesthetic consistency.
+- 🎨 **8 themes**: Ink Classic / Indigo Porcelain / Forest Ink / Kraft Paper / Dune / Phosphor Terminal / Vermilion Washi / Memphis Pop. Colors locked, no custom hex, protecting aesthetic consistency.
 - 🧩 **7 interactive components**: reading progress bar, TOC sidebar, learning-chain indicator, term tooltip, citation popup, dark-mode toggle, PDF export.
 - 📄 **Single-file HTML**: no build, no server — open in a browser to read, screenshot, share.
 - 🌐 **Bilingual**: `language` parameter controls output language, default `zh`; template and copy are localized.
@@ -228,8 +228,11 @@ Pick one of five — **no custom hex allowed**, protecting the aesthetic over fr
 | 🌿 **Forest Ink** | `#1a2e1f` / `#f5f1e8` | nature, ecology, geography, culture |
 | 🍂 **Kraft Paper** | `#2a1e13` / `#eedfc7` | history, literature, books, nostalgia |
 | 🌙 **Dune** | `#1f1a14` / `#f0e6d2` | art, design, philosophy, abstract |
+| 🟢 **Phosphor Terminal** | `#0f2418` / `#eef7ef` | tech, programming, geek culture |
+| 🧧 **Vermilion Washi** | `#2b2118` / `#faf5ea` | Eastern culture, Eastern figures & institutions |
+| 🎨 **Memphis Pop** | `#26232a` / `#fff6ec` | art & design, buzzwords, youth culture |
 
-Theme recommendation: philosophy/humanities/general → Ink Classic; tech/AI/math → Indigo Porcelain; nature/geography/ecology → Forest Ink; history/literature/books → Kraft Paper; art/design/architecture → Dune.
+Theme recommendation: philosophy/humanities/general → Ink Classic; tech/AI/math → Indigo Porcelain; nature/geography/ecology → Forest Ink; history/literature/books → Kraft Paper; art/design/architecture → Dune; tech/programming/geek culture → Phosphor Terminal; Eastern culture/figures/institutions → Vermilion Washi; art & design/buzzwords/youth culture → Memphis Pop.
 
 ## Core design principles
 
@@ -270,7 +273,7 @@ A bundled sample output: [`examples/新泽西/index.html`](./examples/新泽西/
 Primary delivery is single-file HTML. Use browser "Print → Save as PDF" for a distributable version; PPTX/Word conversion is out of the current main flow.
 
 **Why no custom colors?**
-Stable output matters. Free color choice easily breaks the "electronic ink" aesthetic, so only the 5 presets are allowed.
+Stable output matters. Free color choice easily breaks the "electronic ink" aesthetic, so only the 8 presets are allowed.
 
 **What if data is insufficient?**
 Any thin layer is handled by the fallback strategy and **explicitly labeled** (e.g. "no encyclopedia entry for this concept"), never silently fabricated.

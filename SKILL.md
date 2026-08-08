@@ -34,7 +34,7 @@ license: AGPL-3.0
 | `illustrations` | boolean | ❌ | 是否配图，默认 true |
 | `tone` | enum | ❌ | popular 科普 / academic 学术 / editorial 杂志（默认 popular） |
 | `citation_density` | enum | ❌ | low / standard / high（默认 standard） |
-| `theme` | enum | ❌ | 视觉主题，从 5 套中选，默认自动推荐 |
+| `theme` | enum | ❌ | 视觉主题，从 8 套中选，默认自动推荐 |
 | `language` | string | ❌ | 输出语言，默认 zh |
 | `custom` | array | ❌ | 自由扩展要求（高级用户），直接追加到 Step 0 确认 |
 | `preset` | file | ❌ | 显式指定预设文件路径（最高优先级，覆盖全局/项目预设） |
@@ -63,7 +63,7 @@ license: AGPL-3.0
 | illustrations | on / off | on |
 | tone | popular 科普 / academic 学术 / editorial 杂志 | popular |
 | citation_density | low / standard / high | standard |
-| theme | 墨水经典 / 靛蓝瓷 / 森林墨 / 牛皮纸 / 沙丘 | 自动推荐 |
+| theme | 墨水经典 / 靛蓝瓷 / 森林墨 / 牛皮纸 / 沙丘 / 终端绿 / 朱印和纸 / 孟菲斯波普 | 自动推荐 |
 | language | zh / en / ... | zh |
 | custom | 自由文本数组 | [] |
 
@@ -338,7 +338,7 @@ deep-word-explorer/
 ├── shared/
 │   ├── config/quality-gates.json         ← 唯一阈值事实源（三轴档位/字数公式/引用/AI 痕迹）
 │   ├── schemas/                          ← 8个JSON Schema（含 manifest / comparison-report / preset）
-│   ├── themes/themes.css                 ← 5套主题
+│   ├── themes/themes.css                 ← 8套主题（theme-phosphor-terminal / theme-vermilion-washi / theme-memphis-pop）
 │   └── prompts/                          ← 系统提示词 + 降级策略
 ├── commands/deep-explore.md              ← /deep-explore 快速命令（预设 + 参数）
 ├── scripts/validate.py                   ← 一致性校验脚本（CI 运行）

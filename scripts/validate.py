@@ -284,6 +284,11 @@ if m_ver:
         doc = (ROOT / rel).read_text(encoding="utf-8")
         check(f"v{m_ver.group(1)}" in doc, f"{rel}: 标注当前版本 v{m_ver.group(1)}")
 
+# 5.8 主题系统（8 套预设，同一 6 变量契约）
+themes_css = (ROOT / "shared" / "themes" / "themes.css").read_text(encoding="utf-8")
+theme_count = len(re.findall(r"^\.theme-[\w-]+\s*\{", themes_css, re.M))
+check(theme_count == 8, "themes.css: 主题预设数量为 8")
+
 # 6. Markdown 相对链接与仓库内路径引用
 PREFIX_WHITELIST = (
     "agents/",
@@ -359,6 +364,17 @@ THRESHOLD_ASSERTIONS = [
     ("README.en.md", "P0 18 / P1 36 / P2 28"),
     ("examples/README.md", "deep × pro × panorama"),
     ("examples/新泽西/README.md", "speed=deep, depth=pro, scope=panorama"),
+    ("README.md", "8 套主题"),
+    ("README.en.md", "8 theme palettes"),
+    ("SKILL.md", "theme-phosphor-terminal"),
+    ("SKILL.md", "theme-vermilion-washi"),
+    ("SKILL.md", "theme-memphis-pop"),
+    ("README.md", "终端绿"),
+    ("README.md", "朱印和纸"),
+    ("README.md", "孟菲斯波普"),
+    ("README.en.md", "Phosphor Terminal"),
+    ("README.en.md", "Vermilion Washi"),
+    ("README.en.md", "Memphis Pop"),
 ]
 for rel, phrase in THRESHOLD_ASSERTIONS:
     text = (ROOT / rel).read_text(encoding="utf-8")

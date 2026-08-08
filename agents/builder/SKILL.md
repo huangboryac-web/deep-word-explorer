@@ -16,7 +16,7 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 ## 输入
 - `article_content` (JSON)：来自撰写师 Agent
 - `illustration_plan` (JSON)：来自配图师 Agent（Step 4.5）
-- `theme` (string)：主题名称（ink-classic / indigo-porcelain / forest-ink / kraft-paper / dune）
+- `theme` (string)：主题名称（ink-classic / indigo-porcelain / forest-ink / kraft-paper / dune / phosphor-terminal / vermilion-washi / memphis-pop）
 - `output_path` (string)：输出文件的完整路径
 - `options` (object)：统一配置面板；`format` 决定交付形态
 - `comparison_report` (JSON，可选)：来自对比师 Agent（Step 6.5），`compare=true` 时提供

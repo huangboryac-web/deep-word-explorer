@@ -38,7 +38,7 @@ PR 请基于 `main` 分支，并在描述里关联对应 Issue。PR 模板见 `.
 - [ ] 预设 / manifest / comparison-report / glossary 契约改动同步对应 `shared/schemas/` 文件
 - [ ] 命令参数改动同步 `commands/deep-explore.md`
 - [ ] README / README.en.md 中相关说明已更新
-- [ ] 未引入自定义主题 hex（颜色只能从 5 套预设中选）
+- [ ] 未引入自定义主题 hex（颜色只能从 8 套预设中选）
 - [ ] 未删除或弱化引用标注与反 AI 痕迹机制
 
 ## 代码 / 文档风格

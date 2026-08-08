@@ -8,6 +8,7 @@
 - **预设与快速命令**：支持全局（`~/.deep-word-explorer.json`）与项目级（`./.deep-word-explorer.json`）两级预设，新增 `preset` 参数与 `commands/deep-explore.md` 命令入口；Step 0 读取预设后**主动逐项询问**未指定项（命中项标注「来自预设」），`ask_before_run=false` 或 `--no-ask` 可跳过询问。
 - **引用全量核查**：QA 引用检查升级，来源 URL 由「抽查 5 个」改为全量校验（P0-18），失效链接自动替换或标注「来源不可访问」；清单结构调整为 P0 18 / P1 36 / P2 28（总数仍 82）。
 - **术语表交付**：撰写师汇总全文术语生成 `glossary`（术语 / 定义 / 首次出现阶），构建师在 HTML（可折叠附录）与 Markdown（文末附录）中渲染；QA 校验 glossary 与全文 cached_terms 一致。
+- **新增 3 套主题预设**：终端绿（Phosphor Terminal）/ 朱印和纸（Vermilion Washi）/ 孟菲斯波普（Memphis Pop），主题总数 5 → 8；自动推荐、lieflat 色系映射、命令参数与双语文档同步。
 
 ## [1.2.0] - 2026-08-08
 

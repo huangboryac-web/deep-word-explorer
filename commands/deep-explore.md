@@ -13,7 +13,7 @@ description: 用 deep-word-explorer 深度解析一个或多个词；支持三�
 /deep-explore <词...> [--speed fast|standard|deep] [--depth intro|mid|pro]
   [--scope point|related|panorama] [--format html|markdown|pdf]
   [--illustrations on|off] [--tone popular|academic|editorial]
-  [--citation-density low|standard|high] [--theme ink-classic|indigo-porcelain|forest-ink|kraft-paper|dune]
+  [--citation-density low|standard|high] [--theme ink-classic|indigo-porcelain|forest-ink|kraft-paper|dune|phosphor-terminal|vermilion-washi|memphis-pop]
   [--language zh|en] [--preset <文件>] [--compare on|off] [--no-ask]
 ```
 

@@ -20,7 +20,7 @@ deep-word-explorer 流水线的第五个 Agent（Step 4.5，位于撰写师与�
 
 - `article_content` (JSON)：来自撰写师 Agent
 - `learning_chain` (JSON)：来自架构师 Agent
-- `theme` (string)：ink-classic / indigo-porcelain / forest-ink / kraft-paper / dune
+- `theme` (string)：ink-classic / indigo-porcelain / forest-ink / kraft-paper / dune / phosphor-terminal / vermilion-washi / memphis-pop
 - `options` (object)：统一配置面板；`illustrations=off` 时直接跳过
 
 ## 输出

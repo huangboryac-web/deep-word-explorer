@@ -147,6 +147,9 @@
 | forest-ink（森林墨） | `palm` 或 `mono` | 绿黄低饱和 + 琥珀点睛，自然/地理；数据密集时退回 mono 保可读 |
 | kraft-paper（牛皮纸） | `mono` 或 `palm` | 纸感灰阶最贴牛皮纸；怀旧/莫兰迪场景用 palm |
 | dune（沙丘） | `wire` 或 `mono` | 编辑部红（黑灰+荧光橙）适合艺术/设计气质 |
+| phosphor-terminal（终端绿） | `mono` | 绿阶可退灰保可读；数据密集时最稳 |
+| vermilion-washi（朱印和纸） | `wire` 或 `mono` | 朱红强调与编辑部红逻辑一致；需克制时退 mono |
+| memphis-pop（孟菲斯波普） | `wire` 或 `mono` | 玫粉高饱和对应 wire 的荧光逻辑；数据密集退 mono |
 
 **规则**：整份交付只允许一种色系；若某张图型不支持所选色系（如 big-* 大图无 wire），改选一套全局兼容色系或整组退回 `mono`，不得单图换色系。
 
