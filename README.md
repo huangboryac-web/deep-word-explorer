@@ -236,7 +236,7 @@ deep-word-explorer/
 │   ├── builder/SKILL.md                  ← 构建师（HTML 装配 + 配图嵌入）
 │   │   ├── assets/template-article.html  ← 长文 HTML 模板
 │   │   └── references/                   ← 改造指南 + 组件库 + 主题注入 + 配图嵌入
-│   └── qa/SKILL.md                       ← 质量审查（70 项清单，含配图专项）
+│   └── qa/SKILL.md                       ← 质量审查（72 项清单，含配图专项）
 │       └── references/                   ← 详细检查清单
 ├── shared/
 │   ├── schemas/                          ← 5 个 JSON Schema（阶段间数据契约，含 illustration-plan）

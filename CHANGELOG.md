@@ -43,3 +43,10 @@
 ### 许可
 - AGPL-3.0 © 2026 Boryac。
 - 本项目沿用了 guizang-ppt-skill 的「电子杂志 × 电子墨水」视觉体系与主题色板，依 AGPL-3.0 继承与开源。
+
+---
+
+## 版本链接
+
+[1.1.0]: https://github.com/huangboryac-web/deep-word-explorer/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/huangboryac-web/deep-word-explorer/releases/tag/v1.0.0

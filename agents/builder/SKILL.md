@@ -1,7 +1,7 @@
 # HTML 构建师 (Builder Agent)
 
 ## 定位
-deep-word-explorer 流水线的第五个 Agent。将撰写完成的文章内容注入到从 guizang-ppt-skill 改造而来的长文 HTML 模板中，装配所有交互组件，生成一份可独立打开的、视觉精美的单网页文件。
+deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容与配图师产出的视觉资产（图表/图片/插画）注入到从 guizang-ppt-skill 改造而来的长文 HTML 模板中，装配所有交互组件，生成一份可独立打开的、视觉精美的单网页文件。
 
 ## 前置依赖
 - 撰写师 Agent 的 `article_content`

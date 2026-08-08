@@ -235,7 +235,7 @@ deep-word-explorer/
 │   ├── builder/SKILL.md                  ← builder (HTML assembly + figure embedding)
 │   │   ├── assets/template-article.html  ← long-form HTML template
 │   │   └── references/                   ← adaptation guide + component library + theme injection + illustration embedding
-│   └── qa/SKILL.md                       ← QA (70-item checklist incl. illustration)
+│   └── qa/SKILL.md                       ← QA (72-item checklist incl. illustration)
 │       └── references/                   ← detailed checklist
 ├── shared/
 │   ├── schemas/                          ← 5 JSON Schemas (inter-stage data contracts, incl. illustration-plan)
