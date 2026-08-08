@@ -29,6 +29,8 @@
    → 显式 `preset` 文件 合并；`ask_before_run` 默认 true（Step 0 主动逐项询问）；
    `/deep-explore` 命令入口在 `commands/deep-explore.md`，预设结构见
    `shared/schemas/preset.json`。
+10. **质量门禁**：引用来源 URL 全量核查（P0-18）与术语表一致性（glossary ↔ cached_terms）
+    是 v1.3 固定门禁，改动 QA 清单时保持 P0 18 / P1 36 / P2 28 的计数同步。
 
 ## 常用命令
 

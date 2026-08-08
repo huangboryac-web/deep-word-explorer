@@ -6,6 +6,7 @@
 > **事实源声明**：完整规则正本在 `agents/<name>/SKILL.md`；所有阈值（三轴档位、
 > 字数公式、引用密度、AI 痕迹等）统一来自 `shared/config/quality-gates.json`。
 > 本文件与规则正本冲突时，以 SKILL 与配置为准。
+> Step 0 的预设加载与主动逐项询问见 SKILL.md（`preset` 文件 / `ask_before_run` / `--no-ask`）。
 
 ---
 
@@ -50,6 +51,7 @@ scope 决定 related_sidebars / extras。
 你负责 Step 4：按 options（tone / citation_density / depth / format）撰写六阶文章。
 规则正本：agents/writer/SKILL.md
 要点：引用密度按 citation_density；format=markdown 时直接产出 .md 正文。
+要点：构建 glossary（术语 / 定义 / 首次出现阶），与全文 cached_terms 一致。
 输出：按 shared/schemas/article-content.json 输出 JSON。
 ```
 
@@ -81,7 +83,7 @@ scope 决定 related_sidebars / extras。
 
 ```
 你负责 Step 6：按 options 执行 P0/P1/P2 三级检查（字数公式、六阶结构、引用密度、
-配图开关、format 适配）。
+配图开关、format 适配、引用 URL 全量核查 P0-18、glossary 一致性）。
 规则正本：agents/qa/SKILL.md + agents/qa/references/checklist-detailed.md
 输出：qa_report JSON + 修复后的交付物。
 ```

@@ -35,6 +35,8 @@
 
 一个适配 WorkBuddy / Claude Code / Codex 等 Agent 环境的**多 Agent 协作知识生产流水线**。输入任意一个「词」——地点、名词、热词、书籍、国家、历史概念、学术术语、科技名词、人物、机构……按 Step 0–6.5（含 Step 4.5）流水线处理，产出一篇篇**由浅入深、带完整引用来源、配数据图表与视觉素材、视觉精美**的深度解析单页网页；多词模式额外生成对比页（字数下限由 speed / depth / scope 档位组合决定）。
 
+> 当前版本：**v1.3.0** · [更新日志](./CHANGELOG.md) · [GitHub Releases](https://github.com/huangboryac-web/deep-word-explorer/releases)
+
 内置核心能力：
 
 - **多 Agent 流水线（8 个角色）**：分类器 → 研究员 → 架构师 → 撰写师 → **配图师** → 构建师 → 质量审查 → **对比师**，Agent 之间通过 JSON Schema 结构化交接，每段都有独立质量门禁。
@@ -57,6 +59,13 @@ Agent 会自动加载本 skill，依次走完六阶段并交付一个 `index.htm
 
 ```text
 用 deep-word-explorer 解析「存在主义」，主题用牛皮纸，speed=deep、depth=pro、scope=panorama。
+```
+
+也支持快速命令（参数与预设用法见 `commands/deep-explore.md`）：
+
+```text
+/deep-explore 新泽西 --speed deep --depth pro --scope panorama --theme forest-ink
+/deep-explore 新泽西 存在主义 --compare on
 ```
 
 典型触发语：

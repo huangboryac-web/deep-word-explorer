@@ -279,6 +279,10 @@ check(
     bool(m_ver) and bool(changelog_versions) and m_ver.group(1) == changelog_versions[0],
     "版本一致性：SKILL frontmatter 与 CHANGELOG 最新版本一致",
 )
+if m_ver:
+    for rel in ("README.md", "README.en.md"):
+        doc = (ROOT / rel).read_text(encoding="utf-8")
+        check(f"v{m_ver.group(1)}" in doc, f"{rel}: 标注当前版本 v{m_ver.group(1)}")
 
 # 6. Markdown 相对链接与仓库内路径引用
 PREFIX_WHITELIST = (
