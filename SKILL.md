@@ -3,7 +3,7 @@ name: deep-word-explorer
 displayName: 兴趣词汇解析
 description: 输入任意「词」（地点/名词/热词/书籍/国家/历史/学术概念…），多 Agent 协作产出由浅入深、带完整引用与数据图表配图的深度解析网页，快慢/深浅/点面档位可调；调用后必须先完成 Step 0 参数确认，未确认不得开始。
 author: Boryac
-version: 1.4.0
+version: 1.5.0
 license: AGPL-3.0
 ---
 
@@ -11,7 +11,7 @@ license: AGPL-3.0
 
 ## 技能定位
 
-一个多 Agent 协作的知识生产流水线。输入一个词或 2–8 个词（地点、名词、热词、书籍、国家、历史概念等），按 Step 0–6.5（含 Step 4.5）处理，产出一篇篇由浅入深、有完整引用来源、带数据图表与配图的深度解析网页；多词模式额外生成对比页。字数下限由 `speed` / `depth` / `scope` 档位组合决定，见 `shared/config/quality-gates.json`。
+一个多 Agent 协作的知识生产流水线。输入一个词或 2–8 个词（地点、名词、热词、书籍、国家、历史概念等），按 Step 0–7（含 Step 4.5）处理，产出一篇篇由浅入深、有完整引用来源、带数据图表与配图的深度解析网页；多词模式额外生成对比页。字数下限由 `speed` / `depth` / `scope` 档位组合决定，见 `shared/config/quality-gates.json`。
 
 ## 触发条件
 
@@ -33,6 +33,7 @@ license: AGPL-3.0
 | `format` | enum | ❌ | html（默认）/ markdown / pdf |
 | `illustrations` | boolean | ❌ | 是否配图，默认 true |
 | `tone` | enum | ❌ | popular 科普 / academic 学术 / editorial 杂志（默认 popular） |
+| `style` | enum | ❌ | plain 平实明达 / empathy 设身处地 / narrative 娓娓道来 / succinct 要言不烦 / lucid 举重若轻 / direct 单刀直入 / natural 天然去雕饰（默认 plain；仅 language=zh 生效，非 zh 自动回退 plain 并在 Step 0 提示） |
 | `citation_density` | enum | ❌ | low / standard / high（默认 standard） |
 | `theme` | enum | ❌ | 视觉主题，从 8 套中选，默认自动推荐 |
 | `language` | string | ❌ | 输出语言，默认 zh |
@@ -41,7 +42,7 @@ license: AGPL-3.0
 
 ---
 
-## 工作流（Step 0–6.5，含 Step 4.5；批量并行）
+## 工作流（Step 0–7，含 Step 4.5；批量并行）
 
 ### Step 0: 参数确认与需求对齐
 
@@ -70,6 +71,7 @@ license: AGPL-3.0
 | format | html / markdown / pdf | html |
 | illustrations | on / off | on |
 | tone | popular 科普 / academic 学术 / editorial 杂志 | popular |
+| style | plain 平实明达 / empathy 设身处地 / narrative 娓娓道来 / succinct 要言不烦 / lucid 举重若轻 / direct 单刀直入 / natural 天然去雕饰 | plain |
 | citation_density | low / standard / high | standard |
 | theme | 墨水经典 / 靛蓝瓷 / 森林墨 / 牛皮纸 / 沙丘 / 终端绿 / 朱印和纸 / 孟菲斯波普 | 自动推荐 |
 | language | zh / en / ... | zh |
@@ -89,7 +91,7 @@ license: AGPL-3.0
 - 单词：`.workbuddy/deep-explorer/{word}/index.html`（format=markdown 时为同名 `.md`）
 - 批量：每个词独立目录 `{output_dir}/{word}/`；compare=true 时对比页输出到 `{output_dir}/index.html`
 
-**输出**：确认的参数集 `{word, speed, depth, scope, format, illustrations, tone, citation_density, theme, language, custom, output_path}`
+**输出**：确认的参数集 `{word, speed, depth, scope, format, illustrations, tone, style, citation_density, theme, language, custom, output_path}`
 
 > 档位语义、字数公式与引用密度统一见 `shared/config/quality-gates.json`。
 
@@ -173,7 +175,7 @@ license: AGPL-3.0
 3. 注入术语 tooltip（首次出现时）
 4. 润色过渡问题
 5. 全文一致性检查（术语/引用/AI 痕迹/渐进披露）
-6. 按 tone / citation_density / format 调整行文、引用密度与交付形态（markdown 直接产出 .md 正文）
+6. 按 style / tone / citation_density / format 调整行文、引用密度与交付形态（markdown 直接产出 .md 正文）；`style` 仅对 language=zh 生效，非 zh 自动回退 plain
 7. 构建 glossary（术语、定义、首次出现阶），与各阶 cached_terms 保持一致
 
 **阶段输出**：向用户汇报撰写结果：
@@ -217,7 +219,7 @@ license: AGPL-3.0
 2. 注入主题 CSS 变量
 3. 注入六阶正文内容 + 过渡问题
 4. 注入参考文献列表（三组分类）
-5. 装配 7 个交互组件（进度条 / TOC / 学习链 / tooltip / 引用框 / 暗色 / PDF）
+5. 装配 8 个交互组件（进度条 / TOC / 学习链 / tooltip / 引用框 / 暗色 / PDF / 关联知识图谱交互）
 6. **嵌入配图**：按 illustration-embedding.md 将图表片段（figure.chart-figure + 作用域样式）与网络图片/插画（figure.media-figure + 来源/许可行）嵌入到对应段落后
 7. 添加滚动渐入动效
 8. 渲染术语表章节（HTML：可折叠附录；markdown：文末附录）
@@ -267,9 +269,35 @@ license: AGPL-3.0
 
 ---
 
+### Step 7: HTML 功能校验（所有任务完成后的最终验收）
+
+**调度**：QA Agent（`agents/qa/SKILL.md` 的「Step 5: 功能校验」工作流）
+
+**输入**：最终 `index.html`（或批量模式下的 `{output_dir}/index.html` 对比页 + 各词子页）+ options
+**输出**：`functional_report` JSON（并入 `qa_report` 或独立文件，写入 `checkpoints/`）
+
+**目的**：在 Step 6 质量审查与 Step 6.5 对比完成之后、交付之前，逐项实测 HTML 的功能是否真实可用——不只看「存在」，还要验证「能用」。
+
+**关键动作**：
+1. 悬浮释义（tooltip）：hover 术语 `<abbr class="abbr-term">` 弹出释义，键盘 focus 亦可触发
+2. 章节跳转：点击 TOC / 学习链指示器 / 各阶锚点，正确滚动到对应 `#chain-N`，URL hash 正确
+3. 引用跳转：点击文内 `[N]` 上标 → 弹出引用框或跳转参考文献对应条目；返回正常
+4. 暗色模式：切换无白屏、无样式错乱，图表浅卡保持可读
+5. PDF 导出：触发打印对话框，交互组件被隐藏
+6. SVG 显示（可选，scope=panorama 时必查）：知识图谱 / 图表 / 插画 SVG 渲染正常，无空白或错位
+7. 对比页（批量）：总览表 / 并排时间线 / 交叉引用完整，各词子页可跳转
+8. 控制台无 JS 报错；CDN 字体 / Lucide 图标加载正常
+
+**判定**：功能校验任一 FAIL → 返回构建师修复（或按降级策略标注），修复后复测；全部通过才进入最终交付。
+
+**阶段输出**：向用户汇报功能校验结果：
+> 功能校验完成：悬浮释义 ✓ / 章节跳转 ✓ / 引用跳转 ✓ / 暗色 ✓ / PDF ✓ / SVG ✓ / 对比页 ✓ / 控制台无报错 ✓
+
+---
+
 ## 最终交付
 
-交付物通过 `present_files` 工具呈现给用户：
+交付物通过 `present_files` 工具呈现给用户（Step 7 功能校验全部通过后交付）：
 
 1. **`index.html`**：可直接在浏览器打开的精美解析网页
 2. **解读说明**（口头告知）：
@@ -312,6 +340,7 @@ license: AGPL-3.0
 |------|------|
 | 某阶信息不足以写到 min_words | 添加"延伸思考"板块，用引导式问题补充 |
 | AI 痕迹检测失败（score > 0.3） | 逐段执行 anti-ai-patterns 替换，重新检测 |
+| 人味分不足（humanize_score < 35） | 按 anti-ai-patterns 的五维评分定位扣分维度，做净化改写（不重写内容）；style=natural 时人话三要素（偏见/情绪/立场）必须锚定原文材料，禁止凭空编造 |
 
 ### HTML 阶段异常
 | 异常 | 处理 |
@@ -334,24 +363,26 @@ deep-word-explorer/
 │   ├── architect/SKILL.md                ← 架构师
 │   │   └── references/                   ← 学习链模板 + 过渡模式库
 │   ├── writer/SKILL.md                   ← 撰写师
-│   │   └── references/                   ← 风格指南 + 引用格式 + 反AI模式
+│   │   ├── styles/                       ← 7 种文风规则（plain/empathy/narrative/succinct/lucid/direct/natural）
+│   │   └── references/                   ← 风格指南（plain 基线）+ 引用格式 + 反AI模式
 │   ├── illustrator/SKILL.md              ← 配图师（Step 4.5 文字配图流程）
 │   │   └── references/illustration-guide.md  ← 双轨配图规则（网络来源+自生成）+ lieflat 图表集成
 │   ├── builder/SKILL.md                  ← 构建师
 │   │   ├── assets/template-article.html  ← 长文HTML模板
 │   │   └── references/                   ← 改造指南 + 组件库 + 主题注入 + 配图嵌入
-│   ├── qa/SKILL.md                       ← 质量审查
-│   │   └── references/                   ← P0/P1/P2 检查清单（含配图与无障碍专项）
+│   ├── qa/SKILL.md                       ← 质量审查 + Step 7 功能校验
+│   │   └── references/                   ← P0/P1/P2 检查清单（含配图与无障碍专项）+ 功能校验清单
 │   └── comparator/SKILL.md               ← 对比师（Step 6.5 批量对比）
 ├── shared/
 │   ├── config/quality-gates.json         ← 唯一阈值事实源（三轴档位/字数公式/引用/AI 痕迹）
 │   ├── schemas/                          ← 8个JSON Schema（含 manifest / comparison-report / preset）
 │   ├── themes/themes.css                 ← 8套主题（theme-phosphor-terminal / theme-vermilion-washi / theme-memphis-pop）
 │   └── prompts/                          ← 系统提示词 + 降级策略
-├── commands/deep-explore.md              ← /deep-explore 快速命令（预设 + 参数）
+├── commands/deep-explore.md              ← /deep-explore 快速命令（预设 + 参数 + --style）
 ├── scripts/validate.py                   ← 一致性校验脚本（CI 运行）
 ├── scripts/generate_goldens.py           ← 分类 golden 生成器
 ├── examples/                             ← 示例输出（真实样例：新泽西/）
+├── THIRD_PARTY_NOTICES.md                ← 第三方素材致谢（文风体系 MIT 归属 + karpathy 思想级引用说明）
 └── tests/                                ← 测试用例（test-words.json + fixtures/ + expected-outputs/ golden）
 ```
 
@@ -364,7 +395,7 @@ deep-word-explorer/
 5. **单文件交付**：读者无需任何工具，浏览器打开即可阅读
 6. **配图双轨制**：数据图表走 lieflat-chart 模板化生成（一张图一个结论），概念图优先 SVG、网络图只采用许可安全且本地化的来源；整份交付锁定唯一色系
 7. **引用与署名完整**：文字引用、图片来源与许可、图表数据契约，三者缺一不可
-8. **档位可组合**：快慢/深浅/点面三轴正交（3×3×3），默认值开箱即用，高级需求经 custom 扩展
+8. **档位可组合**：快慢/深浅/点面三轴正交（3×3×3），文风 `style` 为第四正交轴（7 种，与 tone/theme 自由组合，仅 zh 生效），默认值开箱即用，高级需求经 custom 扩展
 9. **可续跑可对比**：批量词并行隔离，阶段产物落盘可断点续跑；对比页只综合既有产物，不引入新研究
 
 ---

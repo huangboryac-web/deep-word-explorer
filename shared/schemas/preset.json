@@ -11,6 +11,7 @@
     "format": { "type": "string", "enum": ["html", "markdown", "pdf"] },
     "illustrations": { "type": "boolean" },
     "tone": { "type": "string", "enum": ["popular", "academic", "editorial"] },
+    "style": { "type": "string", "enum": ["plain", "empathy", "narrative", "succinct", "lucid", "direct", "natural"] },
     "citation_density": { "type": "string", "enum": ["low", "standard", "high"] },
     "theme": { "type": "string" },
     "language": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] },

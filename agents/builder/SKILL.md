@@ -125,7 +125,7 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 
   <script>
     // WebGL shader 初始化（保留原始代码）
-    // 组件 JS（组件1-7的JS逻辑）
+    // 组件 JS（组件1-8的JS逻辑，组件8按 scope 条件注入）
     // Motion One 动画（滚动渐入）
   </script>
 </body>
@@ -167,6 +167,7 @@ deep-word-explorer 流水线的第六个 Agent。将撰写完成的文章内容�
 5. 引用弹出框
 6. 暗色模式切换
 7. 导出 PDF
+8. 关联知识图谱交互（scope=panorama 且 `learning_chain.stage_5.concept_map` 存在时，按组件库组件 8 渲染到第五阶；数据不足按降级规则回退文本列表）
 
 **无障碍属性（所有组件通用）**：
 - `<html lang>` 与 `options.language` 一致
@@ -202,6 +203,7 @@ document.querySelectorAll('.chain-section').forEach(el => {
 - [ ] 暗色模式切换正常且无闪烁
 - [ ] WebGL 背景在 hero 区域正确渲染
 - [ ] 移动端（< 768px）布局正常
+- [ ] scope=panorama：第五阶知识图谱（组件 8）已渲染或按降级规则回退，SVG 在暗色 / 移动端下可读
 
 ---
 
@@ -224,6 +226,7 @@ document.querySelectorAll('.chain-section').forEach(el => {
 - [ ] compare=true：对比页已渲染（总览表 / 时间线 / 交叉引用 / 差异），各词子页可跳转
 - [ ] 无障碍：lang 属性、图标按钮 aria-label、figure 标注、focus-visible 样式齐全
 - [ ] glossary 已渲染（html 附录 / markdown 文末），条目与 cached_terms 一致
+- [ ] scope=panorama：组件 8 知识图谱数据契约正确（nodes/edges 来自 concept_map），hover / focus 高亮与降级规则符合组件库
 
 ---
 

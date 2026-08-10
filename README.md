@@ -33,9 +33,9 @@
 - [作者与许可](#作者与许可)
 - [更新日志](./CHANGELOG.md)
 
-一个适配 WorkBuddy / Claude Code / Codex 等 Agent 环境的**多 Agent 协作知识生产流水线**。输入任意一个「词」——地点、名词、热词、书籍、国家、历史概念、学术术语、科技名词、人物、机构……按 Step 0–6.5（含 Step 4.5）流水线处理，产出一篇篇**由浅入深、带完整引用来源、配数据图表与视觉素材、视觉精美**的深度解析单页网页；多词模式额外生成对比页（字数下限由 speed / depth / scope 档位组合决定）。
+一个适配 WorkBuddy / Claude Code / Codex 等 Agent 环境的**多 Agent 协作知识生产流水线**。输入任意一个「词」——地点、名词、热词、书籍、国家、历史概念、学术术语、科技名词、人物、机构……按 Step 0–7（含 Step 4.5 与交付前功能校验）流水线处理，产出一篇篇**由浅入深、带完整引用来源、配数据图表与视觉素材、视觉精美**的深度解析单页网页；多词模式额外生成对比页（字数下限由 speed / depth / scope 档位组合决定）。
 
-> 当前版本：**v1.4.0** · [更新日志](./CHANGELOG.md) · [GitHub Releases](https://github.com/huangboryac-web/deep-word-explorer/releases)
+> 当前版本：**v1.5.0** · [更新日志](./CHANGELOG.md) · [GitHub Releases](https://github.com/huangboryac-web/deep-word-explorer/releases)
 
 内置核心能力：
 
@@ -43,7 +43,7 @@
 - **五层漏斗搜索**：百科骨架 → 学术论文 → 专家解读 → 关联概念 → 时效信息，逐层加深，不足即降级标注。
 - **六阶学习链**：原初印象 → 时空坐标 → 核心要素拆解 → 深层机制 → 关联网络 → 批判视角，段间用过渡提问自然衔接，强制「由浅入深」。
 - **文字配图流程（双轨制）**：数据密集段落用 [lieflat-chart](https://redskill.xiaohongshu.net) 模板化生成数据图表（一张图一个结论）；强视觉实体走网络来源（仅采用许可安全且本地化的图片，标注图源与许可）；抽象概念用 SVG 纹样 / AI 插画自生成。整份交付锁定唯一色系，与文章主题协调。
-- **单文件 HTML 交付**：电子杂志 × 电子墨水美学，8 套主题色，7 个交互组件（阅读进度条 / 目录侧栏 / 学习链指示器 / 术语浮窗 / 引用弹层 / 暗色模式 / PDF 导出），浏览器直接打开即读。
+- **单文件 HTML 交付**：电子杂志 × 电子墨水美学，8 套主题色，8 个交互组件（阅读进度条 / 目录侧栏 / 学习链指示器 / 术语浮窗 / 引用弹层 / 暗色模式 / PDF 导出 / 关联知识图谱交互），浏览器直接打开即读。
 
 > 本技能的 HTML 模板由 [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill)（作者 [op7418](https://x.com/op7418)，AGPL-3.0）改造而来，已按「长文网页」重新设计。依 AGPL-3.0 协议继承并开源，详见文末[致谢](#致谢)与[作者与许可](#作者与许可)。
 
@@ -81,7 +81,7 @@ Agent 会自动加载本 skill，依次走完六阶段并交付一个 `index.htm
 - 📖 **术语表交付**：全文术语自动汇总为可折叠术语表（HTML / Markdown 均含）。
 - 📊 **数据图表 + 双轨配图**：lieflat 图表（一张图一个结论）、许可安全网络图、SVG/AI 插画，整份交付锁定唯一色系。
 - 🎨 **8 套主题**：5 套编辑部风 + 3 套独立风格模板（终端绿 / 朱印和纸 / 孟菲斯波普），不允许自定义 hex。
-- 📄 **单文件 HTML**：7 个交互组件，浏览器直接打开即可阅读、截图、分享。
+- 📄 **单文件 HTML**：8 个交互组件（含 scope=panorama 的关联知识图谱），浏览器直接打开即可阅读、截图、分享。
 - 🌐 **中英双语**：`language` 控制输出语言，模板与文案均本地化。
 
 ## 适合 / 不适合
@@ -184,7 +184,8 @@ ls ~/.workbuddy/skills/deep-word-explorer/
 | `scope` | enum | ❌ | `point` / `related` / `panorama` | `point` | 点→面：内容广度 |
 | `format` | enum | ❌ | `html` / `markdown` / `pdf` | `html` | 交付形态 |
 | `illustrations` | boolean | ❌ | `true` / `false` | `true` | 是否配图 |
-| `tone` | enum | ❌ | `popular` 科普 / `academic` 学术 / `editorial` 杂志 | `popular` | 行文风格 |
+| `tone` | enum | ❌ | `popular` 科普 / `academic` 学术 / `editorial` 杂志 | `popular` | 文体（科普 / 学术 / 杂志） |
+| `style` | enum | ❌ | `plain` 平实明达 / `empathy` 设身处地 / `narrative` 娓娓道来 / `succinct` 要言不烦 / `lucid` 举重若轻 / `direct` 单刀直入 / `natural` 天然去雕饰 | `plain` | 文风（第四正交轴；仅 `zh` 生效，非 zh 自动回退 `plain`） |
 | `citation_density` | enum | ❌ | `low` / `standard` / `high` | `standard` | 引用密度（每阶 1 / 2 / 3 条） |
 | `theme` | enum | ❌ | 8 套主题（见「主题色预设」） | 自动推荐 | 视觉主题 |
 | `language` | enum | ❌ | `zh` / `en` / `fr` / `de` / `ja` / `ko` / `ar` / `es` / `ru` | `zh` | 输出语言 |
@@ -208,7 +209,7 @@ Step 0 与 `shared/config/quality-gates.json`。
 
 ## 使用流程
 
-Skill 本身是结构化工作流，Agent 会逐步引导：参数确认 → 分类 → 研究 → 架构 → 撰写 → 配图 → 构建 → 质检 → 对比（多词）→ 交付（Step 0–6.5，含 Step 4.5）。每个阶段以 JSON 交接、有独立质量门禁；产物落盘可断点续跑。
+Skill 本身是结构化工作流，Agent 会逐步引导：参数确认 → 分类 → 研究 → 架构 → 撰写 → 配图 → 构建 → 质检 → 对比（多词）→ 功能校验 → 交付（Step 0–7，含 Step 4.5 与交付前功能校验）。每个阶段以 JSON 交接、有独立质量门禁；产物落盘可断点续跑。
 
 详细流程见 [`SKILL.md`](./SKILL.md)；各 Agent 细分指令在 `agents/<role>/SKILL.md`；阈值统一来自 `shared/config/quality-gates.json`。
 
@@ -262,7 +263,7 @@ Skill 本身是结构化工作流，Agent 会逐步引导：参数确认 → 分
 
 ## 核心设计原则
 
-JSON 交接、阶段门禁、降级标注、单文件交付、三轴档位可组合、阈值单一事实源——完整原则见 [`SKILL.md`](./SKILL.md)「设计原则」。
+JSON 交接、阶段门禁、降级标注、单文件交付、三轴档位 + 文风 `style` 可组合、阈值单一事实源——完整原则见 [`SKILL.md`](./SKILL.md)「设计原则」。
 
 ## 示例请求
 
@@ -286,12 +287,13 @@ JSON 交接、阶段门禁、降级标注、单文件交付、三轴档位可组
 
 - HTML 模板改编自 [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill)（作者 [op7418](https://x.com/op7418)），依其 AGPL-3.0 协议继承与开源。本技能沿用了其「电子杂志 × 电子墨水」美学、CSS 变量体系与主题色板，并按「长文网页」需求移除了翻页系统、改造了布局与交互组件。
 - 数据图表由 [lieflat-chart](https://redskill.xiaohongshu.net)（lieflat-charts，作者 躺在废墟里）模板化生成。lieflat-chart 采用 **PolyForm Noncommercial** 许可：本仓库仅在运行时调用它、不重新分发其模板；生成的图表遵循其非商业许可（个人 / 学习 / 非营利用途可自由使用，商业用途需另行向作者授权）。
+- 文风体系（v1.5）为「蒸馏改写」：规则思想与量化指标本地化重写并致谢，不引入运行时依赖。素材来源与 MIT 归属见 [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md)——`empathy`/`narrative` 源自 [liurun-bookwriter-skills](https://github.com/liangdabiao/liurun-bookwriter-skills)（刘润 / 罗振宇 style-dna），`succinct`/`lucid` 源自 [awesome-ai-persona-skills](https://github.com/momozi1996/awesome-ai-persona-skills)（量子位 / 李继刚），`direct` 吸收 [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) 的写作思想（原仓库无 LICENSE，仅思想级引用），去 AI 净化规则源自 [Humanizer-zh](https://github.com/op7418/Humanizer-zh)（源自 [humanizer](https://github.com/blader/humanizer)）与 [stop-slop](https://github.com/hardikpandya/stop-slop)。
 - 视觉参考：*Monocle* 杂志版式、瑞士国际主义网格系统。
 
 ## Roadmap
 
-- 探索 `scope=panorama` 的关联知识图谱交互组件
-- 强化 QA 自动化视觉校验（暗色 / 移动端 / 溢出截图比对）
+- ~~探索 `scope=panorama` 的关联知识图谱交互组件~~ ✅ 已完成（组件 8，见 CHANGELOG [Unreleased]）
+- ~~强化 QA 自动化视觉校验（暗色 / 移动端 / 溢出截图比对）~~ ✅ 已完成（见 CHANGELOG [Unreleased]）
 - 补充更多真实示例（markdown / 无配图 / 批量对比）
 - 增加更多主题包（继续限制自定义颜色）
 

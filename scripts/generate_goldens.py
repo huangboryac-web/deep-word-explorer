@@ -87,6 +87,7 @@ def main() -> None:
                     "format": "html",
                     "illustrations": True,
                     "tone": "popular",
+                    "style": "plain",
                     "citation_density": "standard",
                     "language": "zh",
                 },

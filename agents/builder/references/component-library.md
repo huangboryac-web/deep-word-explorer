@@ -479,3 +479,154 @@ document.getElementById('export-pdf').addEventListener('click', () => {
   window.print();
 });
 ```
+
+---
+
+## 组件 8：关联知识图谱交互（scope=panorama）
+
+数据源：`learning_chain.stage_5.concept_map`（`nodes[]`：id / label / category / importance；`edges[]`：from / to / label / strength）。
+仅在 `scope=panorama` 且 `concept_map` 存在时渲染到第五阶（`has_knowledge_graph=true`）。
+降级规则：`nodes < 2` 或 `edges < 5` 时回退为文本列表（quality-gates.json `concept_map_edges_min: 5`）；节点 > 20 时仅渲染核心子图。
+
+### HTML
+```html
+<figure class="kg-figure" data-asset-id="kg-{word}" aria-label="关联知识图谱：{word} 的概念网络">
+  <figcaption class="fig-title">{结论式标题，例：存在主义如何串联现象学、结构主义与后现代主义}</figcaption>
+  <div class="kg-chart" role="img" aria-label="节点按类别着色，悬停或聚焦可高亮邻接关系">
+    <!-- 由 JS 确定性布局渲染 <svg>；数据不足时替换为 <ul class="kg-fallback"> -->
+  </div>
+</figure>
+```
+
+### CSS
+```css
+.kg-figure { margin: 2rem 0; }
+.kg-chart {
+  position: relative;
+  width: 100%;
+  min-height: 380px;
+  background: var(--paper-tint);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.kg-chart svg { width: 100%; height: auto; display: block; }
+.kg-node { cursor: pointer; transition: opacity 0.2s; }
+.kg-node circle { stroke-width: 1.5; }
+.kg-node text { font-family: var(--sans-zh); font-size: 12px; fill: var(--ink); }
+.kg-node.kg-cat-core circle { fill: var(--ink); }
+.kg-node.kg-cat-prerequisite circle { fill: #6b8e23; }
+.kg-node.kg-cat-parallel circle { fill: #b45309; }
+.kg-node.kg-cat-downstream circle { fill: #0369a1; }
+.kg-node.is-muted { opacity: 0.25; }
+.kg-node.is-active circle { stroke: var(--accent, var(--ink)); stroke-width: 2.5; }
+.kg-edge { stroke: var(--paper); stroke-width: 1; }
+.kg-edge.is-active { stroke: var(--accent, var(--ink)); stroke-width: 2; }
+body.theme-dark .kg-chart { background: var(--ink-tint); }
+body.theme-dark .kg-node text { fill: var(--paper); }
+.kg-fallback { padding: 1rem; font-size: 0.9rem; }
+@media (max-width: 767px) {
+  .kg-chart { min-height: 300px; }
+  .kg-node text { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kg-node { transition: none; }
+}
+```
+
+### JS
+```javascript
+// 数据注入：构建师将 learning_chain.stage_5.concept_map 写入 window.KG_DATA
+(function () {
+  var chart = document.querySelector('.kg-chart');
+  if (!chart) return;
+  var data = window.KG_DATA || { nodes: [], edges: [] };
+  var nodes = data.nodes, edges = data.edges;
+  // 降级：数据不足回退文本列表（quality-gates.json concept_map_edges_min: 5）
+  if (nodes.length < 2 || edges.length < 5) {
+    var ul = document.createElement('ul');
+    ul.className = 'kg-fallback';
+    nodes.forEach(function (n) {
+      var li = document.createElement('li');
+      li.textContent = n.label;
+      ul.appendChild(li);
+    });
+    chart.parentNode.replaceChild(ul, chart);
+    return;
+  }
+  // 规模保护：节点 > 20 仅渲染核心子图
+  if (nodes.length > 20) {
+    nodes = nodes.slice().sort(function (a, b) { return b.importance - a.importance; }).slice(0, 12);
+  }
+  // 确定性布局：core 居中，其余按索引环形散布（无随机，可复现）
+  var core = nodes.filter(function (n) { return n.category === 'core'; });
+  var cx = 240, cy = 190, R = 150;
+  var pos = {};
+  nodes.forEach(function (n, i) {
+    pos[n.id] = core.indexOf(n) > -1
+      ? { x: cx, y: cy }
+      : { x: cx + R * Math.cos(2 * Math.PI * i / nodes.length),
+          y: cy + R * Math.sin(2 * Math.PI * i / nodes.length) };
+  });
+  var NS = 'http://www.w3.org/2000/svg';
+  var svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 480 380');
+  var edgeEls = {};
+  edges.forEach(function (e) {
+    var line = document.createElementNS(NS, 'line');
+    line.setAttribute('class', 'kg-edge');
+    line.setAttribute('data-id', e.from + '--' + e.to);
+    line.setAttribute('x1', pos[e.from].x);
+    line.setAttribute('y1', pos[e.from].y);
+    line.setAttribute('x2', pos[e.to].x);
+    line.setAttribute('y2', pos[e.to].y);
+    svg.appendChild(line);
+    edgeEls[e.from + '--' + e.to] = line;
+  });
+  var nodeEls = {};
+  nodes.forEach(function (n) {
+    var g = document.createElementNS(NS, 'g');
+    g.setAttribute('class', 'kg-node kg-cat-' + n.category);
+    g.setAttribute('data-id', n.id);
+    g.setAttribute('tabindex', '0');
+    g.setAttribute('role', 'button');
+    g.setAttribute('aria-label', n.label);
+    var c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', pos[n.id].x);
+    c.setAttribute('cy', pos[n.id].y);
+    c.setAttribute('r', 8 + 10 * n.importance);
+    var t = document.createElementNS(NS, 'text');
+    t.setAttribute('x', pos[n.id].x + 12);
+    t.setAttribute('y', pos[n.id].y + 4);
+    t.textContent = n.label;
+    g.appendChild(c);
+    g.appendChild(t);
+    nodeEls[n.id] = g;
+    // hover / 键盘 focus 高亮邻接子图
+    function highlight(on) {
+      var linked = {};
+      edges.forEach(function (e) {
+        if (e.from === n.id) linked[e.to] = true;
+        if (e.to === n.id) linked[e.from] = true;
+      });
+      nodes.forEach(function (m) {
+        var el = nodeEls[m.id];
+        if (!el) return;
+        var active = on && (m.id === n.id || linked[m.id]);
+        el.classList.toggle('is-active', active);
+        el.classList.toggle('is-muted', on && !active);
+      });
+      edges.forEach(function (e) {
+        var el = edgeEls[e.from + '--' + e.to];
+        if (!el) return;
+        el.classList.toggle('is-active', on && (e.from === n.id || e.to === n.id));
+      });
+    }
+    g.addEventListener('mouseenter', function () { highlight(true); });
+    g.addEventListener('mouseleave', function () { highlight(false); });
+    g.addEventListener('focus', function () { highlight(true); });
+    g.addEventListener('blur', function () { highlight(false); });
+    svg.appendChild(g);
+  });
+  chart.appendChild(svg);
+})();
+```

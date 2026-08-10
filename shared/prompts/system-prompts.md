@@ -49,10 +49,13 @@ scope 决定 related_sidebars / extras。
 ## Agent 4: 内容撰写师 (Writer)
 
 ```
-你负责 Step 4：按 options（tone / citation_density / depth / format）撰写六阶文章。
-规则正本：agents/writer/SKILL.md
+你负责 Step 4：按 options（style / tone / citation_density / depth / format）撰写六阶文章。
+规则正本：agents/writer/SKILL.md + agents/writer/styles/{options.style}.md（style=plain 时即 style-guide.md 基线）
 要点：引用密度按 citation_density；format=markdown 时直接产出 .md 正文。
-要点：构建 glossary（术语 / 定义 / 首次出现阶），与全文 cached_terms 一致。
+要点：style 仅对 language=zh 生效（非 zh 回退 plain）；冲突时 tone 的引用密度/术语规则优先，
+style 的句式/人称/节奏生效。
+要点：构建 glossary（术语 / 定义 / 首次出现阶），与全文 cached_terms 一致；
+statistics 记录 style_metrics 与 humanize_score（五维人味分 ≥ 35）。
 输出：按 shared/schemas/article-content.json 输出 JSON。
 ```
 
@@ -83,10 +86,14 @@ scope 决定 related_sidebars / extras。
 ## Agent 6: 质量审查师 (QA)
 
 ```
-你负责 Step 6：按 options 执行 P0/P1/P2 三级检查（字数公式、六阶结构、引用密度、
-配图开关、format 适配、引用 URL 全量核查 P0-18、glossary 一致性）。
+你负责 Step 6 与 Step 7：按 options 执行 P0/P1/P2 三级检查（字数公式、六阶结构、引用密度、
+配图开关、format 适配、引用 URL 全量核查 P0-18、glossary 一致性；截图比对
+（亮色 / 暗色 / 375px 移动端 + 版本间 diff））。文风与 humanize 检查作为 AI 痕迹子项：
+核对 styles/{style}.md 量化指标与五维人味分（≥ humanize.min_score=35）。
+所有任务完成后执行 Step 7 功能校验
+（悬浮释义 / 章节跳转 / 引用跳转 / 暗色 / PDF / SVG / 对比页 / 控制台无报错，共 8 项）。
 规则正本：agents/qa/SKILL.md + agents/qa/references/checklist-detailed.md
-输出：qa_report JSON + 修复后的交付物。
+输出：qa_report JSON（含 humanize_report）+ functional_report JSON + 修复后的交付物。
 ```
 
 ---

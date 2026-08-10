@@ -12,7 +12,7 @@
         "word": { "type": "string" },
         "options": {
           "type": "object",
-          "required": ["speed", "depth", "scope", "format", "illustrations", "tone", "citation_density", "language"],
+          "required": ["speed", "depth", "scope", "format", "illustrations", "tone", "style", "citation_density", "language"],
           "properties": {
             "speed": { "type": "string", "enum": ["fast", "standard", "deep"] },
             "depth": { "type": "string", "enum": ["intro", "mid", "pro"] },
@@ -20,11 +20,12 @@
             "format": { "type": "string", "enum": ["html", "markdown", "pdf"] },
             "illustrations": { "type": "boolean" },
             "tone": { "type": "string", "enum": ["popular", "academic", "editorial"] },
+            "style": { "type": "string", "enum": ["plain", "empathy", "narrative", "succinct", "lucid", "direct", "natural"] },
             "citation_density": { "type": "string", "enum": ["low", "standard", "high"] },
             "language": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] },
             "custom": { "type": "array", "items": { "type": "string" } }
           },
-          "description": "Step 0 确认的统一配置面板快照，见 shared/config/quality-gates.json"
+          "description": "Step 0 确认的统一配置面板快照（含文风 style），见 shared/config/quality-gates.json"
         },
         "generated_at": { "type": "string", "format": "date-time" },
         "total_sources_consulted": { "type": "integer", "minimum": 5 },

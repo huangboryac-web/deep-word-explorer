@@ -33,9 +33,9 @@
 - [Author & License](#author--license)
 - [Changelog](./CHANGELOG.md)
 
-A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs the pipeline as **Step 0–6.5 (incl. Step 4.5)**, producing **progressively-structured, fully-cited, illustrated with data charts, visually polished deep-explainer pages as single-file HTML**; multi-word batches also generate a comparison page. The word-count floor is set by the `speed` / `depth` / `scope` tier combination.
+A **multi-Agent knowledge-production pipeline** for WorkBuddy / Claude Code / Codex and similar Agent environments. Feed it any *word* — a place, a noun, a buzzword, a book, a country, a historical concept, an academic term, a tech term, a person, an institution — and it runs the pipeline as **Step 0–7 (incl. Step 4.5 and a pre-delivery functional check)**, producing **progressively-structured, fully-cited, illustrated with data charts, visually polished deep-explainer pages as single-file HTML**; multi-word batches also generate a comparison page. The word-count floor is set by the `speed` / `depth` / `scope` tier combination.
 
-> Current version: **v1.4.0** · [Changelog](./CHANGELOG.md) · [GitHub Releases](https://github.com/huangboryac-web/deep-word-explorer/releases)
+> Current version: **v1.5.0** · [Changelog](./CHANGELOG.md) · [GitHub Releases](https://github.com/huangboryac-web/deep-word-explorer/releases)
 
 Core capabilities:
 
@@ -43,7 +43,7 @@ Core capabilities:
 - **Five-layer funnel search**: encyclopedia skeleton → academic papers → expert interpretation → related concepts → timeliness, deepening layer by layer, with explicit degradation when data is thin.
 - **Six-stage learning chain**: First Impression → Spatiotemporal Context → Anatomy → Mechanism → Ecosystem → Critique, connected by transition questions that enforce "shallow-to-deep".
 - **Text-illustration flow (dual-track)**: data-dense passages get template-driven charts from [lieflat-chart](https://redskill.xiaohongshu.net) (one figure, one conclusion); strong visual entities go the network track (license-safe, localized images with source/attribution); abstract concepts go self-generated (SVG motifs / AI illustrations). One global color system per delivery, aligned with the article theme.
-- **Single-file HTML delivery**: "Editorial × Electronic Ink" aesthetic, 8 theme palettes, 7 interactive components (reading progress bar / TOC sidebar / learning-chain indicator / term tooltip / citation popup / dark mode / PDF export), open directly in a browser.
+- **Single-file HTML delivery**: "Editorial × Electronic Ink" aesthetic, 8 theme palettes, 8 interactive components (reading progress bar / TOC sidebar / learning-chain indicator / term tooltip / citation popup / dark mode / PDF export / knowledge-graph interaction), open directly in a browser.
 
 > The HTML template is adapted from [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) (by [op7418](https://x.com/op7418), AGPL-3.0) and redesigned for long-form articles. Released under AGPL-3.0 in inheritance; see [Acknowledgements](#acknowledgements) and [Author & License](#author--license).
 
@@ -55,7 +55,7 @@ Send this to an AI Agent with shell access (WorkBuddy shown):
 Give me a deep explainer on "New Jersey", default theme, standard tiers.
 ```
 
-The Agent auto-loads this skill, runs all stages (Step 0–6.5, incl. Step 4.5), and delivers `index.html` page(s), plus a comparison page for multi-word batches. You can also specify parameters:
+The Agent auto-loads this skill, runs all stages (Step 0–7, incl. Step 4.5 and a pre-delivery functional check), and delivers `index.html` page(s), plus a comparison page for multi-word batches. You can also specify parameters:
 
 ```text
 Use deep-word-explorer to explain "Existentialism", theme kraft-paper, speed=deep, depth=pro, scope=panorama.
@@ -82,7 +82,7 @@ Typical triggers:
 - 📖 **Glossary delivery**: all terms are aggregated into a collapsible glossary (in both HTML and Markdown).
 - 📊 **Charts + dual-track illustration**: lieflat charts (one figure, one conclusion), license-safe network images, SVG/AI illustrations; one global color system per delivery.
 - 🎨 **8 themes**: 5 editorial palettes + 3 independent style templates (Phosphor Terminal / Vermilion Washi / Memphis Pop); no custom hex.
-- 📄 **Single-file HTML**: 7 interactive components, open in a browser to read, screenshot, share.
+- 📄 **Single-file HTML**: 8 interactive components (incl. the panorama knowledge graph), open in a browser to read, screenshot, share.
 - 🌐 **Bilingual**: `language` controls output language; template and copy are localized.
 
 ## Good fit / Not a good fit
@@ -185,7 +185,8 @@ trigger-phrase recommendations into a candidate list; execution begins only afte
 | `scope` | enum | ❌ | `point` / `related` / `panorama` | `point` | Point→breadth: content scope |
 | `format` | enum | ❌ | `html` / `markdown` / `pdf` | `html` | Delivery format |
 | `illustrations` | boolean | ❌ | `true` / `false` | `true` | Enable illustrations |
-| `tone` | enum | ❌ | `popular` / `academic` / `editorial` | `popular` | Writing style |
+| `tone` | enum | ❌ | `popular` / `academic` / `editorial` | `popular` | Register (popular / academic / editorial) |
+| `style` | enum | ❌ | `plain` plain & clear / `empathy` walk in their shoes / `narrative` storytelling / `succinct` to the point / `lucid` effortless clarity / `direct` straight to it / `natural` unpolished & human | `plain` | Writing style (4th orthogonal axis; `zh` only — non-zh falls back to `plain`, noted at Step 0) |
 | `citation_density` | enum | ❌ | `low` / `standard` / `high` | `standard` | Citations per stage (1 / 2 / 3) |
 | `theme` | enum | ❌ | 8 themes (see "Theme palettes") | auto | Visual theme |
 | `language` | enum | ❌ | `zh` / `en` / `fr` / `de` / `ja` / `ko` / `ar` / `es` / `ru` | `zh` | Output language |
@@ -210,7 +211,7 @@ confirmation. Full semantics and thresholds live in [`SKILL.md`](./SKILL.md) Ste
 
 ## Workflow
 
-The Skill is a structured workflow the Agent guides step by step: param alignment → classify → research → architect → write → illustrate → build → QA → compare (multi-word) → deliver (Step 0–6.5, incl. Step 4.5). Stages hand off via JSON with independent quality gates; every stage artifact is checkpointed for resume.
+The Skill is a structured workflow the Agent guides step by step: param alignment → classify → research → architect → write → illustrate → build → QA → compare (multi-word) → deliver (Step 0–7, incl. Step 4.5 and a pre-delivery functional check). Stages hand off via JSON with independent quality gates; every stage artifact is checkpointed for resume.
 
 Full detail in [`SKILL.md`](./SKILL.md); per-Agent instructions in `agents/<role>/SKILL.md`; all thresholds live in `shared/config/quality-gates.json`.
 
@@ -264,7 +265,7 @@ Theme recommendation: philosophy/humanities/general → Ink Classic; tech/AI/mat
 
 ## Core design principles
 
-JSON hand-offs, per-stage gates, degrade-over-silent-failure, single-file delivery, combinable tier axes, and a single source of truth for thresholds — see [`SKILL.md`](./SKILL.md) ("Design principles").
+JSON hand-offs, per-stage gates, degrade-over-silent-failure, single-file delivery, combinable tier axes plus the `style` writing axis, and a single source of truth for thresholds — see [`SKILL.md`](./SKILL.md) ("Design principles").
 
 ## Example requests
 
@@ -286,12 +287,13 @@ A bundled sample output: [`examples/新泽西/index.html`](./examples/新泽西/
 
 - The HTML template is adapted from [guizang-ppt-skill](https://github.com/op7418/guizang-ppt-skill) (by [op7418](https://x.com/op7418)), released under AGPL-3.0 and open-sourced here in inheritance. This skill reuses its "Editorial × Electronic Ink" aesthetic, CSS variable system, and theme palettes, and redesigns the layout & interactive components for long-form articles.
 - Data charts are generated from [lieflat-chart](https://redskill.xiaohongshu.net) (lieflat-charts, by 躺在废墟里). lieflat-chart is **PolyForm Noncommercial**: this repo only calls it at runtime and does not redistribute its templates; generated charts follow its non-commercial license (free for personal / learning / non-commercial use; commercial use requires separate authorization from the author).
+- The writing-style system (v1.5) is a "distilled rewrite": rules and quantitative metrics are localized and re-written with attribution, with no runtime dependency. See [THIRD_PARTY_NOTICES.md](./THIRD_PARTY_NOTICES.md) for sources & MIT attribution — `empathy`/`narrative` from [liurun-bookwriter-skills](https://github.com/liangdabiao/liurun-bookwriter-skills) (Liu Run / Luo Zhenyu style-DNA), `succinct`/`lucid` from [awesome-ai-persona-skills](https://github.com/momozi1996/awesome-ai-persona-skills) (量子位 / 李继刚), `direct` absorbs the writing ideas of [andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) (no LICENSE file upstream; idea-level citation only), and the de-AI purification rules derive from [Humanizer-zh](https://github.com/op7418/Humanizer-zh) (from [humanizer](https://github.com/blader/humanizer)) and [stop-slop](https://github.com/hardikpandya/stop-slop).
 - Visual references: *Monocle* magazine layout, Swiss International Typographic System.
 
 ## Roadmap
 
-- Build an interactive knowledge-graph component for `scope=panorama`
-- Automate QA visual checks (dark / mobile / overflow screenshot diffs)
+- ~~Build an interactive knowledge-graph component for `scope=panorama`~~ ✅ Done (Component 8; see CHANGELOG [Unreleased])
+- ~~Automate QA visual checks (dark / mobile / overflow screenshot diffs)~~ ✅ Done (see CHANGELOG [Unreleased])
 - Add more real samples (markdown / no-illustration / batch comparison)
 - Add more theme packs (custom colors stay locked)
 

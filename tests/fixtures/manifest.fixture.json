@@ -7,17 +7,50 @@
     "format": "html",
     "illustrations": true,
     "tone": "academic",
+    "style": "plain",
     "citation_density": "standard",
     "language": "zh"
   },
-  "words": ["新泽西", "存在主义"],
+  "words": [
+    "新泽西",
+    "存在主义"
+  ],
   "output_dir": ".workbuddy/deep-explorer/batch-demo",
   "created_at": "2026-08-08T00:00:00Z",
   "updated_at": "2026-08-08T01:00:00Z",
   "stages": [
-    { "word": "新泽西", "stage": "classifier", "status": "done", "artifact_path": "新泽西/checkpoints/classifier.json", "schema": "classification-profile.json", "attempts": 1, "updated_at": "2026-08-08T00:05:00Z" },
-    { "word": "新泽西", "stage": "qa", "status": "done", "artifact_path": "新泽西/checkpoints/qa.json", "schema": "qa-report.json", "attempts": 1, "updated_at": "2026-08-08T00:50:00Z" },
-    { "word": "存在主义", "stage": "classifier", "status": "failed", "attempts": 1, "error": "示例失败原因", "updated_at": "2026-08-08T00:06:00Z" },
-    { "word": "存在主义", "stage": "researcher", "status": "pending", "attempts": 0, "updated_at": "2026-08-08T00:00:00Z" }
+    {
+      "word": "新泽西",
+      "stage": "classifier",
+      "status": "done",
+      "artifact_path": "新泽西/checkpoints/classifier.json",
+      "schema": "classification-profile.json",
+      "attempts": 1,
+      "updated_at": "2026-08-08T00:05:00Z"
+    },
+    {
+      "word": "新泽西",
+      "stage": "qa",
+      "status": "done",
+      "artifact_path": "新泽西/checkpoints/qa.json",
+      "schema": "qa-report.json",
+      "attempts": 1,
+      "updated_at": "2026-08-08T00:50:00Z"
+    },
+    {
+      "word": "存在主义",
+      "stage": "classifier",
+      "status": "failed",
+      "attempts": 1,
+      "error": "示例失败原因",
+      "updated_at": "2026-08-08T00:06:00Z"
+    },
+    {
+      "word": "存在主义",
+      "stage": "researcher",
+      "status": "pending",
+      "attempts": 0,
+      "updated_at": "2026-08-08T00:00:00Z"
+    }
   ]
 }

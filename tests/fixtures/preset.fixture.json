@@ -5,6 +5,7 @@
   "format": "html",
   "illustrations": true,
   "tone": "popular",
+  "style": "plain",
   "citation_density": "standard",
   "theme": "forest-ink",
   "language": "zh"

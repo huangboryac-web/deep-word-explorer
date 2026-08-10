@@ -6,7 +6,7 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 ## 前置依赖
 - 架构师 Agent 的 `learning_chain`
 - 研究员 Agent 的 `research_bundle`（用于补充细节和验证引用）
-- 本 Agent 的 style-guide.md、citation-format.md、anti-ai-patterns.md
+- 本 Agent 的 style-guide.md（plain 基线）、citation-format.md、anti-ai-patterns.md、styles/{style}.md（按 `options.style` 加载）
 
 ## 触发条件
 主编排器在 Step 4 中调度本 Agent。
@@ -15,7 +15,7 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 - `word` (string)
 - `learning_chain` (JSON)：来自架构师 Agent
 - `research_bundle` (JSON)：来自研究员 Agent（用于细节补充）
-- `options` (object)：Step 0 确认的统一配置面板（三轴 + 格式/配图/语气/引用密度）
+- `options` (object)：Step 0 确认的统一配置面板（三轴 + 格式/配图/语气/引用密度/文风 style）
 
 ## 输出
 - `article_content` (JSON)：严格按照 `shared/schemas/article-content.json` schema 输出
@@ -27,9 +27,10 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 ### Step 1: 撰写准备
 
 #### 1.1 加载规范
-- 阅读 style-guide.md：确认禁用词库、句式规范、类比规则
+- 阅读 style-guide.md：确认禁用词库、句式规范、类比规则（本文件是 `plain` 文风基线）
+- 阅读 styles/{options.style}.md：按 `options.style` 加载对应文风规则（句式指纹/词汇特征/量化指标/与 tone 叠加规则）；`language != zh` 时强制回退 `plain` 并提示
 - 阅读 citation-format.md：确认引用格式
-- 阅读 anti-ai-patterns.md：确认 AI 痕迹检测模式
+- 阅读 anti-ai-patterns.md：确认 AI 痕迹检测模式（含全局去 AI 净化三条机制与 humanize 五维评分）
 
 #### 1.2 建立术语词典
 从 learning_chain 各阶的 `key_terms_to_define` 和 `cached_terms` 中提取所有需要定义的术语，建立映射表：
@@ -71,13 +72,16 @@ deep-word-explorer 流水线的第四个 Agent。将架构师构建的学习链�
 - 如果仍不足 → 添加「延伸思考」板块（引导式问题）
 
 **2.6 AI 痕迹检查**
-- 对照 anti-ai-patterns.md 的 7 类模式逐条检查
+- 对照 anti-ai-patterns.md 的 7 类既有模式 + 新增类别逐条检查
+- 应用全局去 AI 净化三条机制：密度决策树（200 字内 ≥3 次才算 AI 味）、保护区（不误删作者真实口头禅/犹豫/不完美）、硬边界（改写不得编造原文没有的事实）
+- 按 humanize 五维（直接/节奏/信任/真实/密度）自评人味分，目标 ≥ `quality-gates.json` 的 `humanize.min_score`（35/50）
 - 修复所有匹配的模式
 
 **2.7 风格检查**
-- 对照 style-guide.md 检查：禁用词、句长、段落结构、信息密度
-- 确保渐进披露：无后阶概念泄露
-- 按 `options.tone` 统一行文：`popular` 科普（类比多、禁用术语堆砌）/ `academic` 学术（严谨、可含公式、引用密度高）/ `editorial` 杂志（短句节奏、标题感、画面感）
+- 按 `options.style` 加载的 styles/{style}.md 检查：句式指纹、词汇特征、量化指标（句长/人称配额/金句密度/留白等）
+- 对照 style-guide.md（plain 基线）检查：禁用词、段落结构、信息密度、渐进披露（无后阶概念泄露）
+- 按 `options.tone` 统一文体：`popular` 科普（类比多、禁用术语堆砌）/ `academic` 学术（严谨、可含公式、引用密度高）/ `editorial` 杂志（短句节奏、标题感、画面感）
+- 冲突消解：`tone` 的引用密度/术语规则优先；`style` 的句式/人称/节奏生效
 
 ---
 
@@ -156,6 +160,8 @@ scope=panorama 时，另把 learning_chain.extras 映射为 article_content.extr
 - `analogy_count`：类比总数
 - `defined_terms_count`：定义术语总数
 - `ai_pattern_score`：AI 痕迹得分（< 0.3 为合格）
+- `style_metrics`：按 `options.style` 记录对应量化指标实测值（如「你」频次、金句密度、SCQA 节点、句长、留白数等，字段见 styles/{style}.md）
+- `humanize_score`：五维人味分（直接/节奏/信任/真实/密度，总分 50，≥ 35 为合格；`style=natural` 时按 `styles.natural.humanize_min_score` 硬性达标）
 
 #### 5.5 glossary 数组
 从全文各阶 `cached_terms` 汇总去重，每项含：
@@ -196,9 +202,11 @@ scope=panorama 时，另把 learning_chain.extras 映射为 article_content.extr
 - [ ] 5 个过渡问题，无机械过渡
 - [ ] 引用标注 ≥ citation_density 每阶下限 × 6（low ≥6 / standard ≥12 / high ≥18）
 - [ ] ai_pattern_score < 0.3
+- [ ] humanize_score ≥ 35（五维人味分；`style=natural` 时必须达标，其余风格作为增强检查）
+- [ ] style_metrics 满足 styles/{options.style}.md 的量化指标（language=zh 时；非 zh 回退 plain 不强制）
 - [ ] 严格符合 shared/schemas/article-content.json schema
 - [ ] scope=related/panorama 时每阶含 related_sidebar；scope=panorama 时 extras 齐全
-- [ ] 行文风格与 options.tone 一致（科普 / 学术 / 杂志）
+- [ ] 行文风格与 options.tone 一致（科普 / 学术 / 杂志）且与 options.style 的句式/人称/节奏一致
 - [ ] glossary 与各阶 cached_terms 一致（无遗漏、无定义冲突）
 
 ### 必须检查

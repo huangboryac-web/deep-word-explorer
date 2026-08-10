@@ -103,6 +103,30 @@ check(
     and batch_cfg.get("max_parallel") == 3,
     "quality-gates.json: 批量 2-8 词、默认并发 3",
 )
+styles_cfg = cfg.get("styles", {})
+style_labels = set(styles_cfg.get("labels", {}))
+style_defs = set(styles_cfg) - {"labels"}
+expected_styles = {"plain", "empathy", "narrative", "succinct", "lucid", "direct", "natural"}
+check(
+    style_labels == expected_styles and style_defs == expected_styles,
+    "quality-gates.json: styles 枚举 7 种文风且定义齐全",
+)
+check(defaults.get("style") in style_labels, "quality-gates.json: 默认 style 合法")
+for s in expected_styles:
+    check(bool(styles_cfg[s].get("note")), f"quality-gates.json: styles.{s} 含说明 note")
+humanize_cfg = cfg.get("humanize", {})
+check(
+    set(humanize_cfg.get("dimensions", [])) == {"directness", "rhythm", "trust", "authenticity", "density"}
+    and humanize_cfg.get("min_score") == 35
+    and humanize_cfg.get("max_score") == 50
+    and humanize_cfg.get("density_window_chars") == 200
+    and humanize_cfg.get("density_hit_min") == 3,
+    "quality-gates.json: humanize 五维人味分配置（直接/节奏/信任/真实/密度，min 35/50）",
+)
+check(
+    cfg["gates"]["humanize_min_score"] == humanize_cfg["min_score"],
+    "quality-gates.json: gates.humanize_min_score 与 humanize.min_score 一致",
+)
 
 
 def word_floor(options):
@@ -197,6 +221,11 @@ for fixture in sorted((ROOT / "tests" / "fixtures").glob("classification-profile
 for fixture in sorted((ROOT / "tests" / "fixtures").glob("research-bundle.*.json")):
     opts = json.loads(fixture.read_text(encoding="utf-8")).get("meta", {}).get("options", {})
     check(opts.get("depth") in depth_tiers and opts.get("format") in {"html", "markdown", "pdf"}, f"{fixture.relative_to(ROOT)}: meta.options 档位合法")
+for fixture in sorted((ROOT / "tests" / "fixtures").glob("*.json")):
+    data = json.loads(fixture.read_text(encoding="utf-8"))
+    opts = data.get("options") or data.get("meta", {}).get("options") or {}
+    if opts.get("style"):
+        check(opts["style"] in style_labels, f"{fixture.relative_to(ROOT)}: options.style 合法")
 
 # 5. test-words.json
 tw = load_json("tests/test-words.json")
@@ -340,6 +369,28 @@ theme_injection = (ROOT / "agents/builder/references/theme-injection.md").read_t
 check("以 `shared/themes/themes.css` 为准" in theme_injection, "theme-injection.md: 变量以 themes.css 正本为准")
 check("追加到 `<style>` 末尾" not in theme_injection, "theme-injection.md: 无皮肤层追加步骤")
 
+# 5.11 文风体系（style 正交轴 + humanize）防回归
+STYLE_SECTIONS = ["## 定位", "## 句式指纹", "## 词汇特征", "## 量化指标", "## 与 tone 叠加规则", "## 样例"]
+for style_name in expected_styles:
+    style_file = ROOT / f"agents/writer/styles/{style_name}.md"
+    check(style_file.exists(), f"styles/{style_name}.md 存在")
+    if style_file.exists():
+        stext = style_file.read_text(encoding="utf-8")
+        check(all(sec in stext for sec in STYLE_SECTIONS), f"styles/{style_name}.md 含全部必备章节")
+        if style_name != "plain":
+            check(
+                ("源自" in stext or "改编" in stext or "思想" in stext),
+                f"styles/{style_name}.md 标注素材来源",
+            )
+readme_zh_style = (ROOT / "README.md").read_text(encoding="utf-8")
+for phrase in ("平实明达", "设身处地", "娓娓道来", "要言不烦", "举重若轻", "单刀直入", "天然去雕饰"):
+    check(phrase in readme_zh_style, f"README.md: 含文风标签「{phrase}」")
+third_party = (ROOT / "THIRD_PARTY_NOTICES.md").read_text(encoding="utf-8")
+check("liurun-bookwriter-skills" in third_party and "awesome-ai-persona-skills" in third_party, "THIRD_PARTY_NOTICES.md: 记录文风素材来源")
+check("Humanizer-zh" in third_party and "stop-slop" in third_party, "THIRD_PARTY_NOTICES.md: 记录去 AI 素材来源")
+check("思想级引用" in third_party, "THIRD_PARTY_NOTICES.md: karpathy 仅思想级引用说明")
+check("natural" in (ROOT / "agents/writer/references/anti-ai-patterns.md").read_text(encoding="utf-8"), "anti-ai-patterns.md: 含 natural 文风联动")
+
 # 6. Markdown 相对链接与仓库内路径引用
 PREFIX_WHITELIST = (
     "agents/",
@@ -437,6 +488,13 @@ THRESHOLD_ASSERTIONS = [
     ("README.en.md", "Step 0 parameter list"),
     ("README.md", "Themes-8"),
     ("README.en.md", "Themes-8"),
+    ("README.md", "8 个交互组件"),
+    ("README.en.md", "8 interactive components"),
+    ("agents/builder/references/component-library.md", "组件 8：关联知识图谱交互"),
+    ("agents/qa/SKILL.md", "Step 5: 功能校验"),
+    ("agents/qa/references/checklist-detailed.md", "功能校验清单"),
+    ("SKILL.md", "Step 7: HTML 功能校验"),
+    ("shared/prompts/system-prompts.md", "functional_report"),
 ]
 for rel, phrase in THRESHOLD_ASSERTIONS:
     text = (ROOT / rel).read_text(encoding="utf-8")

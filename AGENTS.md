@@ -1,7 +1,7 @@
 # AGENTS.md
 
 本仓库是一个可安装的 skill 包（`deep-word-explorer` / 兴趣词汇解析）：根目录
-`SKILL.md` 是主编排器，负责按 Step 0–6.5（含 Step 4.5）调度 `agents/` 下的 8 个子 Agent
+`SKILL.md` 是主编排器，负责按 Step 0–7（含 Step 4.5 与 Step 7 功能校验）调度 `agents/` 下的 8 个子 Agent
 （分类器 / 研究员 / 架构师 / 撰写师 / 配图师 / 构建师 / 质检 / 对比师）。
 
 ## 仓库约定（改动前必读）

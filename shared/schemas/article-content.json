@@ -12,7 +12,7 @@
         "word": { "type": "string" },
         "options": {
           "type": "object",
-          "required": ["speed", "depth", "scope", "format", "illustrations", "tone", "citation_density", "language"],
+          "required": ["speed", "depth", "scope", "format", "illustrations", "tone", "style", "citation_density", "language"],
           "properties": {
             "speed": { "type": "string", "enum": ["fast", "standard", "deep"] },
             "depth": { "type": "string", "enum": ["intro", "mid", "pro"] },
@@ -20,11 +20,12 @@
             "format": { "type": "string", "enum": ["html", "markdown", "pdf"] },
             "illustrations": { "type": "boolean" },
             "tone": { "type": "string", "enum": ["popular", "academic", "editorial"] },
+            "style": { "type": "string", "enum": ["plain", "empathy", "narrative", "succinct", "lucid", "direct", "natural"] },
             "citation_density": { "type": "string", "enum": ["low", "standard", "high"] },
             "language": { "type": "string", "enum": ["zh", "en", "fr", "de", "ja", "ko", "ar", "es", "ru"] },
             "custom": { "type": "array", "items": { "type": "string" } }
           },
-          "description": "统一配置面板（三轴档位 + 格式/配图/语气/引用密度/主题语言），见 shared/config/quality-gates.json"
+          "description": "统一配置面板（三轴档位 + 格式/配图/语气/文风/引用密度/主题语言），见 shared/config/quality-gates.json"
         },
         "total_words": {
           "type": "integer",
@@ -145,6 +146,16 @@
           "minimum": 0,
           "maximum": 1,
           "description": "AI 痕迹检测得分，<0.3 为合格"
+        },
+        "style_metrics": {
+          "type": "object",
+          "description": "按 options.style 记录的量化指标实测值（如「你」频次、金句密度、SCQA 节点、句长、留白数等），字段见 agents/writer/styles/{style}.md"
+        },
+        "humanize_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 50,
+          "description": "五维人味分（直接/节奏/信任/真实/密度），≥ 35 为合格（quality-gates.json → humanize.min_score）"
         }
       }
     }

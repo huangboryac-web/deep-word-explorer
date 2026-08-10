@@ -7,6 +7,7 @@
     "format": "html",
     "illustrations": true,
     "tone": "academic",
+    "style": "plain",
     "citation_density": "standard",
     "language": "zh"
   },
@@ -23,14 +24,31 @@
     "estimated_reader_familiarity": "有所耳闻"
   },
   "search_profile": {
-    "layer_1_sources": ["wikipedia", "baidu_baike", "wikidata"],
-    "layer_2_sources": ["google_scholar", "sep"],
-    "layer_3_sources": ["zhihu", "douban"],
+    "layer_1_sources": [
+      "wikipedia",
+      "baidu_baike",
+      "wikidata"
+    ],
+    "layer_2_sources": [
+      "google_scholar",
+      "sep"
+    ],
+    "layer_3_sources": [
+      "zhihu",
+      "douban"
+    ],
     "layer_4_enabled": false,
     "layer_5_enabled": false,
-    "query_languages": ["zh", "en", "de"],
+    "query_languages": [
+      "zh",
+      "en",
+      "de"
+    ],
     "depth_modifier": 1.2,
-    "preferred_academic_databases": ["sep", "jstor"],
+    "preferred_academic_databases": [
+      "sep",
+      "jstor"
+    ],
     "timeline_importance": "高"
   }
 }

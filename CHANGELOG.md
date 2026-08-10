@@ -2,7 +2,21 @@
 
 本文件遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/) 约定，版本号采用语义化版本（[SemVer](https://semver.org/lang/zh-CN/)）。
 
+## [1.5.0] - 2026-08-10
+
+### 新增
+- **文风体系（`style` 第四正交轴）**：配置面板新增 `style`（enum，默认 `plain`），7 种文风全部用描述性中文标签——`plain` 平实明达（现状基线）/ `empathy` 设身处地（对象感对话 · SCQA 逻辑势能 · 金句 · 商业类比；源自刘润）/ `narrative` 娓娓道来（时间纵深叙事 · 跨域联想 · 金句收束；源自罗振宇）/ `succinct` 要言不烦（科技快讯 · 高信息密度 · 短段快节奏 · 结论先行；源自量子位）/ `lucid` 举重若轻（概念拆解 · 极简句式 · 留白克制；源自李继刚）/ `direct` 单刀直入（第一性原理 · 直白具体 · 诚实标注不确定；源自 Karpathy 思想）/ `natural` 天然去雕饰（口语化 · 有温度 · 最强去 AI 味）。`style` 仅对 `language=zh` 生效，非 zh 自动回退 `plain` 并在 Step 0 提示。
+- **规则层**：新建 `agents/writer/styles/{plain,empathy,narrative,succinct,lucid,direct,natural}.md` 七份风格文件（定位 / 句式指纹 / 词汇特征 / 量化指标 / 与 tone 叠加规则 / 样例）；撰写师按 `style` 加载风格文件、按 `tone` 定文体；`style-guide.md` 标注为 `plain` 基线。冲突消解：`tone` 的引用密度/术语规则优先，`style` 的句式/人称/节奏生效。
+- **阈值事实源**：`shared/config/quality-gates.json` 新增 `defaults.style`、`styles` 段（每风格 2–4 个硬量化指标，如 empathy「你」≥8 次/千字、金句≥2 句/千字、「大家」=0、单句≤45 字）与 `humanize` 五维门禁；7 个承载 options 的 schema（preset / article-content / manifest / comparison-report / classification-profile / research-bundle / learning-chain）同步 `style` 枚举与 required；fixtures 与 golden 同步更新。
+- **去 AI 净化升级（全局生效）**：`anti-ai-patterns.md` 并入 Humanizer-zh / stop-slop 的中文适用模式（新增 AI 词汇表、三段式法则、否定式排比、破折号滥用、同义词循环、虚假范围、被动/无主句、signposting、空洞结论 9 类），并引入三条机制——密度决策树（200 字内 ≥3 次才算 AI 味）、保护区（不误删作者真实口头禅/犹豫/不完美）、硬边界（改写不得编造原文没有的事实）；QA 新增五维人味分（直接/节奏/信任/真实/密度，阈值入 quality-gates，`humanize.min_score=35`），`ai_pattern_score < 0.3` 时人味分不足只做净化改写；`natural` 为最强净化形态（人话三要素各 ≥1，锚定原文材料）。
+- **文档/命令/合规**：`SKILL.md` Step 0 面板、`README.md` / `README.en.md` 参数表新增 `style` 行（中文描述标签）；`commands/deep-explore.md` 新增 `--style`；`system-prompts.md` 同步；新增 `THIRD_PARTY_NOTICES.md` 记录 MIT 归属（liurun-bookwriter-skills、awesome-ai-persona-skills、Humanizer-zh、stop-slop）与 karpathy 思想级引用说明，README 致谢同步。
+
 ## [Unreleased]
+
+### 新增
+- **Step 7 功能校验（交付前最终验收）**：所有任务完成（含 Step 6.5 对比）后新增最终验收步骤，QA 逐项实测 HTML 功能——悬浮释义（tooltip hover / focus）、章节跳转（`#chain-N`）、引用跳转、暗色模式、PDF 导出、SVG 显示（scope=panorama 必查）、对比页（批量）、控制台无 JS 报错，共 8 项；输出 `functional_report` JSON 并入 `qa_report` 或独立写入 `checkpoints/`，任一 FAIL 返回构建师修复后复测。
+- **QA 视觉校验强化（截图比对）**：亮色 / 暗色 / 375px 移动端三视口同区域截图逐一比对，横向溢出检测（`scrollWidth > clientWidth`），与上一版产物截图 diff 比对防布局回退；截图基线存入 `checkpoints/screenshots/` 供复测对比。
+- **关联知识图谱交互组件（组件 8，scope=panorama）**：第五阶基于 `learning_chain.stage_5.concept_map` 渲染确定性布局知识图谱（core 居中 + 其余环形散布），按 category 上色，hover / 键盘 focus 高亮邻接子图，暗色 / 移动端 / reduced-motion 适配；数据不足（`nodes < 2` 或 `edges < 5`）回退文本列表，节点 > 20 仅渲染核心子图。
 
 ### 修复
 - **审计修复**：builder / illustrator 主题计数由 5 套更正为 8 套；终端模板档位硬编码改为 `{{TIER_LABEL}}` 占位符；删除 themes.css 重复皮肤层，三套风格主题样式以独立模板为唯一源；theme-injection.md 改为引用 themes.css 正本并补充 `{{TIER_LABEL}}`；validate.py 新增防回归断言。
@@ -92,6 +106,7 @@
 
 ## 版本链接
 
+[1.5.0]: https://github.com/huangboryac-web/deep-word-explorer/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/huangboryac-web/deep-word-explorer/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/huangboryac-web/deep-word-explorer/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/huangboryac-web/deep-word-explorer/compare/v1.1.0...v1.2.0

@@ -7,6 +7,7 @@
     "format": "html",
     "illustrations": true,
     "tone": "popular",
+    "style": "plain",
     "citation_density": "standard",
     "language": "zh"
   },
@@ -51,6 +52,93 @@
     "standard": { "per_stage_min": 2, "reference_list_min": 8 },
     "high": { "per_stage_min": 3, "reference_list_min": 12 }
   },
+  "styles": {
+    "labels": {
+      "plain": "平实明达",
+      "empathy": "设身处地",
+      "narrative": "娓娓道来",
+      "succinct": "要言不烦",
+      "lucid": "举重若轻",
+      "direct": "单刀直入",
+      "natural": "天然去雕饰"
+    },
+    "plain": {
+      "avg_sentence_max": 35,
+      "max_sentence_max": 60,
+      "paragraph_sentences_max": 5,
+      "facts_per_100_words_min": 1,
+      "analogy_per_stage_min": 1,
+      "note": "现状基线：句式/密度/段落沿用 style-guide.md"
+    },
+    "empathy": {
+      "max_sentence_max": 45,
+      "you_per_1000_min": 8,
+      "i_per_1000_min": 3,
+      "dajia_per_1000_max": 0,
+      "golden_sentence_per_1000_min": 2,
+      "scqa_nodes_min": 1,
+      "forbidden_business_jargon": ["赋能", "抓手", "底层逻辑", "打通", "闭环"],
+      "note": "源自 liurun-bookwriter-skills（刘润）蒸馏"
+    },
+    "narrative": {
+      "max_sentence_max": 40,
+      "golden_sentence_per_1000_min": 3,
+      "stories_per_1000_min": 2,
+      "verb_ratio_min": 0.33,
+      "i_per_1000_min": 4,
+      "you_per_1000_min": 3,
+      "we_per_1000_max": 5,
+      "dajia_per_1000_max": 0,
+      "immersion_box_min": 1,
+      "note": "源自 liurun-bookwriter-skills（罗振宇）蒸馏"
+    },
+    "succinct": {
+      "paragraph_sentences_max": 3,
+      "data_before_adjective": true,
+      "conclusion_first": true,
+      "forbidden_vague_adjectives": ["重大", "火爆"],
+      "note": "源自 awesome-ai-persona-skills（量子位）蒸馏"
+    },
+    "lucid": {
+      "avg_sentence_max": 20,
+      "philosophical_question_per_stage_min": 1,
+      "whitespace_per_stage_min": 1,
+      "forbidden_words": ["震惊", "颠覆", "你必须"],
+      "note": "源自 awesome-ai-persona-skills（李继刚）蒸馏"
+    },
+    "direct": {
+      "max_sentence_max": 25,
+      "assumptions_explicit": true,
+      "multiple_readings": true,
+      "uncertainty_honest": true,
+      "claims_traceable": true,
+      "note": "源自 andrej-karpathy-skills 思想级蒸馏"
+    },
+    "natural": {
+      "bias_min": 1,
+      "emotion_min": 1,
+      "stance_min": 1,
+      "hesitation_allowed": true,
+      "humanize_min_score": 35,
+      "note": "人话三要素 + 全局 humanize 五维门禁联动（最强净化形态）"
+    }
+  },
+  "humanize": {
+    "dimensions": ["directness", "rhythm", "trust", "authenticity", "density"],
+    "dimension_labels": {
+      "directness": "直接",
+      "rhythm": "节奏",
+      "trust": "信任",
+      "authenticity": "真实",
+      "density": "密度"
+    },
+    "max_score": 50,
+    "min_score": 35,
+    "density_window_chars": 200,
+    "density_hit_min": 3,
+    "protected_zones": ["作者真实口头禅", "犹豫", "不完美", "个人偏见"],
+    "hard_boundary": "改写不得编造原文没有的事实"
+  },
   "structure": {
     "stages": 6,
     "transition_questions": 5,
@@ -64,6 +152,7 @@
   "gates": {
     "citation_index_min": 8,
     "ai_pattern_score_max": 0.3,
+    "humanize_min_score": 35,
     "concept_map_edges_min": 5,
     "concept_map_relation_types_min": 5,
     "layer1_timeline_min": 2,

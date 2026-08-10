@@ -8,6 +8,7 @@
       "format": "html",
       "illustrations": true,
       "tone": "popular",
+      "style": "plain",
       "citation_density": "standard",
       "language": "zh"
     },
@@ -40,7 +41,9 @@
       }
     ],
     "geographic_scope": "欧洲",
-    "parent_concepts": ["欧陆哲学"],
+    "parent_concepts": [
+      "欧陆哲学"
+    ],
     "etymology": "existentialism 源自拉丁文 existere",
     "sources": [
       {
